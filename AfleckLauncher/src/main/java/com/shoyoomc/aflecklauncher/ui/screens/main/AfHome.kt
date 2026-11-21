@@ -243,7 +243,7 @@ private fun AfHomeContent(
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
-                            Modifier.size(58.dp).clip(CircleShape).background(AfNavy).border(2.dp, AfAccent, CircleShape),
+                            Modifier.size(58.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.12f)).border(2.dp, AfAccent, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             val skin = account?.takeIf { it.hasSkinFile }?.getSkinFile()
@@ -290,7 +290,7 @@ private fun AfHomeContent(
                 Text(
                     "9:16", color = AfText, fontSize = 13.sp, fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.BottomStart).padding(10.dp).clip(CircleShape)
-                        .background(AfNavy.copy(alpha = 0.85f)).padding(horizontal = 10.dp, vertical = 4.dp)
+                        .background(Color.White.copy(alpha = 0.18f)).padding(horizontal = 10.dp, vertical = 4.dp)
                 )
             }
         }

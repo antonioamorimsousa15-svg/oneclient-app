@@ -50,7 +50,7 @@ fun AfSidebar(
     Box(
         modifier = modifier.width(205.dp).fillMaxHeight()
             .clip(panelShape)
-            .afGlassSurface(panelShape)
+            .afHudFrame(backing = 0.14f)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(10.dp).verticalScroll(rememberScrollState()),

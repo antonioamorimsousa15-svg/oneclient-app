@@ -67,6 +67,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.shoyoomc.aflecklauncher.R
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHud
+import com.shoyoomc.aflecklauncher.ui.screens.main.afDialogBacking
 import com.shoyoomc.aflecklauncher.ui.theme.cardColor
 import com.shoyoomc.aflecklauncher.ui.theme.onCardColor
 import kotlinx.coroutines.Dispatchers
@@ -108,7 +109,7 @@ fun SimpleAlertDialog(
 ) {
     AlertDialog(
         modifier = Modifier.afHud(MaterialTheme.shapes.extraLarge),
-        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy.copy(alpha = 0.32f),
+        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfDialogColor,
         onDismissRequest = {
             if (dismissByDialog) onDismiss()
         },
@@ -159,7 +160,7 @@ fun SimpleAlertDialog(
 ) {
     AlertDialog(
         modifier = Modifier.afHud(MaterialTheme.shapes.extraLarge),
-        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy.copy(alpha = 0.32f),
+        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfDialogColor,
         onDismissRequest = {
             if (dismissByDialog) onDismiss()
         },
@@ -199,7 +200,7 @@ fun SimpleAlertDialog(
 ) {
     AlertDialog(
         modifier = Modifier.afHud(MaterialTheme.shapes.extraLarge),
-        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy.copy(alpha = 0.32f),
+        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfDialogColor,
         onDismissRequest = onDismissRequest,
         title = {
             Text(
@@ -246,7 +247,7 @@ fun SimpleAlertDialog(
 ) {
     AlertDialog(
         modifier = Modifier.afHud(MaterialTheme.shapes.extraLarge),
-        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy.copy(alpha = 0.32f),
+        containerColor = com.shoyoomc.aflecklauncher.ui.screens.main.AfDialogColor,
         onDismissRequest = onDismiss,
         title = {
             Text(
@@ -304,6 +305,7 @@ fun SimpleEditDialog(
                     .padding(all = 6.dp)
                     .heightIn(max = (maxHeight - 12.dp).coerceAtMost(rememberDialogMaxHeight()))
                     .wrapContentHeight()
+                    .afDialogBacking(MaterialTheme.shapes.extraLarge)
                     .afHud(MaterialTheme.shapes.extraLarge),
                 shape = MaterialTheme.shapes.extraLarge,
                 color = cardColor(false),
@@ -382,6 +384,7 @@ fun SimpleEditDialog(
                     .padding(all = 6.dp)
                     .heightIn(max = (maxHeight - 12.dp).coerceAtMost(rememberDialogMaxHeight()))
                     .wrapContentHeight()
+                    .afDialogBacking(MaterialTheme.shapes.extraLarge)
                     .afHud(MaterialTheme.shapes.extraLarge),
                 shape = MaterialTheme.shapes.extraLarge,
                 color = cardColor(false),
@@ -577,6 +580,7 @@ fun <T> SimpleListDialog(
                     .padding(all = 3.dp)
                     .heightIn(max = (maxHeight - 6.dp).coerceAtMost(rememberDialogMaxHeight()))
                     .wrapContentHeight()
+                    .afDialogBacking(MaterialTheme.shapes.extraLarge)
                     .afHud(MaterialTheme.shapes.extraLarge),
                 shape = MaterialTheme.shapes.extraLarge,
                 color = cardColor(false),

@@ -632,24 +632,38 @@ private fun VersionsLayout(
                             modifier = Modifier.fillMaxWidth(),
                             radius = 24.dp
                         ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column {
+                                Column(Modifier.weight(1f)) {
                                     Text(
                                         "VERSIONS // DECK", color = AfAccent,
                                         fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp
                                     )
                                     Text("$allVersionsCount versões instaladas", color = AfText, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                 }
+                                AfIconCircle(
+                                    icon = R.drawable.ic_refresh,
+                                    size = 38.dp,
+                                    modifier = Modifier.afClick(onRefresh)
+                                )
+                                AfButton(
+                                    text = "Instalar",
+                                    icon = R.drawable.ic_download,
+                                    modifier = Modifier.height(40.dp),
+                                    onClick = onInstall
+                                )
+                            }
                                 val scrollState = rememberScrollState()
                                 Row(
                                     modifier = Modifier
-                                        .weight(1f, fill = false)
+                                        .fillMaxWidth()
                                         .horizontalScroll(state = scrollState),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                                     verticalAlignment = Alignment.CenterVertically
@@ -673,18 +687,6 @@ private fun VersionsLayout(
                                         onClick = { onCategoryChange(VersionCategory.MODLOADER) }
                                     )
                                 }
-                                Spacer(Modifier.weight(1f))
-                                AfIconCircle(
-                                    icon = R.drawable.ic_refresh,
-                                    size = 38.dp,
-                                    modifier = Modifier.afClick(onRefresh)
-                                )
-                                AfButton(
-                                    text = "Instalar",
-                                    icon = R.drawable.ic_download,
-                                    modifier = Modifier.height(40.dp),
-                                    onClick = onInstall
-                                )
                             }
                         }
                     }

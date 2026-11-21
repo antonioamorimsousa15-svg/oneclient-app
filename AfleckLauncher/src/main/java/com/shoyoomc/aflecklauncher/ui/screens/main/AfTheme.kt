@@ -215,7 +215,9 @@ internal fun AfPanel(
 ) {
     val shape = androidx.compose.foundation.shape.RoundedCornerShape(radius.coerceAtMost(28.dp))
     Box(
-        modifier = modifier.afGlassSurface(shape),
+        modifier = modifier
+            .then(if (deep) Modifier.afDialogBacking(shape) else Modifier)
+            .afGlassSurface(shape),
         content = content
     )
 }
@@ -394,3 +396,80 @@ class AfCutShape(private val cut: Dp = 14.dp) : Shape {
 /** Vidro grande (cartões e painéis): degradê escuro na diagonal, luz nas bordas, borda branca fina. */
 @Composable
 internal fun Modifier.afHud(shape: androidx.compose.ui.graphics.Shape): Modifier = this.afGlassSurface(shape)
+
+
+/** Cor firme (mas na cor do tema) para janelas por cima de outras telas. */
+internal val AfDialogColor: Color get() = androidx.compose.ui.graphics.lerp(AfThemeState.base, AfAccent, 0.14f).copy(alpha = 0.84f)
+
+internal fun Modifier.afDialogBacking(shape: androidx.compose.ui.graphics.Shape): Modifier =
+    this.clip(shape).background(AfDialogColor, shape)
+
+/** Moldura HUD sci-fi: chanfros nos cantos e entalhes laterais com barras de luz (estilo das referências). */
+class AfHudFrameShape : androidx.compose.ui.graphics.Shape {
+    override fun createOutline(
+        size: androidx.compose.ui.geometry.Size,
+        layoutDirection: androidx.compose.ui.unit.LayoutDirection,
+        density: androidx.compose.ui.unit.Density
+    ): androidx.compose.ui.graphics.Outline =
+        androidx.compose.ui.graphics.Outline.Generic(afHudFramePath(size, with(density) { 16.dp.toPx() }))
+}
+
+internal fun afHudFramePath(size: androidx.compose.ui.geometry.Size, c0: Float): androidx.compose.ui.graphics.Path {
+    val w = size.width
+    val h = size.height
+    val c = c0.coerceAtMost(minOf(w, h) / 3f)
+    val n = c * 0.38f
+    val notches = h * 0.17f > 2 * n && w * 0.22f > 2 * n
+    val p = androidx.compose.ui.graphics.Path()
+    p.moveTo(c, 0f)
+    if (notches) { p.lineTo(w * 0.52f, 0f); p.lineTo(w * 0.52f + n, n); p.lineTo(w * 0.74f - n, n); p.lineTo(w * 0.74f, 0f) }
+    p.lineTo(w - c, 0f)
+    p.lineTo(w, c)
+    if (notches) { p.lineTo(w, h * 0.55f); p.lineTo(w - n, h * 0.55f + n); p.lineTo(w - n, h * 0.72f - n); p.lineTo(w, h * 0.72f) }
+    p.lineTo(w, h - c)
+    p.lineTo(w - c, h)
+    if (notches) { p.lineTo(w * 0.38f, h); p.lineTo(w * 0.38f - n, h - n); p.lineTo(w * 0.10f + n, h - n); p.lineTo(w * 0.10f, h) }
+    p.lineTo(c, h)
+    p.lineTo(0f, h - c)
+    if (notches) { p.lineTo(0f, h * 0.45f); p.lineTo(n, h * 0.45f - n); p.lineTo(n, h * 0.28f + n); p.lineTo(0f, h * 0.28f) }
+    p.lineTo(0f, c)
+    p.close()
+    return p
+}
+
+/** Doca em moldura HUD com borda neon e brilho. [backing] = quanto fundo escuro de tema fica por baixo. */
+internal fun Modifier.afHudFrame(backing: Float = 0.55f): Modifier = composed {
+    val accent = AfAccent
+    val accent2 = AfAccent2
+    val shape = remember { AfHudFrameShape() }
+    val base = androidx.compose.ui.graphics.lerp(AfThemeState.base, accent, 0.12f).copy(alpha = backing)
+    this@composed
+        .clip(shape)
+        .background(base, shape)
+        .background(Brush.verticalGradient(listOf(accent.copy(alpha = 0.12f), Color.White.copy(alpha = 0.03f), accent.copy(alpha = 0.08f))), shape)
+        .drawWithCache {
+            val c = 16.dp.toPx().coerceAtMost(minOf(size.width, size.height) / 3f)
+            val n = c * 0.38f
+            val w = size.width
+            val h = size.height
+            val notches = h * 0.17f > 2 * n && w * 0.22f > 2 * n
+            val path = afHudFramePath(size, 16.dp.toPx())
+            val g1 = androidx.compose.ui.graphics.drawscope.Stroke(7.dp.toPx())
+            val g2 = androidx.compose.ui.graphics.drawscope.Stroke(3.5.dp.toPx())
+            val line = androidx.compose.ui.graphics.drawscope.Stroke(1.6.dp.toPx())
+            val bw = 3.dp.toPx()
+            onDrawWithContent {
+                drawContent()
+                drawPath(path, accent.copy(alpha = 0.10f), style = g1)
+                drawPath(path, accent.copy(alpha = 0.22f), style = g2)
+                drawPath(path, accent, style = line)
+                if (notches) {
+                    val cap = androidx.compose.ui.graphics.StrokeCap.Round
+                    drawLine(accent2, Offset(w * 0.52f + n, n / 2), Offset(w * 0.74f - n, n / 2), bw, cap)
+                    drawLine(accent2, Offset(w * 0.10f + n, h - n / 2), Offset(w * 0.38f - n, h - n / 2), bw, cap)
+                    drawLine(accent2, Offset(n / 2, h * 0.28f + n), Offset(n / 2, h * 0.45f - n), bw, cap)
+                    drawLine(accent2, Offset(w - n / 2, h * 0.55f + n), Offset(w - n / 2, h * 0.72f - n), bw, cap)
+                }
+            }
+        }
+}

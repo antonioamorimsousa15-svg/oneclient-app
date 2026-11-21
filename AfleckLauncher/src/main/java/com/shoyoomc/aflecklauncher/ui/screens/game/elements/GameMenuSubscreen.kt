@@ -56,6 +56,7 @@ import com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy
 import com.shoyoomc.aflecklauncher.ui.screens.main.afClick
 import com.shoyoomc.aflecklauncher.ui.screens.main.afGlow
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHud
+import com.shoyoomc.aflecklauncher.ui.screens.main.afHudFrame
 import kotlinx.coroutines.delay
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -208,9 +209,7 @@ fun GameMenuSubscreen(
                             .padding(top = 10.dp)
                             .width(460.dp)
                             .height(panelHeight)
-                            .afHud(shape)
-                            .clip(shape)
-                            .background(AfNavy.copy(alpha = 0.94f))
+                            .afHudFrame(backing = 0.62f)
                     ) {
                         Row(
                             modifier = Modifier
@@ -306,9 +305,7 @@ private fun AfGameDock(
             modifier = Modifier
                 .fillMaxWidth(0.84f)
                 .widthIn(max = 760.dp)
-                .afHud(shape)
-                .clip(shape)
-                .background(AfNavy.copy(alpha = 0.92f))
+                .afHudFrame(backing = 0.62f)
                 .padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)

@@ -184,8 +184,9 @@ fun MainScreen(
         if (!useSystemBg) AfSlotImage(bgSlot, AfThemeState.current.bg, Modifier.fillMaxSize())
         Box(Modifier.fillMaxSize().background(Color(if (useSystemBg) 0x33000000 else 0x59000000)))
         Column(
-            modifier = Modifier.fillMaxSize().windowInsetsPadding(
-                androidx.compose.foundation.layout.WindowInsets.displayCutout
+            modifier = Modifier.fillMaxSize().then(
+                if (AllSettings.launcherFullScreen.state) Modifier
+                else Modifier.windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.displayCutout)
             )
         ) {
             AfTopBar(

@@ -59,7 +59,7 @@ fun AfModelStage(modifier: Modifier = Modifier, content: @Composable androidx.co
         Canvas(Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
-            drawRect(lerp(Color.Black, accent, 0.07f).copy(alpha = 0.96f))
+            drawRect(lerp(Color.Black, accent, 0.07f).copy(alpha = 0.22f))
             drawHudGrid(accent)
             // brilho do centro
             drawCircle(

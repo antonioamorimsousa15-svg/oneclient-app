@@ -19,6 +19,7 @@
 package com.shoyoomc.aflecklauncher.ui.screens.content.elements
 
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHud
+import com.shoyoomc.aflecklauncher.ui.screens.main.afDialogBacking
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfButton
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfOutlineButton
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfModelStage
@@ -1549,6 +1550,7 @@ fun ChangeSkinDialog(
                 modifier = Modifier
                     .padding(all = 6.dp)
                     .heightIn(max = (maxHeight - 12.dp).coerceAtMost(rememberDialogMaxHeight()))
+                    .afDialogBacking(AfCutShape(26.dp))
                     .afHud(AfCutShape(26.dp)),
                 shape = AfCutShape(26.dp),
                 color = androidx.compose.ui.graphics.Color.Transparent,
@@ -1578,7 +1580,7 @@ fun ChangeSkinDialog(
                                 modifier = Modifier
                                     .align(Alignment.TopStart)
                                     .padding(12.dp)
-                                    .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.7f), androidx.compose.foundation.shape.CircleShape)
+                                    .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f), androidx.compose.foundation.shape.CircleShape)
                                     .padding(horizontal = 10.dp, vertical = 4.dp)
                             )
                             Text(
@@ -1589,7 +1591,7 @@ fun ChangeSkinDialog(
                                     .padding(12.dp)
                                     .afGlow(androidx.compose.foundation.shape.CircleShape, AfBorder, 0.8f)
                                     .clip(androidx.compose.foundation.shape.CircleShape)
-                                    .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.6f))
+                                    .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f))
                                     .afClick { playing = !playing }
                                     .padding(horizontal = 14.dp, vertical = 6.dp)
                             )
@@ -2098,7 +2100,7 @@ private fun AfSkinTile(file: File, slim: Boolean, selected: Boolean, onClick: ()
                 .fillMaxSize()
                 .afGlow(shape, if (selected) AfAccent else AfBorder, if (selected) 1.2f else 0.6f)
                 .clip(shape)
-                .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.35f))
+                .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f))
                 .afClick(onClick),
             contentAlignment = Alignment.Center
         ) {
@@ -2136,7 +2138,7 @@ private fun AfSection(title: String, content: @Composable ColumnScope.() -> Unit
             .fillMaxWidth()
             .afGlow(shape, AfBorder, 0.6f)
             .clip(shape)
-            .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.25f))
+            .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f))
             .padding(14.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {

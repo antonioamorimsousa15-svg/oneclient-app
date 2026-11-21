@@ -67,7 +67,7 @@ fun AfTabBar(tabs: List<AfTabSpec>, modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .size(38.dp)
                             .clip(CircleShape)
-                            .background(if (t.selected) Color(0xFF0B0B0D) else androidx.compose.ui.graphics.Color.White.copy(alpha = 0.10f))
+                            .background(if (t.selected) Color.White.copy(alpha = 0.22f) else androidx.compose.ui.graphics.Color.White.copy(alpha = 0.10f))
                             .border(1.dp, if (t.selected) AfBorder else AfDim.copy(alpha = 0.6f), CircleShape),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
