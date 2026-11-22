@@ -57,6 +57,7 @@ import com.shoyoomc.aflecklauncher.ui.screens.main.afClick
 import com.shoyoomc.aflecklauncher.ui.screens.main.afGlow
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHud
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHudFrame
+import com.shoyoomc.aflecklauncher.ui.screens.main.afHudScreen
 import kotlinx.coroutines.delay
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -186,7 +187,7 @@ fun GameMenuSubscreen(
 
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.TopCenter),
-            visible = visible,
+            visible = visible && panel == null,
             enter = fadeIn() + slideInVertically { -it },
             exit = fadeOut() + slideOutVertically { -it }
         ) {
@@ -202,15 +203,22 @@ fun GameMenuSubscreen(
                     onForceClose = onForceClose
                 )
 
-                panel?.let { current ->
-                    val shape = AfCutShape(18.dp)
-                    Column(
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .width(460.dp)
-                            .height(panelHeight)
-                            .afHudFrame(backing = 0.62f)
-                    ) {
+            }
+        }
+        AnimatedVisibility(
+            modifier = Modifier.align(Alignment.Center),
+            visible = visible && panel != null,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            val current = panel ?: return@AnimatedVisibility
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.74f)
+                    .fillMaxHeight(0.82f)
+                    .afHudScreen(backing = 0.72f, glow = true)
+                    .padding(6.dp)
+            ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -268,8 +276,7 @@ fun GameMenuSubscreen(
                                 )
                             }
                         }
-                    }
-                }
+
             }
         }
     }

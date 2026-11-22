@@ -215,9 +215,7 @@ internal fun AfPanel(
 ) {
     val shape = androidx.compose.foundation.shape.RoundedCornerShape(radius.coerceAtMost(28.dp))
     Box(
-        modifier = modifier
-            .then(if (deep) Modifier.afDialogBacking(shape) else Modifier)
-            .afGlassSurface(shape),
+        modifier = modifier.afHudScreen(backing = if (deep) 0.82f else 0f, glow = false),
         content = content
     )
 }
@@ -469,6 +467,67 @@ internal fun Modifier.afHudFrame(backing: Float = 0.55f): Modifier = composed {
                     drawLine(accent2, Offset(w * 0.10f + n, h - n / 2), Offset(w * 0.38f - n, h - n / 2), bw, cap)
                     drawLine(accent2, Offset(n / 2, h * 0.28f + n), Offset(n / 2, h * 0.45f - n), bw, cap)
                     drawLine(accent2, Offset(w - n / 2, h * 0.55f + n), Offset(w - n / 2, h * 0.72f - n), bw, cap)
+                }
+            }
+        }
+}
+
+
+/**
+ * Tela/painel em moldura HUD sci-fi (referência "blue glowing technology sci fi frame hud ui"):
+ * contorno duplo com cantos chanfrados, entalhes com barras de luz, nós brilhantes e grupos de pontos.
+ * As cores seguem o tema.
+ */
+internal fun Modifier.afHudScreen(backing: Float = 0.6f, glow: Boolean = true): Modifier = composed {
+    val accent = AfAccent
+    val accent2 = AfAccent2
+    val shape = remember { AfHudFrameShape() }
+    val tint = androidx.compose.ui.graphics.lerp(AfThemeState.base, accent, 0.12f).copy(alpha = backing)
+    this@composed
+        .clip(shape)
+        .background(tint, shape)
+        .background(Brush.verticalGradient(listOf(accent.copy(alpha = 0.14f), Color.White.copy(alpha = 0.04f), accent.copy(alpha = 0.10f))), shape)
+        .drawWithCache {
+            val u = 1.dp.toPx()
+            val w = size.width
+            val h = size.height
+            val c = 16.dp.toPx().coerceAtMost(minOf(w, h) / 3f)
+            val n = c * 0.38f
+            val notches = h * 0.17f > 2 * n && w * 0.22f > 2 * n
+            val big = minOf(w, h) > 90.dp.toPx()
+            val outer = afHudFramePath(size, 16.dp.toPx())
+            val inner = afHudFramePath(androidx.compose.ui.geometry.Size(w - 12 * u, h - 12 * u), 11 * u).apply {
+                translate(Offset(6 * u, 6 * u))
+            }
+            val g1 = androidx.compose.ui.graphics.drawscope.Stroke(7 * u)
+            val g2 = androidx.compose.ui.graphics.drawscope.Stroke(3.5f * u)
+            val line = androidx.compose.ui.graphics.drawscope.Stroke(1.8f * u)
+            val thin = androidx.compose.ui.graphics.drawscope.Stroke(1f * u)
+            val cap = androidx.compose.ui.graphics.StrokeCap.Round
+            onDrawWithContent {
+                drawContent()
+                if (glow) {
+                    drawPath(outer, accent.copy(alpha = 0.10f), style = g1)
+                    drawPath(outer, accent.copy(alpha = 0.22f), style = g2)
+                }
+                drawPath(outer, accent, style = line)
+                if (big) drawPath(inner, accent.copy(alpha = 0.45f), style = thin)
+                if (notches) {
+                    drawLine(accent2, Offset(w * 0.52f + n, n / 2), Offset(w * 0.74f - n, n / 2), 3 * u, cap)
+                    drawLine(accent2, Offset(w * 0.10f + n, h - n / 2), Offset(w * 0.38f - n, h - n / 2), 3 * u, cap)
+                    drawLine(accent2, Offset(n / 2, h * 0.28f + n), Offset(n / 2, h * 0.45f - n), 3 * u, cap)
+                    drawLine(accent2, Offset(w - n / 2, h * 0.55f + n), Offset(w - n / 2, h * 0.72f - n), 3 * u, cap)
+                    // nós brilhantes nas pontas dos entalhes
+                    for (p in listOf(Offset(w * 0.52f, 0f), Offset(w * 0.38f, h), Offset(0f, h * 0.28f), Offset(w, h * 0.55f))) {
+                        drawCircle(accent2.copy(alpha = 0.30f), 9 * u, p)
+                        drawCircle(Color.White, 3.2f * u, p)
+                    }
+                    // grupos de pontos
+                    for (i in 0 until 5) {
+                        drawCircle(accent.copy(alpha = 0.85f), 1.6f * u, Offset(w * 0.80f + i * 8 * u, 7 * u))
+                        drawCircle(accent.copy(alpha = 0.85f), 1.6f * u, Offset(w * 0.55f + i * 8 * u, h - 7 * u))
+                    }
+                    drawLine(accent.copy(alpha = 0.8f), Offset(w * 0.78f, h - 7 * u), Offset(w * 0.90f, h - 7 * u), 2 * u, cap)
                 }
             }
         }
