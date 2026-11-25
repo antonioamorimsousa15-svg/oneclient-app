@@ -19,6 +19,31 @@
 package com.shoyoomc.aflecklauncher.ui.screens.content.settings
 
 import android.app.Activity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items as gridItems
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent2
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfBorder
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfDim
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfPanel
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfText
+import com.shoyoomc.aflecklauncher.ui.screens.main.afClick
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -154,20 +179,22 @@ fun JavaManageScreen(
             )
         }
 
-        SettingsCard(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(all = 12.dp)
                 .animated(ctx),
-            position = CardPosition.Single
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            CardTitleLayout {
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp, vertical = 8.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+            // ----- esquerda: ambientes Java + ações
+            AfPanel(Modifier.weight(0.8f).fillMaxHeight(), radius = 24.dp) {
+                Column(
+                    Modifier.fillMaxSize().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+                    Text("Ambientes Java", color = AfText, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text("${runtimes.size} instalados", color = AfDim, fontSize = 13.sp)
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     IconTextButton(
                         onClick = { runtimes = getRuntimes(true) },
                         painter = painterResource(R.drawable.ic_refresh),
@@ -220,29 +247,21 @@ fun JavaManageScreen(
                         painter = painterResource(R.drawable.ic_terminal_outlined),
                         text = stringResource(R.string.execute_jar_title)
                     )
+                    }
                 }
             }
 
-            val scrollState = rememberLazyListState()
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .nonInteractiveScrollbar(
-                        state = scrollState.scrollIndicatorState!!,
-                        orientation = Orientation.Vertical,
-                    ),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-                state = scrollState,
+            // ----- direita: cards dos ambientes
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.weight(2f).fillMaxHeight(),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                items(runtimes) { runtime ->
-                    JavaRuntimeItem(
+                gridItems(runtimes) { runtime ->
+                    JavaRuntimeCard(
                         runtime = runtime,
-                        modifier = Modifier
-                            .padding(vertical = 6.dp),
-                        onDeleteClick = {
-                            runtimeOperation = RuntimeOperation.PreDelete(runtime)
-                        }
+                        onDeleteClick = { runtimeOperation = RuntimeOperation.PreDelete(runtime) }
                     )
                 }
             }
@@ -443,6 +462,70 @@ private fun JavaRuntimeItem(
                         painter = painterResource(R.drawable.ic_delete_filled),
                         contentDescription = stringResource(R.string.generic_delete)
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun JavaChip(text: String, warn: Boolean = false) {
+    val c = if (warn) Color(0xFFFF6B6B) else AfAccent
+    Text(
+        text = "●  " + text.uppercase(),
+        color = c,
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .clip(CircleShape)
+            .border(1.dp, c.copy(alpha = 0.7f), CircleShape)
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+    )
+}
+
+@Composable
+private fun JavaRuntimeCard(runtime: Runtime, onDeleteClick: () -> Unit) {
+    val canDelete = !runtime.isProvidedByLauncher || !runtime.isCompatible()
+    AfPanel(Modifier.fillMaxWidth(), radius = 24.dp) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    Modifier.size(58.dp).clip(RoundedCornerShape(14.dp))
+                        .background(Brush.linearGradient(listOf(AfAccent, AfAccent2))),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        runtime.javaVersion.takeIf { it != 0 }?.toString() ?: "?",
+                        color = AfNavy, fontSize = 26.sp, fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(runtime.name, color = AfText, fontSize = 17.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(
+                        runtime.versionString?.let { "Versão: $it" } ?: "Ambiente corrompido",
+                        color = if (runtime.versionString != null) AfDim else Color(0xFFFF6B6B),
+                        fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Box(
+                    Modifier.size(40.dp).clip(CircleShape)
+                        .border(1.dp, AfBorder.copy(alpha = if (canDelete) 0.8f else 0.3f), CircleShape)
+                        .then(if (canDelete) Modifier.afClick(onDeleteClick) else Modifier),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_delete_filled), null,
+                        tint = AfText.copy(alpha = if (canDelete) 1f else 0.35f),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (runtime.isProvidedByLauncher) JavaChip("Integrado")
+                runtime.arch?.let { arch ->
+                    val compatible = ZLApplication.DEVICE_ARCHITECTURE == Architecture.archAsInt(arch)
+                    JavaChip(arch, warn = !compatible)
                 }
             }
         }

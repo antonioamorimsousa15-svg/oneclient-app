@@ -52,6 +52,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.material3.nonInteractiveScrollbar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -172,20 +174,29 @@ fun LauncherSettingsScreen(
                         trailingIcon = { Text("›") }
                     )
 
-                    ListSettingsCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        position = CardPosition.Middle,
-                        unit = AllSettings.launcherLanguage,
-                        items = AppLanguage.entries,
-                        title = systemLocaleStringResource(R.string.settings_launcher_language),
-                        getItemText = {
-                            if (it == AppLanguage.FOLLOW_SYSTEM) systemLocaleStringResource(it.textRes)
-                            else stringResource(it.textRes)
-                        },
-                        onValueChange = {
-                            applyLanguage(it)
+                    Column(
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            systemLocaleStringResource(R.string.settings_launcher_language),
+                            color = com.shoyoomc.aflecklauncher.ui.screens.main.AfText,
+                            fontSize = 18.sp, fontWeight = FontWeight.Bold
+                        )
+                        val currentLang = AllSettings.launcherLanguage.state
+                        com.shoyoomc.aflecklauncher.ui.screens.main.AfPickGrid(AppLanguage.entries) { lang, cardModifier ->
+                            com.shoyoomc.aflecklauncher.ui.screens.main.AfPickCard(
+                                title = if (lang == AppLanguage.FOLLOW_SYSTEM) systemLocaleStringResource(lang.textRes)
+                                else stringResource(lang.textRes),
+                                selected = currentLang == lang,
+                                modifier = cardModifier,
+                                onClick = {
+                                    AllSettings.launcherLanguage.save(lang)
+                                    applyLanguage(lang)
+                                }
+                            )
                         }
-                    )
+                    }
 
                     SwitchSettingsCard(
                         modifier = Modifier.fillMaxWidth(),

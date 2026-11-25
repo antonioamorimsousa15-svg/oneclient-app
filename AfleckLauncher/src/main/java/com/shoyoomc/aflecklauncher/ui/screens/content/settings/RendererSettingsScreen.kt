@@ -34,6 +34,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -120,23 +122,25 @@ fun RendererSettingsScreen(
                     }
                     var showConfigDialog by remember { mutableStateOf(false) }
 
-                    ListSettingsCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        position = CardPosition.Top,
-                        unit = AllSettings.renderer,
-                        items = Renderers.getRenderers(),
-                        title = stringResource(R.string.settings_renderer_global_renderer_title),
-                        summary = stringResource(R.string.settings_renderer_global_renderer_summary),
-                        getItemText = { it.getRendererName() },
-                        getItemId = { it.getUniqueIdentifier() },
-                        getItemSummary = {
-                            RendererSummaryLayout(it)
-                        },
-                        trailingIcon = {
+                    Column(
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text(
+                                    stringResource(R.string.settings_renderer_global_renderer_title),
+                                    color = com.shoyoomc.aflecklauncher.ui.screens.main.AfText,
+                                    fontSize = 18.sp, fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    stringResource(R.string.settings_renderer_global_renderer_summary),
+                                    color = com.shoyoomc.aflecklauncher.ui.screens.main.AfDim,
+                                    fontSize = 12.sp
+                                )
+                            }
                             if (configurableRenderer != null) {
-                                IconButton(
-                                    onClick = { showConfigDialog = true }
-                                ) {
+                                IconButton(onClick = { showConfigDialog = true }) {
                                     Icon(
                                         painter = painterResource(R.drawable.ic_settings_filled),
                                         contentDescription = stringResource(R.string.settings_renderer_config_title)
@@ -162,7 +166,16 @@ fun RendererSettingsScreen(
                                 )
                             }
                         }
-                    )
+                        com.shoyoomc.aflecklauncher.ui.screens.main.AfPickGrid(Renderers.getRenderers()) { r, cardModifier ->
+                            com.shoyoomc.aflecklauncher.ui.screens.main.AfPickCard(
+                                title = r.getRendererName(),
+                                selected = r.getUniqueIdentifier() == currentRendererId,
+                                modifier = cardModifier,
+                                onClick = { AllSettings.renderer.save(r.getUniqueIdentifier()) },
+                                summary = { RendererSummaryLayout(r) }
+                            )
+                        }
+                    }
 
                     if (showConfigDialog && configurableRenderer != null) {
                         RendererConfigDialog(
