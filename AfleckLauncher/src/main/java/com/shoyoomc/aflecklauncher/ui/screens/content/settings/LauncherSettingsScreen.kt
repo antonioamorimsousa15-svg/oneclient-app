@@ -833,7 +833,7 @@ private fun AfWallpaperAnimDialog(
                 }
             }
 
-            //Brilho (neon) — igual ao Cryo
+            //Brilho (neon) — igual ao padrão Afleck
             run {
                 val T = com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

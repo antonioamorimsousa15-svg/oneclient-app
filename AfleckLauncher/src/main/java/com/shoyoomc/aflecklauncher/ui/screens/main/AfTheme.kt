@@ -74,6 +74,8 @@ class AfThemeDef(
 /** Estado do tema (cores, vibração, contraste, opacidade), salvo no aparelho. */
 object AfThemeState {
     val themes = listOf(
+        // Tema principal Afleck: azul-noite, contorno cobre e gradiente âmbar/coral das referências.
+        AfThemeDef("afleck", "Afleck Neon", R.drawable.af_bg, Color(0xFFFFB66D), Color(0xFFFF7188), Color(0xFF09152B), Color(0xFFE49A82), Color(0xFFC9D5E8)),
         AfThemeDef("aurora", "Aurora Boreal", R.drawable.af_bg, Color(0xFF39FFB0), Color(0xFF8A5CFF), Color(0xFF041512), Color(0xFF39FFB0), Color(0xFFB6D8CE)),
         AfThemeDef("vermelha", "Aurora Rubi", R.drawable.af_bg, Color(0xFFFF4D5E), Color(0xFFFF8A5C), Color(0xFF2A060A), Color(0xFFFF4D5E), Color(0xFFE8C2C6)),
         AfThemeDef("laranja", "Aurora Âmbar", R.drawable.af_bg, Color(0xFFFF8A2B), Color(0xFFFFC02B), Color(0xFF2B1405), Color(0xFFFF8A2B), Color(0xFFE8D2BC)),
@@ -91,13 +93,13 @@ object AfThemeState {
         AfThemeDef("branca", "Aurora Pérola", R.drawable.af_bg, Color(0xFFFFFFFF), Color(0xFFBFC8D2), Color(0xFF0B0B0D), Color(0xFFE6ECF2), Color(0xFFB4B9C2))
     )
 
-    var themeId by mutableStateOf("aurora")
+    var themeId by mutableStateOf("afleck")
         private set
     var vibrance by mutableIntStateOf(0)
         private set
     var contrast by mutableIntStateOf(0)
         private set
-    var panelOpacity by mutableIntStateOf(45)
+    var panelOpacity by mutableIntStateOf(72)
         private set
     var animate by mutableStateOf(false)
         private set
@@ -128,15 +130,16 @@ object AfThemeState {
         if (prefs != null) return
         val p = ctx.getSharedPreferences("afleck_ui", Context.MODE_PRIVATE)
         prefs = p
-        themeId = p.getString("theme.id", "aurora") ?: "aurora"
-        // Aurora Boreal passa a ser o tema padrão do Afleck
-        if (p.getInt("theme.rev", 0) < 2) {
-            themeId = "aurora"
-            p.edit().putString("theme.id", "aurora").putInt("theme.rev", 2).apply()
+        themeId = p.getString("theme.id", "afleck") ?: "afleck"
+        // Migra instalações anteriores para a identidade visual principal Afleck.
+        if (p.getInt("theme.rev", 0) < 3) {
+            themeId = "afleck"
+            p.edit().putString("theme.id", "afleck").putInt("theme.rev", 3)
+                .putInt("theme.panelOpacityGlass", 72).apply()
         }
         vibrance = p.getInt("theme.vibrance", 0)
         contrast = p.getInt("theme.contrast", 0)
-        panelOpacity = p.getInt("theme.panelOpacityGlass", 45)
+        panelOpacity = p.getInt("theme.panelOpacityGlass", 72)
         animate = p.getBoolean("theme.animate", false)
         uiScale = p.getInt("theme.uiScale100", 100)
         glowOn = p.getBoolean("theme.glowOn", false)
@@ -163,7 +166,7 @@ object AfThemeState {
     fun changeDblClickOn(v: Boolean) { dblClickOn = v; saveAll() }
     fun changeDblClickRate(v: Int) { dblClickRate = v.coerceIn(20, 200); saveAll() }
     fun changeUiScale(v: Int) { uiScale = v.coerceIn(60, 110); saveAll() }
-    fun resetAdjustments() { vibrance = 0; contrast = 0; panelOpacity = 45; animate = false; uiScale = 100; saveAll() }
+    fun resetAdjustments() { vibrance = 0; contrast = 0; panelOpacity = 72; animate = false; uiScale = 100; saveAll() }
 
     private fun saveAll() {
         prefs?.edit()
@@ -225,7 +228,7 @@ internal fun Modifier.afClick(onClick: () -> Unit): Modifier = composed {
     clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onClick)
 }
 
-/** Painel de vidro azul-marinho com borda ciano. */
+/** Painel de vidro azul-noite com borda cobre. */
 @Composable
 internal fun AfPanel(
     modifier: Modifier = Modifier,
@@ -306,11 +309,11 @@ internal fun Modifier.afGlassSurface(shape: androidx.compose.ui.graphics.Shape, 
 internal fun Modifier.afRect(color: Color, selected: Boolean = false, radius: Dp = 14.dp): Modifier =
     this.afGlassSurface(androidx.compose.foundation.shape.RoundedCornerShape(radius.coerceAtMost(28.dp)), selected)
 
-/** Vidro bem escuro com a cor do tema (marca, menu lateral): fundo translúcido, mas denso, como no Cryo. */
+/** Vidro bem escuro com a cor do tema (marca, menu lateral): fundo translúcido, mas denso, como nas referências Afleck. */
 internal fun Modifier.afDarkGlass(color: Color, selected: Boolean = false, radius: Dp = 28.dp): Modifier =
     this.afGlassSurface(androidx.compose.foundation.shape.RoundedCornerShape(radius), selected)
 
-/** Botão principal: degradê ciano, texto escuro. */
+/** Botão principal: degradê âmbar/coral, texto azul-noite como nas referências. */
 @Composable
 internal fun AfButton(text: String, modifier: Modifier = Modifier, icon: Int? = null, onClick: () -> Unit) {
     Row(
@@ -321,14 +324,14 @@ internal fun AfButton(text: String, modifier: Modifier = Modifier, icon: Int? = 
         horizontalArrangement = Arrangement.Center
     ) {
         if (icon != null) {
-            Icon(painterResource(icon), null, tint = AfAccent, modifier = Modifier.size(22.dp))
+            Icon(painterResource(icon), null, tint = AfNavy, modifier = Modifier.size(22.dp))
             Spacer(Modifier.width(8.dp))
         }
-        Text(text, color = AfText, fontSize = 15.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+        Text(text, color = AfNavy, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold, maxLines = 1)
     }
 }
 
-/** Botão secundário: só contorno ciano. */
+/** Botão secundário: contorno cobre discreto. */
 @Composable
 internal fun AfOutlineButton(text: String, modifier: Modifier = Modifier, icon: Int? = null, onClick: () -> Unit) {
     Row(
@@ -346,7 +349,7 @@ internal fun AfOutlineButton(text: String, modifier: Modifier = Modifier, icon: 
     }
 }
 
-/** Círculo com ícone (preenchido em ciano ou escuro com contorno). */
+/** Círculo com ícone (preenchido em âmbar ou escuro com contorno cobre). */
 @Composable
 internal fun AfIconCircle(icon: Int, size: Dp = 40.dp, filled: Boolean = false, modifier: Modifier = Modifier) {
     Box(
@@ -403,7 +406,7 @@ internal fun Modifier.afGlow(shape: androidx.compose.ui.graphics.Shape, color: C
         )
     }
 
-/** Moldura arredondada (estilo Cryo). Mantém o nome AfCutShape para valer em todas as telas. */
+/** Moldura arredondada (estilo HUD Afleck). Mantém o nome AfCutShape para valer em todas as telas. */
 class AfCutShape(private val cut: Dp = 14.dp) : Shape {
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
         val r = with(density) { (cut * 0.9f).coerceAtMost(14.dp).toPx() }.coerceAtMost(minOf(size.width, size.height) / 2f)
