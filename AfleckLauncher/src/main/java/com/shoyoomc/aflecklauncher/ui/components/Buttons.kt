@@ -232,7 +232,7 @@ fun TouchableButton(
     text: String
 ) {
     Surface(
-        shape = CircleShape,
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(3.dp),
         color = ButtonDefaults.buttonColors().containerColor,
         contentColor = ButtonDefaults.buttonColors().contentColor,
         modifier = modifier

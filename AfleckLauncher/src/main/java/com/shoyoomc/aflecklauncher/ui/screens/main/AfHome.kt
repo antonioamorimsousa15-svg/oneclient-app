@@ -120,214 +120,83 @@ private fun AfHomeContent(
         else -> "Conta"
     }
 
+    val mono = androidx.compose.ui.text.font.FontFamily.Monospace
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // ---------- Linha de cima: Bem-vindo + Versão do Minecraft ----------
-        Row(Modifier.fillMaxWidth().height(250.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            // Bem-vindo de volta
-            AfPanel(Modifier.weight(1.65f).fillMaxHeight()) {
-                AfCardBg(homeSlot)
-                Column(Modifier.fillMaxSize().padding(18.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("Bem-vindo de volta,", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        Row(Modifier.fillMaxWidth().height(290.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            // ---------- SESSÃO ----------
+            AfPanel(Modifier.weight(1.5f).fillMaxHeight()) {
+                Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text("// SESSÃO", color = AfDim, fontSize = 11.sp, letterSpacing = 3.sp, fontFamily = mono)
                     Text(
-                        "Minecraft Java", color = AfText, fontSize = 44.sp, fontWeight = FontWeight.Bold,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis
+                        current?.getVersionName() ?: "SEM VERSÃO", color = AfText, fontSize = 34.sp, fontWeight = FontWeight.Bold,
+                        fontFamily = mono, maxLines = 1, overflow = TextOverflow.Ellipsis
                     )
-                    Text("Sua nova jornada começa aqui!", color = AfText, fontSize = 18.sp)
-                    if (current != null) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                            HomeChip(current?.getVersionName()?.uppercase() ?: "")
-                            if (loaderName.isNotEmpty()) HomeChip(loaderName.uppercase())
-                        }
-                    }
-                    Spacer(Modifier.weight(1f))
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        if (current != null) {
-                            AfButton("Jogar Agora", Modifier.width(190.dp), R.drawable.ic_play_arrow_filled) { current?.let(onPlay) }
-                        } else {
-                            AfButton("BAIXAR MINECRAFT", Modifier.width(220.dp), R.drawable.ic_download_2_filled, onOpenDownload)
-                        }
-                        Box(Modifier.afClick { onEdit("home") }) { AfIconCircle(R.drawable.ic_image_filled, size = 50.dp) }
-                    }
-                }
-            }
-            // Versão do Minecraft
-            AfPanel(Modifier.weight(1.0f).fillMaxHeight()) {
-                Column(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painterResource(R.drawable.ic_sports_esports_outlined), null, tint = AfText, modifier = Modifier.size(22.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("Versão do Minecraft", color = AfText, fontSize = 20.sp, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.weight(1f))
-                    }
-                    Row(Modifier.weight(1f).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        VersionIconImage(current, Modifier.size(52.dp))
-                        Spacer(Modifier.width(12.dp))
-                        Column {
-                            Text(current?.getVersionName() ?: "Nenhuma", color = AfText, fontSize = 26.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text(
-                                if (current != null) summary.replace(", ", " • ").substringBefore(" -") else "Escolha uma versão",
-                                color = AfDim, fontSize = 15.sp, maxLines = 1, overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (current != null) AfButton("JOGAR", Modifier.weight(1f), R.drawable.ic_play_arrow_filled) { current?.let(onPlay) }
-                        else AfButton("ESCOLHER", Modifier.weight(1f), null, onOpenVersions)
-                        Box(Modifier.afClick(onOpenVersions)) { AfIconCircle(R.drawable.ic_settings_filled, size = 44.dp) }
-                    }
-                }
-            }
-        }
-        // ---------- Meio: Suas versões + Conta + Texturas/Shaders, com a imagem 9:16 ao lado ----------
-        Row(Modifier.fillMaxWidth().height(440.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        Column(Modifier.weight(2.79f).fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Row(Modifier.fillMaxWidth().height(228.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            // Suas versões
-            AfPanel(Modifier.weight(1.26f).fillMaxHeight()) {
-                AfCardBg(versSlot)
-                Column(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painterResource(R.drawable.ic_package_2_outlined), null, tint = AfText, modifier = Modifier.size(22.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("Suas versões", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                        Text("Ver todas ›", color = AfAccent, fontSize = 15.sp, fontWeight = FontWeight.Bold, modifier = Modifier.afClick(onOpenVersions))
-                        Spacer(Modifier.width(6.dp))
-                        Box(Modifier.afClick { onEdit("vers") }) { AfIconCircle(R.drawable.ic_image_filled, size = 30.dp) }
-                    }
-                    val first = allVersions.firstOrNull()
-                    if (first == null) {
-                        Text("Nenhuma versão instalada.", color = AfDim, fontSize = 16.sp)
-                        Spacer(Modifier.weight(1f))
-                        AfButton("Baixar", Modifier.fillMaxWidth(), null, onOpenDownload)
-                    } else {
-                        allVersions.take(2).forEach { v ->
-                            Row(
-                                Modifier.fillMaxWidth().afRect(AfBorder, radius = 16.dp).padding(horizontal = 10.dp, vertical = 6.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                VersionIconImage(v, Modifier.size(36.dp))
-                                Spacer(Modifier.width(10.dp))
-                                Column(Modifier.weight(1f)) {
-                                    Text(v.getVersionName(), color = AfText, fontSize = 18.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                    Text(runCatching { v.getVersionSummary().replace(", ", " • ").substringBefore(" -") }.getOrDefault(""), color = AfDim, fontSize = 15.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                }
-                                Box(Modifier.afClick { onPlay(v) }) { AfIconCircle(R.drawable.ic_play_arrow_filled, size = 34.dp) }
-                            }
-                        }
-                    }
-                }
-            }
-            // Conta
-            AfPanel(Modifier.weight(1.0f).fillMaxHeight()) {
-                Column(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painterResource(R.drawable.ic_person_filled), null, tint = AfText, modifier = Modifier.size(22.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("Conta", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                        Row(
-                            Modifier.clip(CircleShape).background(AfAccent).afClick(onOpenAccounts)
-                                .padding(horizontal = 12.dp, vertical = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(painterResource(R.drawable.ic_checkroom), null, tint = AfNavy, modifier = Modifier.size(16.dp))
-                            Spacer(Modifier.width(4.dp))
-                            Text("Skins", color = AfNavy, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                        }
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        if (current != null) ("[" + (if (loaderName.isEmpty()) "VANILLA" else loaderName.uppercase()) + "]  " + summary.substringBefore(",")) else "Instale uma versão para começar",
+                        color = AfAccent, fontSize = 13.sp, fontFamily = mono, maxLines = 1, overflow = TextOverflow.Ellipsis
+                    )
+                    Box(Modifier.padding(vertical = 6.dp).fillMaxWidth().height(1.dp).background(AfBorder.copy(alpha = 0.3f)))
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.afClick(onOpenAccounts)) {
                         Box(
-                            Modifier.size(58.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.12f)).border(2.dp, AfAccent, CircleShape),
+                            Modifier.size(46.dp).clip(RoundedCornerShape(3.dp)).background(Color.Black.copy(alpha = 0.5f)).border(1.dp, AfAccent.copy(alpha = 0.6f), RoundedCornerShape(3.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             val skin = account?.takeIf { it.hasSkinFile }?.getSkinFile()
-                            if (skin != null) {
-                                HomeSkinHead(skin, Modifier.fillMaxSize().padding(5.dp))
-                            } else if (userName == null) {
-                                Icon(painterResource(R.drawable.ic_add), null, tint = AfText, modifier = Modifier.size(28.dp))
-                            } else {
-                                Text(userName.take(1).uppercase(), color = AfAccent, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                            }
+                            if (skin != null) HomeSkinHead(skin, Modifier.fillMaxSize().padding(3.dp))
+                            else Icon(painterResource(R.drawable.ic_person_filled), null, tint = AfDim, modifier = Modifier.size(24.dp))
                         }
                         Spacer(Modifier.width(12.dp))
                         Column {
-                            Text(
-                                userName ?: "Adicionar Conta", color = AfText, fontSize = 24.sp, fontWeight = FontWeight.Bold,
-                                maxLines = 1, overflow = TextOverflow.Ellipsis
-                            )
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(Modifier.size(8.dp).clip(CircleShape).background(if (userName == null) AfDim else Color(0xFF4ADE80)))
-                                Spacer(Modifier.width(6.dp))
-                                Text(accountKind, color = if (userName == null) AfDim else Color(0xFF4ADE80), fontSize = 16.sp)
-                            }
+                            Text(userName ?: "SEM CONTA", color = AfText, fontSize = 18.sp, fontWeight = FontWeight.Bold, fontFamily = mono, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(accountKind.uppercase(), color = AfDim, fontSize = 11.sp, letterSpacing = 1.sp, fontFamily = mono)
                         }
                     }
                     Spacer(Modifier.weight(1f))
-                    AfOutlineButton("Gerenciar Conta", Modifier.fillMaxWidth(), R.drawable.ic_settings_filled, onOpenAccounts)
+                    if (current != null) AfButton("Iniciar jogo", Modifier.fillMaxWidth(), R.drawable.ic_play_arrow_filled) { current?.let(onPlay) }
+                    else AfButton("Baixar Minecraft", Modifier.fillMaxWidth(), R.drawable.ic_download_2_filled, onOpenDownload)
+                }
+            }
+            // ---------- TELEMETRIA ----------
+            AfPanel(Modifier.weight(1f).fillMaxHeight()) {
+                Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("// TELEMETRIA", color = AfDim, fontSize = 11.sp, letterSpacing = 3.sp, fontFamily = mono)
+                    AfTelemetry(Modifier.fillMaxWidth())
                 }
             }
         }
-        Row(Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            HomeShortcutCard(Modifier.weight(1f), R.drawable.ic_styler, "Texturas", "Mude o visual do jogo com texturas novas.", "Ver texturas ›", onOpenVersions)
-            HomeShortcutCard(Modifier.weight(1f), R.drawable.ic_lightbulb, "Shaders", "Deixe seu mundo mais bonito com shaders.", "Explorar ›", onOpenVersions)
-        }
-        }
-            // Imagem 9:16 (plano de fundo)
-            Box(
-                Modifier.weight(1.0f).fillMaxHeight().clip(androidx.compose.foundation.shape.RoundedCornerShape(26.dp))
-                    .border(1.5.dp, AfBorder, androidx.compose.foundation.shape.RoundedCornerShape(26.dp))
-            ) {
-                AfSlotImage(slot916, R.drawable.af_bg, Modifier.fillMaxSize())
-                Box(Modifier.align(Alignment.TopEnd).padding(8.dp).afClick { onEdit("card916") }) {
-                    AfIconCircle(R.drawable.ic_image_filled, size = 40.dp)
-                }
-                Text(
-                    "9:16", color = AfText, fontSize = 13.sp, fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.BottomStart).padding(10.dp).clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.18f)).padding(horizontal = 10.dp, vertical = 4.dp)
-                )
-            }
-        }
-        // ---------- Linha de baixo: Texturas, Shaders, Configurações Rápidas ----------
-        Row(Modifier.fillMaxWidth().height(231.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            AfPanel(Modifier.weight(1.0f).fillMaxHeight()) {
-                Column(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(Modifier.fillMaxWidth().height(190.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            // ---------- VERSÕES ----------
+            AfPanel(Modifier.weight(1.5f).fillMaxHeight()) {
+                Column(Modifier.fillMaxSize().padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painterResource(R.drawable.ic_star_filled), null, tint = AfAccent, modifier = Modifier.size(24.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("Funções Extras", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                        Text("// VERSÕES", color = AfDim, fontSize = 11.sp, letterSpacing = 3.sp, fontFamily = mono, modifier = Modifier.weight(1f))
+                        Text("VER TODAS >", color = AfAccent, fontSize = 11.sp, letterSpacing = 1.sp, fontFamily = mono, modifier = Modifier.afClick(onOpenVersions))
                     }
-                    Row(
-                        Modifier.fillMaxWidth().height(72.dp).afRect(AfBorder, radius = 14.dp).afClick(onOpenSettings).padding(horizontal = 14.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AfIconCircle(R.drawable.ic_star_filled, size = 44.dp)
-                        Spacer(Modifier.width(12.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text("Novidades", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-                            Text("Veja o que há de novo no Afleck", color = AfAccent, fontSize = 15.sp)
+                    if (allVersions.isEmpty()) {
+                        Spacer(Modifier.weight(1f))
+                        Text("NENHUMA VERSÃO INSTALADA", color = AfDim, fontSize = 12.sp, fontFamily = mono)
+                        Spacer(Modifier.weight(1f))
+                    } else {
+                        allVersions.take(3).forEach { v ->
+                            Box(Modifier.padding(top = 6.dp).fillMaxWidth().height(1.dp).background(AfBorder.copy(alpha = 0.2f)))
+                            Row(Modifier.weight(1f).fillMaxWidth().afClick { onPlay(v) }, verticalAlignment = Alignment.CenterVertically) {
+                                Text(v.getVersionName(), color = AfText, fontSize = 14.sp, fontWeight = FontWeight.Bold, fontFamily = mono, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                                Text(runCatching { v.getVersionSummary().substringBefore(" -").replace(", ", " / ") }.getOrDefault(""), color = AfDim, fontSize = 11.sp, fontFamily = mono, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                                Icon(painterResource(R.drawable.ic_play_arrow_filled), null, tint = AfAccent, modifier = Modifier.size(20.dp))
+                            }
                         }
-                        Icon(painterResource(R.drawable.ic_keyboard_arrow_right), null, tint = AfDim, modifier = Modifier.size(24.dp))
-                    }
-                    Row(
-                        Modifier.fillMaxWidth().height(52.dp).afRect(AfBorder, radius = 14.dp).padding(horizontal = 14.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(painterResource(R.drawable.ic_add), null, tint = AfDim, modifier = Modifier.size(20.dp))
-                        Spacer(Modifier.width(10.dp))
-                        Text("Mais funções em breve", color = AfDim, fontSize = 17.sp)
                     }
                 }
             }
-            AfPanel(Modifier.weight(1.0f).fillMaxHeight()) {
-                AfCardBg(quickSlot)
-                Column(Modifier.fillMaxSize().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            // ---------- ATALHOS ----------
+            AfPanel(Modifier.weight(1f).fillMaxHeight()) {
+                Column(Modifier.fillMaxSize().padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painterResource(R.drawable.ic_settings_filled), null, tint = AfText, modifier = Modifier.size(22.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("Configurações Rápidas", color = AfText, fontSize = 21.sp, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.weight(1f))
-                        Box(Modifier.afClick { onEdit("shortcuts") }) { AfIconCircle(R.drawable.ic_edit_outlined, size = 34.dp) }
+                        Text("// ATALHOS", color = AfDim, fontSize = 11.sp, letterSpacing = 3.sp, fontFamily = mono, modifier = Modifier.weight(1f))
+                        Text("EDITAR", color = AfAccent, fontSize = 11.sp, letterSpacing = 1.sp, fontFamily = mono, modifier = Modifier.afClick { onEdit("shortcuts") })
                     }
                     val ctx = androidx.compose.ui.platform.LocalContext.current
                     val picked = remember { mutableStateOf(afLoadShortcuts(ctx)) }
@@ -338,7 +207,7 @@ private fun AfHomeContent(
                     )
                     val cols = if (picked.value.size > 4) 3 else 2
                     picked.value.mapNotNull { id -> AF_SHORTCUTS.firstOrNull { it.id == id } }.chunked(cols).forEach { rowItems ->
-                        Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             rowItems.forEach { sc -> QuickTile(Modifier.weight(1f), sc.icon, sc.label, actions[sc.id] ?: onOpenSettings) }
                             repeat(cols - rowItems.size) { Spacer(Modifier.weight(1f)) }
                         }
@@ -409,11 +278,11 @@ private fun HomeSkinHead(file: java.io.File, modifier: Modifier = Modifier) {
 @Composable
 private fun QuickTile(modifier: Modifier, icon: Int, label: String, onClick: () -> Unit) {
     Column(
-        modifier = modifier.fillMaxHeight().afRect(AfAccent, radius = 14.dp).afClick(onClick),
+        modifier = modifier.fillMaxHeight().afRect(AfAccent, radius = 4.dp).afClick(onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(painterResource(icon), null, tint = AfAccent, modifier = Modifier.size(22.dp))
-        Text(label, color = AfText, fontSize = 15.sp, fontWeight = FontWeight.Bold, maxLines = 1, textAlign = TextAlign.Center)
+        Text(label.uppercase(), color = AfText, fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1, letterSpacing = 0.5.sp, textAlign = TextAlign.Center, fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
     }
 }

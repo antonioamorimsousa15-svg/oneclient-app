@@ -19,5 +19,19 @@
 package com.shoyoomc.aflecklauncher.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.unit.sp
 
-val AppTypography = Typography()
+private val AfMono = androidx.compose.ui.text.font.FontFamily.Monospace
+
+private fun androidx.compose.ui.text.TextStyle.af() = copy(fontFamily = AfMono, letterSpacing = 0.4.sp)
+
+/** Tipografia técnica do Afleck: monoespaçada em todo o app. */
+val AppTypography = Typography().let { t ->
+    t.copy(
+        displayLarge = t.displayLarge.af(), displayMedium = t.displayMedium.af(), displaySmall = t.displaySmall.af(),
+        headlineLarge = t.headlineLarge.af(), headlineMedium = t.headlineMedium.af(), headlineSmall = t.headlineSmall.af(),
+        titleLarge = t.titleLarge.af(), titleMedium = t.titleMedium.af(), titleSmall = t.titleSmall.af(),
+        bodyLarge = t.bodyLarge.af(), bodyMedium = t.bodyMedium.af(), bodySmall = t.bodySmall.af(),
+        labelLarge = t.labelLarge.af(), labelMedium = t.labelMedium.af(), labelSmall = t.labelSmall.af()
+    )
+}

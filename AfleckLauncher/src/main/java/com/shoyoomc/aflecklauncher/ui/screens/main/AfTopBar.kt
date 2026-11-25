@@ -52,12 +52,12 @@ fun AfTopBar(
         Row(Modifier.afClick(onLogo), verticalAlignment = Alignment.CenterVertically) {
             Icon(painterResource(R.drawable.ic_af_bolt), null, tint = AfAccent, modifier = Modifier.size(30.dp))
             Spacer(Modifier.width(8.dp))
-            Text("AFLECK", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Black, letterSpacing = 4.sp, maxLines = 1)
+            Text("AFLECK", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Black, letterSpacing = 4.sp, maxLines = 1, fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
             Spacer(Modifier.width(8.dp))
             Text("v" + BuildConfig.VERSION_NAME, color = AfAccent, fontSize = 12.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }
         Box(Modifier.width(1.dp).size(width = 1.dp, height = 22.dp).background(AfBorder.copy(alpha = 0.5f)))
-        Text(sectionTitle.uppercase(), color = AfDim, fontSize = 15.sp, fontWeight = FontWeight.Bold, letterSpacing = 3.sp, maxLines = 1)
+        Text("// " + sectionTitle.uppercase(), color = AfDim, fontSize = 13.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp, maxLines = 1, fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
         Spacer(Modifier.weight(1f))
         Pill(onClick = { AfMusic.changeShow(ctx, !AfMusic.showWidget) }) {
             AfIconCircle(R.drawable.ic_af_music, size = 34.dp, filled = AfMusic.showWidget)
@@ -81,7 +81,7 @@ fun AfTopBar(
 @Composable
 private fun Pill(onClick: (() -> Unit)? = null, content: @Composable RowScope.() -> Unit) {
     Row(
-        modifier = Modifier.afDarkGlass(AfBorder, radius = 18.dp)
+        modifier = Modifier.afDarkGlass(AfBorder, radius = 4.dp)
             .then(if (onClick != null) Modifier.afClick(onClick) else Modifier)
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,

@@ -52,7 +52,7 @@ fun AfSidebar(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(vertical = 10.dp).verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NavItem(R.drawable.ic_home_filled, "Início", inHome, onHome)
@@ -66,24 +66,23 @@ fun AfSidebar(
 
 @Composable
 private fun NavItem(icon: Int, label: String, selected: Boolean, onClick: () -> Unit) {
-    val shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp)
-    Column(
-        modifier = Modifier.width(72.dp).clip(shape).afClick(onClick).padding(vertical = 5.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Row(
+        modifier = Modifier.fillMaxWidth().afClick(onClick),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier.size(width = 54.dp, height = 38.dp)
-                .clip(androidx.compose.foundation.shape.RoundedCornerShape(14.dp))
-                .background(if (selected) Brush.horizontalGradient(listOf(AfAccent, AfAccent2)) else Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent))),
-            contentAlignment = Alignment.Center
+        Box(Modifier.width(2.dp).height(44.dp).background(if (selected) AfAccent else Color.Transparent))
+        Column(
+            modifier = Modifier.weight(1f).padding(vertical = 4.dp)
+                .background(if (selected) AfAccent.copy(alpha = 0.12f) else Color.Transparent),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(painterResource(icon), null, tint = if (selected) AfNavy else AfDim, modifier = Modifier.size(24.dp))
+            Icon(painterResource(icon), null, tint = if (selected) AfAccent else AfDim, modifier = Modifier.size(22.dp))
+            Spacer(Modifier.height(2.dp))
+            Text(
+                label.uppercase(), color = if (selected) AfText else AfDim,
+                fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1, letterSpacing = 1.sp,
+                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+            )
         }
-        Spacer(Modifier.height(3.dp))
-        Text(
-            label, color = if (selected) AfText else AfDim,
-            fontSize = 10.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-            maxLines = 1, letterSpacing = 0.5.sp
-        )
     }
 }
