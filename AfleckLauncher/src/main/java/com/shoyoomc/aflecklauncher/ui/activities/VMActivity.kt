@@ -440,6 +440,7 @@ class VMActivity : BaseAppCompatActivity(), SurfaceTextureListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.load(this)
+        com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.load(this)
         //加载渲染器
         Renderers.init()
         //加载插件

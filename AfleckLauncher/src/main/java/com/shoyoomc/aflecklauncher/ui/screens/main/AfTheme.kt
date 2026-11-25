@@ -74,15 +74,24 @@ class AfThemeDef(
 /** Estado do tema (cores, vibração, contraste, opacidade), salvo no aparelho. */
 object AfThemeState {
     val themes = listOf(
-        AfThemeDef("branca", "Aurora Branca", R.drawable.af_bg_branca, Color(0xFFFFFFFF), Color(0xFFBFC8D2), Color(0xFF0B0B0D), Color(0xFFE6ECF2), Color(0xFFB4B9C2)),
-        AfThemeDef("ciano", "Aurora Ciano", R.drawable.af_bg_ciano, Color(0xFF22E3F7), Color(0xFF4DF2D8), Color(0xFF0A3558), Color(0xFF1ED8F5), Color(0xFFB9D6E6)),
-        AfThemeDef("verde", "Aurora Verde", R.drawable.af_bg_verde, Color(0xFF3DFF8A), Color(0xFFB6FF5E), Color(0xFF07261A), Color(0xFF2BE67A), Color(0xFFB4DCC4)),
-        AfThemeDef("roxa", "Aurora Roxa", R.drawable.af_bg_roxa, Color(0xFFB388FF), Color(0xFFFF7AE0), Color(0xFF1E0B3A), Color(0xFFB388FF), Color(0xFFD0C2E8)),
-        AfThemeDef("amarela", "Aurora Amarela", R.drawable.af_bg_amarela, Color(0xFFFFD740), Color(0xFFFF9F1C), Color(0xFF2A1E05), Color(0xFFFFC93C), Color(0xFFE6D8B0)),
-        AfThemeDef("rosa", "Aurora Rosa", R.drawable.af_bg_rosa, Color(0xFFFF6EA8), Color(0xFFFFB36E), Color(0xFF3A0B22), Color(0xFFFF5C9A), Color(0xFFE8C2D2))
+        AfThemeDef("aurora", "Aurora Boreal", R.drawable.af_bg, Color(0xFF39FFB0), Color(0xFF8A5CFF), Color(0xFF041512), Color(0xFF39FFB0), Color(0xFFB6D8CE)),
+        AfThemeDef("vermelha", "Aurora Rubi", R.drawable.af_bg, Color(0xFFFF4D5E), Color(0xFFFF8A5C), Color(0xFF2A060A), Color(0xFFFF4D5E), Color(0xFFE8C2C6)),
+        AfThemeDef("laranja", "Aurora Âmbar", R.drawable.af_bg, Color(0xFFFF8A2B), Color(0xFFFFC02B), Color(0xFF2B1405), Color(0xFFFF8A2B), Color(0xFFE8D2BC)),
+        AfThemeDef("amarela", "Aurora Solar", R.drawable.af_bg, Color(0xFFFFD740), Color(0xFFFF9F1C), Color(0xFF2A1E05), Color(0xFFFFC93C), Color(0xFFE6D8B0)),
+        AfThemeDef("lima", "Aurora Lima", R.drawable.af_bg, Color(0xFFC6FF3D), Color(0xFF5EFF9A), Color(0xFF1A2605), Color(0xFFC6FF3D), Color(0xFFD6E4B4)),
+        AfThemeDef("verde", "Aurora Esmeralda", R.drawable.af_bg, Color(0xFF3DFF8A), Color(0xFFB6FF5E), Color(0xFF07261A), Color(0xFF2BE67A), Color(0xFFB4DCC4)),
+        AfThemeDef("turquesa", "Aurora Jade", R.drawable.af_bg, Color(0xFF2DF5C8), Color(0xFF2DB8F5), Color(0xFF05261F), Color(0xFF2DF5C8), Color(0xFFB4E0D6)),
+        AfThemeDef("ciano", "Aurora Glacial", R.drawable.af_bg, Color(0xFF22E3F7), Color(0xFF4DF2D8), Color(0xFF0A3558), Color(0xFF1ED8F5), Color(0xFFB9D6E6)),
+        AfThemeDef("azul", "Aurora Safira", R.drawable.af_bg, Color(0xFF4D8DFF), Color(0xFF22E3F7), Color(0xFF07163A), Color(0xFF4D8DFF), Color(0xFFBCCBE8)),
+        AfThemeDef("anil", "Aurora Anil", R.drawable.af_bg, Color(0xFF6C5CFF), Color(0xFFB388FF), Color(0xFF0E0A3A), Color(0xFF6C5CFF), Color(0xFFC4C0E8)),
+        AfThemeDef("roxa", "Aurora Ametista", R.drawable.af_bg, Color(0xFFB388FF), Color(0xFFFF7AE0), Color(0xFF1E0B3A), Color(0xFFB388FF), Color(0xFFD0C2E8)),
+        AfThemeDef("magenta", "Aurora Orquídea", R.drawable.af_bg, Color(0xFFFF4DE0), Color(0xFFB388FF), Color(0xFF2E0B2A), Color(0xFFFF4DE0), Color(0xFFE8C0E2)),
+        AfThemeDef("rosa", "Aurora Rosé", R.drawable.af_bg, Color(0xFFFF6EA8), Color(0xFFFFB36E), Color(0xFF3A0B22), Color(0xFFFF5C9A), Color(0xFFE8C2D2)),
+        AfThemeDef("prata", "Aurora Prata", R.drawable.af_bg, Color(0xFFC9D1DB), Color(0xFF8E9AAB), Color(0xFF0C0F14), Color(0xFFB6C0CC), Color(0xFFADB6C2)),
+        AfThemeDef("branca", "Aurora Pérola", R.drawable.af_bg, Color(0xFFFFFFFF), Color(0xFFBFC8D2), Color(0xFF0B0B0D), Color(0xFFE6ECF2), Color(0xFFB4B9C2))
     )
 
-    var themeId by mutableStateOf("branca")
+    var themeId by mutableStateOf("aurora")
         private set
     var vibrance by mutableIntStateOf(0)
         private set
@@ -105,6 +114,9 @@ object AfThemeState {
     var neonThickness by mutableIntStateOf(3)
         private set
 
+    var auroraAnim by mutableStateOf(true)
+        private set
+
     var dblClickOn by mutableStateOf(false)
         private set
     var dblClickRate by mutableIntStateOf(50)
@@ -116,7 +128,12 @@ object AfThemeState {
         if (prefs != null) return
         val p = ctx.getSharedPreferences("afleck_ui", Context.MODE_PRIVATE)
         prefs = p
-        themeId = p.getString("theme.id", "branca") ?: "branca"
+        themeId = p.getString("theme.id", "aurora") ?: "aurora"
+        // Aurora Boreal passa a ser o tema padrão do Afleck
+        if (p.getInt("theme.rev", 0) < 2) {
+            themeId = "aurora"
+            p.edit().putString("theme.id", "aurora").putInt("theme.rev", 2).apply()
+        }
         vibrance = p.getInt("theme.vibrance", 0)
         contrast = p.getInt("theme.contrast", 0)
         panelOpacity = p.getInt("theme.panelOpacityGlass", 45)
@@ -127,6 +144,7 @@ object AfThemeState {
         glowStrength = p.getInt("theme.glowStrength", 70)
         neonAnimated = p.getBoolean("theme.neonAnimated", false)
         neonThickness = p.getInt("theme.neonThickness", 3)
+        auroraAnim = p.getBoolean("theme.auroraAnim", true)
         dblClickOn = p.getBoolean("game.dblClickOn", false)
         dblClickRate = p.getInt("game.dblClickGap", 50)
     }
@@ -141,6 +159,7 @@ object AfThemeState {
     fun changeGlowStrength(v: Int) { glowStrength = v.coerceIn(5, 100); saveAll() }
     fun changeNeonAnimated(v: Boolean) { neonAnimated = v; saveAll() }
     fun changeNeonThickness(v: Int) { neonThickness = v.coerceIn(1, 10); saveAll() }
+    fun changeAuroraAnim(v: Boolean) { auroraAnim = v; saveAll() }
     fun changeDblClickOn(v: Boolean) { dblClickOn = v; saveAll() }
     fun changeDblClickRate(v: Int) { dblClickRate = v.coerceIn(20, 200); saveAll() }
     fun changeUiScale(v: Int) { uiScale = v.coerceIn(60, 110); saveAll() }
@@ -159,6 +178,7 @@ object AfThemeState {
             ?.putInt("theme.glowStrength", glowStrength)
             ?.putBoolean("theme.neonAnimated", neonAnimated)
             ?.putInt("theme.neonThickness", neonThickness)
+            ?.putBoolean("theme.auroraAnim", auroraAnim)
             ?.putBoolean("game.dblClickOn", dblClickOn)
             ?.putInt("game.dblClickGap", dblClickRate)
             ?.apply()

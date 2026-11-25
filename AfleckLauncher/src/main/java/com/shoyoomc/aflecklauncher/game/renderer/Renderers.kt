@@ -51,7 +51,6 @@ object Renderers {
         addRenderers(
             NGGL4ESRenderer,
             GL4ESRenderer,
-            KopperZinkRenderer,
             MobileGluesRenderer,
             VirGLRenderer,
             FreedrenoRenderer,

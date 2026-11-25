@@ -121,12 +121,13 @@ fun launcherEvent(
  */
 object AfDoubleClicker {
     fun isEligible(keycode: Int): Boolean =
-        com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.dblClickOn &&
-            (keycode == com.movtery.inputmap.keycodes.LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT.toInt() ||
-                keycode == com.movtery.inputmap.keycodes.LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT.toInt())
+        (keycode == com.movtery.inputmap.keycodes.LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT.toInt() ||
+            keycode == com.movtery.inputmap.keycodes.LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_RIGHT.toInt()) &&
+            AfMacro.enabled(keycode)
 
     /** Toque: clique, pausa do intervalo e segundo clique (ambos soltos em seguida). */
     fun tap(keycode: Int) {
+        if (AfMacro.enabled(keycode)) { AfMacro.burst(keycode); return }
         stop(keycode)
         val gap = com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.dblClickRate.coerceIn(20, 200).toLong()
         val short = (gap / 3).coerceAtLeast(10L)
@@ -149,6 +150,11 @@ object AfDoubleClicker {
     }
 
     fun handle(keycode: Int, pressed: Boolean) {
+        if (AfMacro.enabled(keycode)) {
+            if (pressed) AfMacro.burst(keycode)
+            else { AfMacro.cancel(keycode); CallbackBridge.sendMouseButton(keycode, false) }
+            return
+        }
         if (!pressed) {
             val wasWaiting = pending[keycode]?.isNotEmpty() == true
             stop(keycode)
@@ -171,6 +177,7 @@ object AfDoubleClicker {
     }
 
     fun stop(keycode: Int) {
+        AfMacro.cancel(keycode)
         pending.remove(keycode)?.forEach { handler.removeCallbacks(it) }
     }
 }

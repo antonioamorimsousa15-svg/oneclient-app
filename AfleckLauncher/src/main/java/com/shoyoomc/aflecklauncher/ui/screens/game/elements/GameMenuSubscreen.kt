@@ -53,6 +53,9 @@ import com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfCutShape
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfIconCircle
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfMusicPicker
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfMusicSettings
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfMusicWidget
 import com.shoyoomc.aflecklauncher.ui.screens.main.afClick
 import com.shoyoomc.aflecklauncher.ui.screens.main.afGlow
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHud
@@ -144,7 +147,7 @@ private val controlTabs = listOf(
 
 private enum class DockPanel(val title: String) {
     Controls("CONTROLES"), Gestures("GESTOS"), Mouse("MOUSE"), Gamepad("CONTROLE / GAMEPAD"),
-    Gyro("GIROSCÓPIO"), Resolution("RESOLUÇÃO E TELA"), Game("MENU DO JOGO")
+    Gyro("GIROSCÓPIO"), Resolution("RESOLUÇÃO E TELA"), Game("MENU DO JOGO"), Music("MÚSICA")
 }
 
 @Composable
@@ -184,6 +187,9 @@ fun GameMenuSubscreen(
                     )
             )
         }
+
+        if (!(visible && panel == null)) AfMusicWidget(Modifier.align(Alignment.TopCenter))
+        AfMusicPicker()
 
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.TopCenter),
@@ -265,6 +271,14 @@ fun GameMenuSubscreen(
                                 ) {
                                     CustomResolutionContent(onValueCommitted = onRefreshWindowSize)
                                 }
+                                DockPanel.Music -> Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .verticalScroll(rememberScrollState())
+                                        .padding(12.dp)
+                                ) {
+                                    AfMusicSettings(Modifier.fillMaxWidth())
+                                }
                                 DockPanel.Game -> GameActionContent(
                                     modifier = Modifier.fillMaxSize(),
                                     onForceClose = onForceClose,
@@ -304,7 +318,8 @@ private fun AfGameDock(
         DockEntry(R.drawable.ic_video_settings, "Resolução", { onOpen(DockPanel.Resolution) }, active == DockPanel.Resolution),
         DockEntry(R.drawable.ic_menu, "Menu flutuante", { onOpen(DockPanel.Game) }, active == DockPanel.Game),
         DockEntry(R.drawable.ic_rocket_launch_filled, "FPS e Memória", { onOpen(DockPanel.Game) }, false),
-        DockEntry(R.drawable.ic_terminal_outlined, "Log", onLog, false)
+        DockEntry(R.drawable.ic_terminal_outlined, "Log", onLog, false),
+        DockEntry(R.drawable.ic_menu, "Música", { onOpen(DockPanel.Music) }, active == DockPanel.Music)
     )
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -637,17 +652,6 @@ private fun GameActionContent(
                 color = color,
                 contentColor = contentColor,
                 enabled = AllSettings.showMenuBall.state
-            )
-        }
-        //请求最高刷新率
-        item {
-            MenuSwitchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.settings_renderer_max_refresh_rate_title),
-                switch = AllSettings.requestMaxRefreshRate.state,
-                onSwitch = { AllSettings.requestMaxRefreshRate.save(it) },
-                color = color,
-                contentColor = contentColor,
             )
         }
 

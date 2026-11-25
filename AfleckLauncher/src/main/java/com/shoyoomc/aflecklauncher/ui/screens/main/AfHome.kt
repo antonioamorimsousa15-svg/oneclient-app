@@ -155,13 +155,11 @@ private fun AfHomeContent(
             }
             // Versão do Minecraft
             AfPanel(Modifier.weight(1.0f).fillMaxHeight()) {
-                AfCardBg(mcvSlot)
                 Column(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(painterResource(R.drawable.ic_sports_esports_outlined), null, tint = AfText, modifier = Modifier.size(22.dp))
                         Spacer(Modifier.width(8.dp))
                         Text("Versão do Minecraft", color = AfText, fontSize = 20.sp, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.weight(1f))
-                        Box(Modifier.afClick { onEdit("mcv") }) { AfIconCircle(R.drawable.ic_image_filled, size = 30.dp) }
                     }
                     Row(Modifier.weight(1f).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         VersionIconImage(current, Modifier.size(52.dp))
@@ -223,7 +221,6 @@ private fun AfHomeContent(
             }
             // Conta
             AfPanel(Modifier.weight(1.0f).fillMaxHeight()) {
-                AfCardBg(accSlot)
                 Column(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(painterResource(R.drawable.ic_person_filled), null, tint = AfText, modifier = Modifier.size(22.dp))
@@ -238,8 +235,6 @@ private fun AfHomeContent(
                             Spacer(Modifier.width(4.dp))
                             Text("Skins", color = AfNavy, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                         }
-                        Spacer(Modifier.width(6.dp))
-                        Box(Modifier.afClick { onEdit("acc") }) { AfIconCircle(R.drawable.ic_image_filled, size = 30.dp) }
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(

@@ -64,9 +64,9 @@ fun AfAppearance(bgSlot: AfImageSlot, onClose: () -> Unit) {
                                 .padding(8.dp),
                             verticalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            Image(
-                                painterResource(t.bg), null, contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxWidth().height(64.dp).clip(AfCutShape(8.dp))
+                            AfAuroraBackground(
+                                Modifier.fillMaxWidth().height(64.dp).clip(AfCutShape(8.dp)),
+                                c1 = t.accent, c2 = t.accent2, animated = false
                             )
                             Box(
                                 Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp))
@@ -92,6 +92,21 @@ fun AfAppearance(bgSlot: AfImageSlot, onClose: () -> Unit) {
                         colors = SwitchDefaults.colors(checkedThumbColor = AfNavy, checkedTrackColor = AfAccent)
                     )
                 }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text("Aurora animada", color = AfText, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                        Text("Desligue para economizar bateria, CPU e GPU.", color = AfDim, fontSize = 12.sp)
+                    }
+                    Switch(
+                        checked = AfThemeState.auroraAnim,
+                        onCheckedChange = { AfThemeState.changeAuroraAnim(it) },
+                        colors = SwitchDefaults.colors(checkedThumbColor = AfNavy, checkedTrackColor = AfAccent)
+                    )
+                }
+
+                Text("Música", color = AfAccent, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                AfMusicSettings(Modifier.fillMaxWidth())
 
                 Text("Plano de fundo", color = AfAccent, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Text(

@@ -282,22 +282,73 @@ fun GameSettingsScreen(
                     SwitchSettingsCard(
                         modifier = Modifier.fillMaxWidth(),
                         position = CardPosition.Top,
-                        checked = com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.dblClickOn,
-                        onCheckedChange = { com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.changeDblClickOn(it) },
-                        title = "Duplo clique ao segurar",
-                        summary = "Cada toque no bot\u00e3o de bater ou de colocar bloco d\u00e1 dois cliques seguidos (ajuda no mobile)"
+                        checked = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.leftOn,
+                        onCheckedChange = { com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.changeLeftOn(it) },
+                        title = "Macro do bot\u00e3o esquerdo",
+                        summary = "Cada toque no bot\u00e3o esquerdo dispara uma rajada de cliques com intervalo fixo (m\u00e1ximo 10)"
+                    )
+
+                    IntSliderSettingsCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        position = CardPosition.Middle,
+                        value = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.leftClicks,
+                        onValueChange = { com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.changeLeftClicks(it) },
+                        title = "Cliques por rajada",
+                        summary = "Quantos cliques a macro dá a cada toque",
+                        valueRange = 1f..10f,
+                        enabled = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.leftOn
                     )
 
                     IntSliderSettingsCard(
                         modifier = Modifier.fillMaxWidth(),
                         position = CardPosition.Bottom,
-                        value = com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.dblClickRate,
-                        onValueChange = { com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.changeDblClickRate(it) },
-                        title = "Intervalo entre os dois cliques",
-                        summary = "Tempo entre o primeiro e o segundo clique",
-                        valueRange = 20f..200f,
+                        value = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.leftGap,
+                        onValueChange = { com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.changeLeftGap(it) },
+                        title = "Intervalo entre os cliques",
+                        summary = "Tempo fixo entre um clique e o pr\u00f3ximo",
+                        valueRange = 50f..500f,
                         suffix = "ms",
-                        enabled = com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.dblClickOn
+                        enabled = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.leftOn
+                    )
+                }
+            }
+
+            AnimatedItem { ctx ->
+                SettingsCardColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animated(ctx)
+                ) {
+                    SwitchSettingsCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        position = CardPosition.Top,
+                        checked = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.rightOn,
+                        onCheckedChange = { com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.changeRightOn(it) },
+                        title = "Macro do bot\u00e3o direito",
+                        summary = "Cada toque no bot\u00e3o direito dispara uma rajada de cliques com intervalo fixo (m\u00e1ximo 10)"
+                    )
+
+                    IntSliderSettingsCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        position = CardPosition.Middle,
+                        value = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.rightClicks,
+                        onValueChange = { com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.changeRightClicks(it) },
+                        title = "Cliques por rajada",
+                        summary = "Quantos cliques a macro dá a cada toque",
+                        valueRange = 1f..10f,
+                        enabled = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.rightOn
+                    )
+
+                    IntSliderSettingsCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        position = CardPosition.Bottom,
+                        value = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.rightGap,
+                        onValueChange = { com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.changeRightGap(it) },
+                        title = "Intervalo entre os cliques",
+                        summary = "Tempo fixo entre um clique e o pr\u00f3ximo",
+                        valueRange = 50f..500f,
+                        suffix = "ms",
+                        enabled = com.shoyoomc.aflecklauncher.ui.control.event.AfMacro.rightOn
                     )
                 }
             }

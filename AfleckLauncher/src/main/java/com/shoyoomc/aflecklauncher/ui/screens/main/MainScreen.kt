@@ -20,6 +20,9 @@ package com.shoyoomc.aflecklauncher.ui.screens.main
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -164,6 +167,14 @@ fun MainScreen(
     remember { AfThemeState.load(themeCtx); true }
     val bgSlot = rememberAfSlot("bg")
     var showAppearance by remember { mutableStateOf(false) }
+    // Afleck: fade-in ao abrir o launcher e ao trocar de seção
+    val startAlpha = remember { Animatable(0f) }
+    val sectionAlpha = remember { Animatable(0f) }
+    LaunchedEffect(Unit) { startAlpha.animateTo(1f, tween(450)) }
+    LaunchedEffect(mainScreenKey, showAppearance) {
+        sectionAlpha.snapTo(0f)
+        sectionAlpha.animateTo(1f, tween(320))
+    }
     val inLauncherScreen = (mainScreenKey == null || mainScreenKey is NormalNavKey.LauncherMain) && !showAppearance
 
     val isBackgroundValid = LocalBackgroundViewModel.current?.isValid == true
@@ -181,10 +192,13 @@ fun MainScreen(
         // Se o usuário escolheu um plano de fundo em Ajustes > Launcher, ele aparece (imagem ou vídeo).
         val useSystemBg = isBackgroundValid && bgSlot.uri == null
         Box(Modifier.fillMaxSize().then(if (useSystemBg) Modifier else Modifier.background(Color.Black))) {
-        if (!useSystemBg) AfSlotImage(bgSlot, AfThemeState.current.bg, Modifier.fillMaxSize())
-        Box(Modifier.fillMaxSize().background(Color(if (useSystemBg) 0x33000000 else 0x59000000)))
+        if (!useSystemBg) {
+            if (bgSlot.uri == null) AfAuroraBackground(Modifier.fillMaxSize())
+            else AfSlotImage(bgSlot, null, Modifier.fillMaxSize())
+        }
+        Box(Modifier.fillMaxSize().background(Color(if (useSystemBg) 0x33000000 else if (bgSlot.uri == null) 0x00000000 else 0x59000000)))
         Column(
-            modifier = Modifier.fillMaxSize().then(
+            modifier = Modifier.fillMaxSize().graphicsLayer { alpha = startAlpha.value }.then(
                 if (AllSettings.launcherFullScreen.state) Modifier
                 else Modifier.windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.displayCutout)
             )
@@ -256,6 +270,7 @@ fun MainScreen(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(1f)
+                    .graphicsLayer { alpha = sectionAlpha.value }
             ) {
                 NavStateHost(rootKey = screenBackStackModel.mainScreen) {
                     NavigationUI(
@@ -272,6 +287,9 @@ fun MainScreen(
                 if (showAppearance) {
                     AfAppearance(bgSlot = bgSlot, onClose = { showAppearance = false })
                 }
+
+                AfMusicWidget(Modifier.align(Alignment.TopCenter))
+                AfMusicPicker()
 
                 TaskMenu(
                     isExpanded = isTaskMenuExpanded,

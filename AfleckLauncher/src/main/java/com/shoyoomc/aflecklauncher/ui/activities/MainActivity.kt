@@ -225,18 +225,10 @@ class MainActivity : BaseAppCompatActivity() {
         NotificationManager.initManager(this)
 
         //检查更新
-        if (!isImporting && launcherUpgradeViewModel.operation == LauncherUpgradeOperation.None) {
-            lifecycleScope.launch {
-                launcherUpgradeViewModel.checkOnAppStart()
-            }
-        }
+        // Afleck: a checagem de atualização do ZL2 foi desligada (apontava para o servidor dele)
 
         //拉取当月赞助者数据
-        lifecycleScope.launch {
-            sponsorsViewModel.loadOnStart(
-                showLastMonth = GuideProgress.isPlayed(GuideKeys.Main) && !isImporting
-            )
-        }
+        // Afleck: patrocinadores do ZL2 desligados
 
         //错误信息展示
         lifecycleScope.launch {
@@ -269,10 +261,10 @@ class MainActivity : BaseAppCompatActivity() {
                         }
                     }
                     is EventViewModel.Event.CheckUpdate -> {
-                        checkUpdate()
+                        // Afleck: sem atualização via ZL2
                     }
                     is EventViewModel.Event.ShowSponsors -> {
-                        sponsorsViewModel.openDialog()
+                        // Afleck: sem patrocinadores do ZL2
                     }
                     is EventViewModel.Event.KeepScreen -> {
                         keepScreen(event.on)
@@ -421,7 +413,7 @@ class MainActivity : BaseAppCompatActivity() {
                 }
 
                 //显示赞助支持的小弹窗
-                if (!isImporting && finishedGame.state >= 100 && showSponsorship.state) {
+                if (false && !isImporting && finishedGame.state >= 100 && showSponsorship.state) {
                     SimpleAlertDialog(
                         title = stringResource(R.string.about_sponsor),
                         text = stringResource(R.string.game_saponsorship_finished_game, finishedGame.state),

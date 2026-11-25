@@ -38,7 +38,13 @@ import kotlin.math.roundToInt
 @Composable
 fun AfThemeStudioDialog(onClose: () -> Unit) {
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        AfPanel(Modifier.fillMaxWidth(0.94f).fillMaxHeight(0.92f), deep = true) {
+        Box(
+            Modifier.fillMaxWidth(0.82f).fillMaxHeight(0.88f)
+                .afHudScreen(backing = 0f, glow = true)
+                .padding(5.dp)
+                .clip(RoundedCornerShape(12.dp))
+        ) {
+            AfAuroraBackground(Modifier.matchParentSize())
             Row(Modifier.fillMaxSize().padding(14.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 // ----- esquerda: lista de temas
                 Column(Modifier.weight(0.9f).fillMaxHeight()) {

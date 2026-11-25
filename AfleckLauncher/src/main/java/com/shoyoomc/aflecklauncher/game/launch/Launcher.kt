@@ -341,8 +341,20 @@ abstract class Launcher(
 
         //Add automatically generated args
         val ramAllocationString = ramAllocation.toString()
-        args.add("-Xms${ramAllocationString}M")
+        // Afleck: começa com pouca memória reservada e cresce até o limite (menos RAM em uso)
+        // se o usuário já escolheu um coletor de lixo nos argumentos, respeita a escolha dele
+        val userChoseGc = args.any { it.startsWith("-XX:+Use") && it.endsWith("GC") }
+        args.purgeArg("-XX:-UsePerfData")
+        val startHeap = minOf(ramAllocation, 768)
+        args.add("-Xms${startHeap}M")
         args.add("-Xmx${ramAllocationString}M")
+        val cpus = java.lang.Runtime.getRuntime().availableProcessors()
+        if (!userChoseGc) {
+            args.add("-XX:+UseParallelGC")
+            args.add("-XX:ParallelGCThreads=${cpus.coerceIn(2, 4)}")
+        }
+        args.add("-XX:-UsePerfData")
+        args.add("-Xshare:auto")
 
         args.add("-Dorg.lwjgl.openal.libname=${PathManager.DIR_NATIVE_LIB}/libopenal.so")
 

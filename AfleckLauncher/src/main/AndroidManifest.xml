@@ -221,6 +221,19 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <activity
+            android:name=".ui.activities.SpotifyAuthActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="aflecklauncher" android:host="spotify" />
+            </intent-filter>
+        </activity>
+
     </application>
     <queries>
         <package android:name="net.kdt.pojavlaunch.ffmpeg"/>
