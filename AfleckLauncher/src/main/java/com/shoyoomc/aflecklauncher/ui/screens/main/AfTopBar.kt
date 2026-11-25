@@ -21,11 +21,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.height
 import androidx.compose.ui.unit.sp
 import com.shoyoomc.aflecklauncher.BuildConfig
 import com.shoyoomc.aflecklauncher.R
@@ -41,47 +43,35 @@ fun AfTopBar(
     modifier: Modifier = Modifier
 ) {
     val account by AccountsManager.currentAccountFlow.collectAsState()
+    val ctx = LocalContext.current
     Row(
         modifier = modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Pill(onClick = onLogo) {
-            Box(
-                Modifier.size(54.dp).clip(CircleShape).border(1.5.dp, AfAccent, CircleShape),
-                contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.ic_af_bolt), null, tint = AfAccent, modifier = Modifier.size(32.dp)) }
-            Spacer(Modifier.width(10.dp))
-            Column {
-                Text("Afleck", color = AfText, fontSize = 28.sp, fontWeight = FontWeight.Bold, maxLines = 1)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("LAUNCHER", color = AfDim, fontSize = 13.sp, fontWeight = FontWeight.Bold, maxLines = 1)
-                    Spacer(Modifier.width(6.dp))
-                    Box(Modifier.border(1.dp, AfAccent, CircleShape).padding(horizontal = 8.dp, vertical = 1.dp)) {
-                        Text("v" + BuildConfig.VERSION_NAME, color = AfAccent, fontSize = 13.sp, fontWeight = FontWeight.Bold, maxLines = 1)
-                    }
-                }
-            }
+        Row(Modifier.afClick(onLogo), verticalAlignment = Alignment.CenterVertically) {
+            Icon(painterResource(R.drawable.ic_af_bolt), null, tint = AfAccent, modifier = Modifier.size(30.dp))
+            Spacer(Modifier.width(8.dp))
+            Text("AFLECK", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Black, letterSpacing = 4.sp, maxLines = 1)
+            Spacer(Modifier.width(8.dp))
+            Text("v" + BuildConfig.VERSION_NAME, color = AfAccent, fontSize = 12.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }
-        Pill {
-            Box(
-                Modifier.size(40.dp).clip(CircleShape).border(1.5.dp, AfAccent, CircleShape),
-                contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.ic_af_bolt), null, tint = AfAccent, modifier = Modifier.size(24.dp)) }
-            Spacer(Modifier.width(10.dp))
-            Text(sectionTitle, color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold, maxLines = 1)
-        }
+        Box(Modifier.width(1.dp).size(width = 1.dp, height = 22.dp).background(AfBorder.copy(alpha = 0.5f)))
+        Text(sectionTitle.uppercase(), color = AfDim, fontSize = 15.sp, fontWeight = FontWeight.Bold, letterSpacing = 3.sp, maxLines = 1)
         Spacer(Modifier.weight(1f))
+        Pill(onClick = { AfMusic.changeShow(ctx, !AfMusic.showWidget) }) {
+            AfIconCircle(R.drawable.ic_af_music, size = 34.dp, filled = AfMusic.showWidget)
+        }
         Pill(onClick = onFiles) {
-            AfIconCircle(R.drawable.ic_folder_filled, size = 40.dp, filled = true)
+            AfIconCircle(R.drawable.ic_folder_filled, size = 34.dp, filled = true)
             Spacer(Modifier.width(10.dp))
-            Text("Arquivos", color = AfText, fontSize = 21.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text("Arquivos", color = AfText, fontSize = 15.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }
         Pill(onClick = onUser) {
-            AfIconCircle(R.drawable.ic_person_filled, size = 40.dp)
+            AfIconCircle(R.drawable.ic_person_filled, size = 34.dp)
             Spacer(Modifier.width(10.dp))
             Text(
-                account?.username ?: "Adicionar Conta", color = AfText, fontSize = 21.sp,
+                account?.username ?: "Adicionar Conta", color = AfText, fontSize = 15.sp,
                 fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis
             )
         }
@@ -91,9 +81,9 @@ fun AfTopBar(
 @Composable
 private fun Pill(onClick: (() -> Unit)? = null, content: @Composable RowScope.() -> Unit) {
     Row(
-        modifier = Modifier.afDarkGlass(AfBorder, radius = 24.dp)
+        modifier = Modifier.afDarkGlass(AfBorder, radius = 18.dp)
             .then(if (onClick != null) Modifier.afClick(onClick) else Modifier)
-            .padding(start = 5.dp, end = 16.dp, top = 5.dp, bottom = 5.dp),
+            .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         content = content
     )

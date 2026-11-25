@@ -53,7 +53,7 @@ import com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfCutShape
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfIconCircle
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfNavy
-import com.shoyoomc.aflecklauncher.ui.screens.main.AfMusicPicker
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfText
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfMusicSettings
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfMusicWidget
 import com.shoyoomc.aflecklauncher.ui.screens.main.afClick
@@ -188,8 +188,7 @@ fun GameMenuSubscreen(
             )
         }
 
-        if (!(visible && panel == null)) AfMusicWidget(Modifier.align(Alignment.TopCenter))
-        AfMusicPicker()
+        AfMusicWidget(Modifier.align(Alignment.TopCenter), showCapsule = !(visible && panel == null))
 
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.TopCenter),
@@ -235,7 +234,7 @@ fun GameMenuSubscreen(
                                 modifier = Modifier.weight(1f),
                                 text = "HUD // " + current.title,
                                 style = MaterialTheme.typography.labelLarge,
-                                color = AfAccent,
+                                color = AfText,
                                 letterSpacing = 2.sp
                             )
                             Text(
@@ -277,7 +276,7 @@ fun GameMenuSubscreen(
                                         .verticalScroll(rememberScrollState())
                                         .padding(12.dp)
                                 ) {
-                                    AfMusicSettings(Modifier.fillMaxWidth())
+                                    AfMusicSettings(Modifier.fillMaxWidth(), onOpenPlayer = { panel = null })
                                 }
                                 DockPanel.Game -> GameActionContent(
                                     modifier = Modifier.fillMaxSize(),
@@ -319,7 +318,7 @@ private fun AfGameDock(
         DockEntry(R.drawable.ic_menu, "Menu flutuante", { onOpen(DockPanel.Game) }, active == DockPanel.Game),
         DockEntry(R.drawable.ic_rocket_launch_filled, "FPS e Memória", { onOpen(DockPanel.Game) }, false),
         DockEntry(R.drawable.ic_terminal_outlined, "Log", onLog, false),
-        DockEntry(R.drawable.ic_menu, "Música", { onOpen(DockPanel.Music) }, active == DockPanel.Music)
+        DockEntry(R.drawable.ic_af_music, "Música", { onOpen(DockPanel.Music) }, active == DockPanel.Music)
     )
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {

@@ -288,8 +288,7 @@ fun MainScreen(
                     AfAppearance(bgSlot = bgSlot, onClose = { showAppearance = false })
                 }
 
-                AfMusicWidget(Modifier.align(Alignment.TopCenter))
-                AfMusicPicker()
+                AfMusicWidget(Modifier.align(Alignment.TopCenter), pauseOnStop = true)
 
                 TaskMenu(
                     isExpanded = isTaskMenuExpanded,

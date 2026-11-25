@@ -23,13 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shoyoomc.aflecklauncher.R
 
-/** Menu lateral: Início, Versões, Download, Contas, Ajustes. */
+/** Menu lateral "Nova": trilho fino só com ícones, indicador de luz e nome pequeno embaixo. */
 @Composable
 fun AfSidebar(
     inHome: Boolean,
@@ -46,46 +47,43 @@ fun AfSidebar(
     onAppearance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val panelShape = androidx.compose.foundation.shape.RoundedCornerShape(30.dp)
     Box(
-        modifier = modifier.width(205.dp).fillMaxHeight()
-            .clip(panelShape)
-            .afHudFrame(backing = 0.14f)
+        modifier = modifier.width(84.dp).fillMaxHeight().afHudFrame(backing = 0.30f)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(10.dp).verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(7.dp)
+            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(vertical = 10.dp).verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            NavPill(R.drawable.ic_home_filled, "Início", inHome, onHome)
-            NavPill(R.drawable.ic_sports_esports_outlined, "Versões", inVersions, onVersions)
-            NavPill(R.drawable.ic_download_2_filled, "Download", inDownload, onDownload)
-            NavPill(R.drawable.ic_person_filled, "Contas", inAccounts, onAccounts)
-            NavPill(R.drawable.ic_settings_filled, "Ajustes", inSettings, onSettings)
+            NavItem(R.drawable.ic_home_filled, "Início", inHome, onHome)
+            NavItem(R.drawable.ic_sports_esports_outlined, "Versões", inVersions, onVersions)
+            NavItem(R.drawable.ic_download_2_filled, "Download", inDownload, onDownload)
+            NavItem(R.drawable.ic_person_filled, "Contas", inAccounts, onAccounts)
+            NavItem(R.drawable.ic_settings_filled, "Ajustes", inSettings || inAppearance, onSettings)
         }
     }
 }
 
 @Composable
-private fun NavPill(icon: Int, label: String, selected: Boolean, onClick: () -> Unit) {
-    val color = if (selected) AfAccent else AfBorder
-    Row(
-        modifier = Modifier.fillMaxWidth().height(58.dp)
-            .afDarkGlass(color, selected, 28.dp)
-            .afClick(onClick)
-            .padding(horizontal = 6.dp),
-        verticalAlignment = Alignment.CenterVertically
+private fun NavItem(icon: Int, label: String, selected: Boolean, onClick: () -> Unit) {
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp)
+    Column(
+        modifier = Modifier.width(72.dp).clip(shape).afClick(onClick).padding(vertical = 5.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier.size(46.dp)
-                .clip(CircleShape).border(1.2.dp, color, CircleShape),
+            modifier = Modifier.size(width = 54.dp, height = 38.dp)
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(14.dp))
+                .background(if (selected) Brush.horizontalGradient(listOf(AfAccent, AfAccent2)) else Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent))),
             contentAlignment = Alignment.Center
         ) {
-            Icon(painterResource(icon), null, tint = AfText, modifier = Modifier.size(22.dp))
+            Icon(painterResource(icon), null, tint = if (selected) AfNavy else AfDim, modifier = Modifier.size(24.dp))
         }
-        Spacer(Modifier.width(12.dp))
+        Spacer(Modifier.height(3.dp))
         Text(
-            label, color = AfText,
-            fontSize = 22.sp, fontWeight = FontWeight.Bold, maxLines = 1
+            label, color = if (selected) AfText else AfDim,
+            fontSize = 10.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            maxLines = 1, letterSpacing = 0.5.sp
         )
     }
 }
