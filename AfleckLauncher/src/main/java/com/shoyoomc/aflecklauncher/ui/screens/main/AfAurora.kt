@@ -54,7 +54,7 @@ fun AfAuroraBackground(
 
         drawCircle(
             brush = Brush.radialGradient(
-                listOf(c1.copy(alpha = 0.12f), Color.Transparent),
+                listOf(c1.copy(alpha = 0.22f), Color.Transparent),
                 center = Offset(w * (0.25f + 0.1f * sin(pp)), h * 0.85f),
                 radius = w * 0.55f
             ),
@@ -63,7 +63,7 @@ fun AfAuroraBackground(
         )
         drawCircle(
             brush = Brush.radialGradient(
-                listOf(c2.copy(alpha = 0.10f), Color.Transparent),
+                listOf(c2.copy(alpha = 0.20f), Color.Transparent),
                 center = Offset(w * (0.78f + 0.08f * sin(qq)), h * 0.8f),
                 radius = w * 0.5f
             ),
@@ -95,8 +95,8 @@ fun AfAuroraBackground(
                 )
             )
         }
-        band(pp, 0.30f, 0.10f, 0.42f, c1, 0.275f, 0.9f)
-        band(qq + 1.7f, 0.38f, 0.08f, 0.38f, c2, 0.231f, 1.3f)
-        band(pp * 0.7f + qq, 0.25f, 0.07f, 0.34f, mid, 0.198f, 0.7f)
+        band(pp, 0.30f, 0.10f, 0.42f, c1, 0.50f, 0.9f)
+        band(qq + 1.7f, 0.38f, 0.08f, 0.38f, c2, 0.42f, 1.3f)
+        band(pp * 0.7f + qq, 0.25f, 0.07f, 0.34f, mid, 0.36f, 0.7f)
     }
 }

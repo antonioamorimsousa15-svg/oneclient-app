@@ -199,8 +199,8 @@ private fun AfStepButton(enabled: Boolean, icon: Int, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(34.dp)
-            .afGlow(androidx.compose.foundation.shape.RoundedCornerShape(3.dp), AfBorder, 0.7f)
-            .clip(androidx.compose.foundation.shape.RoundedCornerShape(3.dp))
+            .afGlow(CircleShape, AfBorder, 0.7f)
+            .clip(CircleShape)
             .then(if (enabled) Modifier.afClick(onClick) else Modifier),
         contentAlignment = Alignment.Center
     ) {

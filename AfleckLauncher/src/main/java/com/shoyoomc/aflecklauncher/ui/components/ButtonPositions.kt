@@ -41,9 +41,9 @@ enum class ButtonPosition {
 @Composable
 fun rememberButtonPosShape(
     position: ButtonPosition,
-    outerShape: Dp = 4.dp,
+    outerShape: Dp = 28.dp,
     outerShapePressed: Dp = outerShape,
-    innerShape: Dp = 2.dp,
+    innerShape: Dp = 4.dp,
     innerShapePressed: Dp = innerShape,
 ): Shape {
     return remember(position, outerShape, outerShapePressed, innerShape, innerShapePressed) {

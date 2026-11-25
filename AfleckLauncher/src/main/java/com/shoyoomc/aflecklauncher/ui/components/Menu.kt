@@ -123,7 +123,7 @@ enum class MenuState {
 fun MenuSubscreen(
     state: MenuState,
     closeScreen: () -> Unit,
-    shape: Shape = RoundedCornerShape(4.dp),
+    shape: Shape = RoundedCornerShape(21.0.dp),
     backgroundColor: Color = Color.Black.copy(alpha = 0.25f),
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -183,7 +183,7 @@ fun MenuSubscreen(
 fun DualMenuSubscreen(
     state: MenuState,
     closeScreen: () -> Unit,
-    shape: Shape = RoundedCornerShape(4.dp),
+    shape: Shape = RoundedCornerShape(21.0.dp),
     backgroundColor: Color = Color.Black.copy(alpha = 0.25f),
     titleHeight: Dp = 48.dp,
     leftMenuTitle: (@Composable BoxScope.() -> Unit)? = null,

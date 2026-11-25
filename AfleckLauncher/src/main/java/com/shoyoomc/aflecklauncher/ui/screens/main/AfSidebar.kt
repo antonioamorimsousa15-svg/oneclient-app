@@ -23,14 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shoyoomc.aflecklauncher.R
 
-/** Menu lateral "Nova": trilho fino só com ícones, indicador de luz e nome pequeno embaixo. */
+/** Menu lateral: Início, Versões, Download, Contas, Ajustes. */
 @Composable
 fun AfSidebar(
     inHome: Boolean,
@@ -47,42 +46,46 @@ fun AfSidebar(
     onAppearance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val panelShape = androidx.compose.foundation.shape.RoundedCornerShape(30.dp)
     Box(
-        modifier = modifier.width(84.dp).fillMaxHeight().afHudFrame(backing = 0.30f)
+        modifier = modifier.width(205.dp).fillMaxHeight()
+            .clip(panelShape)
+            .afHudFrame(backing = 0.14f)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(vertical = 10.dp).verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth().padding(10.dp).verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-            NavItem(R.drawable.ic_home_filled, "Início", inHome, onHome)
-            NavItem(R.drawable.ic_sports_esports_outlined, "Versões", inVersions, onVersions)
-            NavItem(R.drawable.ic_download_2_filled, "Download", inDownload, onDownload)
-            NavItem(R.drawable.ic_person_filled, "Contas", inAccounts, onAccounts)
-            NavItem(R.drawable.ic_settings_filled, "Ajustes", inSettings || inAppearance, onSettings)
+            NavPill(R.drawable.ic_home_filled, "Início", inHome, onHome)
+            NavPill(R.drawable.ic_sports_esports_outlined, "Versões", inVersions, onVersions)
+            NavPill(R.drawable.ic_download_2_filled, "Download", inDownload, onDownload)
+            NavPill(R.drawable.ic_person_filled, "Contas", inAccounts, onAccounts)
+            NavPill(R.drawable.ic_settings_filled, "Ajustes", inSettings, onSettings)
         }
     }
 }
 
 @Composable
-private fun NavItem(icon: Int, label: String, selected: Boolean, onClick: () -> Unit) {
+private fun NavPill(icon: Int, label: String, selected: Boolean, onClick: () -> Unit) {
+    val color = if (selected) AfAccent else AfBorder
     Row(
-        modifier = Modifier.fillMaxWidth().afClick(onClick),
+        modifier = Modifier.fillMaxWidth().height(58.dp)
+            .afDarkGlass(color, selected, 28.dp)
+            .afClick(onClick)
+            .padding(horizontal = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(Modifier.width(2.dp).height(44.dp).background(if (selected) AfAccent else Color.Transparent))
-        Column(
-            modifier = Modifier.weight(1f).padding(vertical = 4.dp)
-                .background(if (selected) AfAccent.copy(alpha = 0.12f) else Color.Transparent),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = Modifier.size(46.dp)
+                .clip(CircleShape).border(1.2.dp, color, CircleShape),
+            contentAlignment = Alignment.Center
         ) {
-            Icon(painterResource(icon), null, tint = if (selected) AfAccent else AfDim, modifier = Modifier.size(22.dp))
-            Spacer(Modifier.height(2.dp))
-            Text(
-                label.uppercase(), color = if (selected) AfText else AfDim,
-                fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1, letterSpacing = 1.sp,
-                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
-            )
+            Icon(painterResource(icon), null, tint = AfText, modifier = Modifier.size(22.dp))
         }
+        Spacer(Modifier.width(12.dp))
+        Text(
+            label, color = AfText,
+            fontSize = 22.sp, fontWeight = FontWeight.Bold, maxLines = 1
+        )
     }
 }
