@@ -21,7 +21,15 @@ package com.shoyoomc.aflecklauncher.ui.components
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchColors
@@ -45,32 +53,29 @@ fun DefaultSwitch(
     colors: SwitchColors = SwitchDefaults.colors(),
     interactionSource: MutableInteractionSource? = null
 ) {
-    Switch(
-        checked = checked,
-        onCheckedChange = onCheckedChange,
-        modifier = modifier,
-        enabled = enabled,
-        thumbContent = {
-            val rotation by animateFloatAsState(
-                if (checked) 0.0f else -(180.0f)
+    // Interruptor técnico: trilho retangular com borda fina e botão quadrado
+    val on = MaterialTheme.colorScheme.primary
+    val off = MaterialTheme.colorScheme.outline
+    val c = if (!enabled) off.copy(alpha = 0.3f) else if (checked) on else off
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+    androidx.compose.foundation.layout.Box(
+        modifier = modifier
+            .size(width = 46.dp, height = 24.dp)
+            .clip(shape)
+            .background(if (checked) on.copy(alpha = 0.35f) else Color.Black.copy(alpha = 0.5f))
+            .border(1.dp, c, shape)
+            .toggleable(
+                value = checked, enabled = enabled, role = Role.Switch,
+                interactionSource = interactionSource, indication = null, onValueChange = onCheckedChange
             )
-            Crossfade(
-                modifier = Modifier.rotate(rotation),
-                targetState = checked
-            ) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    painter = painterResource(
-                        if (it) R.drawable.ic_check else R.drawable.ic_close
-                    ),
-                    contentDescription = null,
-                    tint = colors.trackColor(enabled, checked)
-                )
-            }
-        },
-        colors = colors,
-        interactionSource = interactionSource
-    )
+            .padding(3.dp)
+    ) {
+        androidx.compose.foundation.layout.Box(
+            Modifier.size(18.dp)
+                .align(if (checked) Alignment.CenterEnd else Alignment.CenterStart)
+                .background(c, androidx.compose.foundation.shape.CircleShape)
+        )
+    }
 }
 
 /**

@@ -19,5 +19,14 @@
 package com.shoyoomc.aflecklauncher.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.unit.sp
 
-val AppTypography = Typography()
+/** Títulos e rótulos em fonte compacta (condensada); o texto corrido continua legível. */
+val AppTypography = Typography().let { t ->
+    val c = com.shoyoomc.aflecklauncher.ui.screens.main.AfCondensed
+    t.copy(
+        headlineLarge = t.headlineLarge.copy(fontFamily = c), headlineMedium = t.headlineMedium.copy(fontFamily = c), headlineSmall = t.headlineSmall.copy(fontFamily = c),
+        titleLarge = t.titleLarge.copy(fontFamily = c), titleMedium = t.titleMedium.copy(fontFamily = c), titleSmall = t.titleSmall.copy(fontFamily = c),
+        labelLarge = t.labelLarge.copy(fontFamily = c, letterSpacing = 0.8.sp)
+    )
+}

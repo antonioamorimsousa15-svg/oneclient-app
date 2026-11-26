@@ -3,6 +3,8 @@ package com.shoyoomc.aflecklauncher.ui.screens.main
 import android.content.Context
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.drawscope.clipPath
@@ -59,6 +61,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/** Fonte compacta (condensada) para títulos, botões e rótulos. */
+internal val AfCondensed: FontFamily = FontFamily(android.graphics.Typeface.create("sans-serif-condensed", android.graphics.Typeface.BOLD))
+
 /** Definição de um tema aurora. */
 class AfThemeDef(
     val id: String,
@@ -74,8 +79,8 @@ class AfThemeDef(
 /** Estado do tema (cores, vibração, contraste, opacidade), salvo no aparelho. */
 object AfThemeState {
     val themes = listOf(
-        // Tema principal Afleck: azul-noite, contorno cobre e gradiente âmbar/coral das referências.
-        AfThemeDef("afleck", "Afleck Neon", R.drawable.af_bg, Color(0xFFFFB66D), Color(0xFFFF7188), Color(0xFF09152B), Color(0xFFE49A82), Color(0xFFC9D5E8)),
+        // Tema principal Afleck Forja: preto profundo e grafite, neon laranja, cobre e rosa-salmão.
+        AfThemeDef("afleck", "Afleck Forja", R.drawable.af_bg, Color(0xFFFF8A3D), Color(0xFFFF6F85), Color(0xFF0C0807), Color(0xFFC07A45), Color(0xFFB9AEA7)),
         AfThemeDef("aurora", "Aurora Boreal", R.drawable.af_bg, Color(0xFF39FFB0), Color(0xFF8A5CFF), Color(0xFF041512), Color(0xFF39FFB0), Color(0xFFB6D8CE)),
         AfThemeDef("vermelha", "Aurora Rubi", R.drawable.af_bg, Color(0xFFFF4D5E), Color(0xFFFF8A5C), Color(0xFF2A060A), Color(0xFFFF4D5E), Color(0xFFE8C2C6)),
         AfThemeDef("laranja", "Aurora Âmbar", R.drawable.af_bg, Color(0xFFFF8A2B), Color(0xFFFFC02B), Color(0xFF2B1405), Color(0xFFFF8A2B), Color(0xFFE8D2BC)),
@@ -132,9 +137,9 @@ object AfThemeState {
         prefs = p
         themeId = p.getString("theme.id", "afleck") ?: "afleck"
         // Migra instalações anteriores para a identidade visual principal Afleck.
-        if (p.getInt("theme.rev", 0) < 3) {
+        if (p.getInt("theme.rev", 0) < 4) {
             themeId = "afleck"
-            p.edit().putString("theme.id", "afleck").putInt("theme.rev", 3)
+            p.edit().putString("theme.id", "afleck").putInt("theme.rev", 4)
                 .putInt("theme.panelOpacityGlass", 72).apply()
         }
         vibrance = p.getInt("theme.vibrance", 0)
@@ -256,20 +261,21 @@ internal fun Modifier.afGlassSurface(shape: androidx.compose.ui.graphics.Shape, 
     val accent = AfAccent
     val accent2 = AfAccent2
     val base = AfThemeState.base
-    val fill = remember(selected, k, accent, accent2, base) {
+    val border = AfBorder
+    val fill = remember(selected, k, accent, accent2) {
         if (selected)
-            Brush.horizontalGradient(listOf(accent.copy(alpha = 0.55f), accent2.copy(alpha = 0.55f)))
+            Brush.horizontalGradient(listOf(accent.copy(alpha = 0.95f), accent2.copy(alpha = 0.95f)))
         else
             Brush.verticalGradient(
                 listOf(
-                    Color.White.copy(alpha = (0.16f * k).coerceAtMost(0.5f)),
-                    Color.White.copy(alpha = (0.04f * k).coerceAtMost(0.25f)),
-                    accent.copy(alpha = (0.07f * k).coerceAtMost(0.22f))
+                    Color.Black.copy(alpha = (0.42f * k).coerceAtMost(0.80f)),
+                    Color.Black.copy(alpha = (0.34f * k).coerceAtMost(0.70f))
                 )
             )
     }
-    val borderBrush = remember(accent) {
-        Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.85f), Color.White.copy(alpha = 0.22f), accent.copy(alpha = 0.55f)))
+    val borderBrush = remember(selected, border, accent, accent2) {
+        if (selected) Brush.linearGradient(listOf(Color.White.copy(alpha = 0.55f), accent.copy(alpha = 0.95f)))
+        else Brush.linearGradient(listOf(border.copy(alpha = 0.90f), border.copy(alpha = 0.30f), accent2.copy(alpha = 0.55f)))
     }
     val glintBrush = remember { Brush.horizontalGradient(listOf(Color.Transparent, Color.White.copy(alpha = 0.95f), Color.Transparent)) }
     val glowOn = AfThemeState.glowOn
@@ -277,6 +283,7 @@ internal fun Modifier.afGlassSurface(shape: androidx.compose.ui.graphics.Shape, 
     val glowStr = AfThemeState.glowStrength / 100f
     val glowTh = AfThemeState.neonThickness / 3f
     this@composed
+        .then(if (selected) Modifier.shadow(12.dp, shape, ambientColor = accent, spotColor = accent) else Modifier)
         .clip(shape)
         .background(fill, shape)
         .drawWithCache {
@@ -289,7 +296,6 @@ internal fun Modifier.afGlassSurface(shape: androidx.compose.ui.graphics.Shape, 
             onDrawWithContent {
                 drawContent()
                 afOutline(o, borderBrush, style = borderStroke)
-                drawLine(glintBrush, p1, p2, strokeWidth = glintW)
                 if (glowOn) {
                     val pv = pulse?.value ?: 1f
                     for (i in 1..glowLevel) {
@@ -327,7 +333,7 @@ internal fun AfButton(text: String, modifier: Modifier = Modifier, icon: Int? = 
             Icon(painterResource(icon), null, tint = AfNavy, modifier = Modifier.size(22.dp))
             Spacer(Modifier.width(8.dp))
         }
-        Text(text, color = AfNavy, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold, maxLines = 1)
+        Text(text.uppercase(), color = AfNavy, fontSize = 14.sp, fontFamily = AfCondensed, letterSpacing = 1.sp, maxLines = 1)
     }
 }
 
@@ -345,7 +351,7 @@ internal fun AfOutlineButton(text: String, modifier: Modifier = Modifier, icon: 
             Icon(painterResource(icon), null, tint = AfAccent, modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(8.dp))
         }
-        Text(text, color = AfText, fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+        Text(text.uppercase(), color = AfText, fontSize = 13.sp, fontFamily = AfCondensed, letterSpacing = 1.sp, maxLines = 1)
     }
 }
 
@@ -354,9 +360,9 @@ internal fun AfOutlineButton(text: String, modifier: Modifier = Modifier, icon: 
 internal fun AfIconCircle(icon: Int, size: Dp = 40.dp, filled: Boolean = false, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.size(size)
-            .afGlow(CircleShape, if (filled) AfAccent else AfBorder, if (filled) 1.2f else 0.7f)
-            .clip(CircleShape)
-            .background(if (filled) AfAccent.copy(alpha = 0.16f) else Color.White.copy(alpha = 0.10f)),
+            .afGlow(RoundedCornerShape(12.dp), if (filled) AfAccent else AfBorder, if (filled) 1.2f else 0.7f)
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (filled) AfAccent.copy(alpha = 0.16f) else Color.Black.copy(alpha = 0.45f)),
         contentAlignment = Alignment.Center
     ) {
         Icon(painterResource(icon), null, tint = if (filled) AfAccent else AfText, modifier = Modifier.size(size * 0.5f))
@@ -425,133 +431,89 @@ internal val AfDialogColor: Color get() = androidx.compose.ui.graphics.lerp(AfTh
 internal fun Modifier.afDialogBacking(shape: androidx.compose.ui.graphics.Shape): Modifier =
     this.clip(shape).background(AfDialogColor, shape)
 
-/** Moldura HUD sci-fi: chanfros nos cantos e entalhes laterais com barras de luz (estilo das referências). */
+/** Moldura Afleck Forja: painel escuro translúcido, cantos arredondados, contorno de bronze e luz difusa. */
 class AfHudFrameShape : androidx.compose.ui.graphics.Shape {
     override fun createOutline(
         size: androidx.compose.ui.geometry.Size,
         layoutDirection: androidx.compose.ui.unit.LayoutDirection,
         density: androidx.compose.ui.unit.Density
-    ): androidx.compose.ui.graphics.Outline =
-        androidx.compose.ui.graphics.Outline.Generic(afHudFramePath(size, with(density) { 16.dp.toPx() }))
+    ): androidx.compose.ui.graphics.Outline {
+        val r = with(density) { 20.dp.toPx() }.coerceAtMost(minOf(size.width, size.height) / 2f)
+        return androidx.compose.ui.graphics.Outline.Rounded(
+            androidx.compose.ui.geometry.RoundRect(0f, 0f, size.width, size.height, androidx.compose.ui.geometry.CornerRadius(r, r))
+        )
+    }
 }
 
-internal fun afHudFramePath(size: androidx.compose.ui.geometry.Size, c0: Float): androidx.compose.ui.graphics.Path {
-    val w = size.width
-    val h = size.height
-    val c = c0.coerceAtMost(minOf(w, h) / 3f)
-    val n = c * 0.38f
-    val notches = h * 0.17f > 2 * n && w * 0.22f > 2 * n
-    val p = androidx.compose.ui.graphics.Path()
-    p.moveTo(c, 0f)
-    if (notches) { p.lineTo(w * 0.52f, 0f); p.lineTo(w * 0.52f + n, n); p.lineTo(w * 0.74f - n, n); p.lineTo(w * 0.74f, 0f) }
-    p.lineTo(w - c, 0f)
-    p.lineTo(w, c)
-    if (notches) { p.lineTo(w, h * 0.55f); p.lineTo(w - n, h * 0.55f + n); p.lineTo(w - n, h * 0.72f - n); p.lineTo(w, h * 0.72f) }
-    p.lineTo(w, h - c)
-    p.lineTo(w - c, h)
-    if (notches) { p.lineTo(w * 0.38f, h); p.lineTo(w * 0.38f - n, h - n); p.lineTo(w * 0.10f + n, h - n); p.lineTo(w * 0.10f, h) }
-    p.lineTo(c, h)
-    p.lineTo(0f, h - c)
-    if (notches) { p.lineTo(0f, h * 0.45f); p.lineTo(n, h * 0.45f - n); p.lineTo(n, h * 0.28f + n); p.lineTo(0f, h * 0.28f) }
-    p.lineTo(0f, c)
-    p.close()
-    return p
-}
-
-/** Doca em moldura HUD com borda neon e brilho. [backing] = quanto fundo escuro de tema fica por baixo. */
-internal fun Modifier.afHudFrame(backing: Float = 0.55f): Modifier = composed {
+private fun Modifier.afForgeFrame(backing: Float, glow: Boolean): Modifier = composed {
     val accent = AfAccent
     val accent2 = AfAccent2
+    val bronze = AfBorder
     val shape = remember { AfHudFrameShape() }
-    val base = androidx.compose.ui.graphics.lerp(AfThemeState.base, accent, 0.12f).copy(alpha = backing)
+    val tint = Color.Black.copy(alpha = (0.30f + backing * 0.55f).coerceIn(0f, 0.92f))
     this@composed
-        .clip(shape)
-        .background(base, shape)
-        .background(Brush.verticalGradient(listOf(accent.copy(alpha = 0.12f), Color.White.copy(alpha = 0.03f), accent.copy(alpha = 0.08f))), shape)
-        .drawWithCache {
-            val c = 16.dp.toPx().coerceAtMost(minOf(size.width, size.height) / 3f)
-            val n = c * 0.38f
-            val w = size.width
-            val h = size.height
-            val notches = h * 0.17f > 2 * n && w * 0.22f > 2 * n
-            val path = afHudFramePath(size, 16.dp.toPx())
-            val g1 = androidx.compose.ui.graphics.drawscope.Stroke(7.dp.toPx())
-            val g2 = androidx.compose.ui.graphics.drawscope.Stroke(3.5.dp.toPx())
-            val line = androidx.compose.ui.graphics.drawscope.Stroke(1.6.dp.toPx())
-            val bw = 3.dp.toPx()
-            onDrawWithContent {
-                drawContent()
-                drawPath(path, accent.copy(alpha = 0.10f), style = g1)
-                drawPath(path, accent.copy(alpha = 0.22f), style = g2)
-                drawPath(path, accent, style = line)
-                if (notches) {
-                    val cap = androidx.compose.ui.graphics.StrokeCap.Round
-                    drawLine(accent2, Offset(w * 0.52f + n, n / 2), Offset(w * 0.74f - n, n / 2), bw, cap)
-                    drawLine(accent2, Offset(w * 0.10f + n, h - n / 2), Offset(w * 0.38f - n, h - n / 2), bw, cap)
-                    drawLine(accent2, Offset(n / 2, h * 0.28f + n), Offset(n / 2, h * 0.45f - n), bw, cap)
-                    drawLine(accent2, Offset(w - n / 2, h * 0.55f + n), Offset(w - n / 2, h * 0.72f - n), bw, cap)
-                }
+        // luz externa difusa (fora do painel)
+        .drawBehind {
+            if (glow) {
+                val r = 20.dp.toPx().coerceAtMost(minOf(size.width, size.height) / 2f)
+                val rr = androidx.compose.ui.geometry.RoundRect(0f, 0f, size.width, size.height, androidx.compose.ui.geometry.CornerRadius(r, r))
+                val path = androidx.compose.ui.graphics.Path().apply { addRoundRect(rr) }
+                drawPath(path, accent.copy(alpha = 0.07f), style = androidx.compose.ui.graphics.drawscope.Stroke(12.dp.toPx()))
+                drawPath(path, accent.copy(alpha = 0.12f), style = androidx.compose.ui.graphics.drawscope.Stroke(6.dp.toPx()))
             }
         }
-}
-
-
-/**
- * Tela/painel em moldura HUD sci-fi (referência "blue glowing technology sci fi frame hud ui"):
- * contorno duplo com cantos chanfrados, entalhes com barras de luz, nós brilhantes e grupos de pontos.
- * As cores seguem o tema.
- */
-internal fun Modifier.afHudScreen(backing: Float = 0.6f, glow: Boolean = true): Modifier = composed {
-    val accent = AfAccent
-    val accent2 = AfAccent2
-    val shape = remember { AfHudFrameShape() }
-    val tint = androidx.compose.ui.graphics.lerp(AfThemeState.base, accent, 0.12f).copy(alpha = backing)
-    this@composed
         .clip(shape)
         .background(tint, shape)
-        .background(Brush.verticalGradient(listOf(accent.copy(alpha = 0.14f), Color.White.copy(alpha = 0.04f), accent.copy(alpha = 0.10f))), shape)
+        // luz interna: calor sutil no topo
+        .background(Brush.verticalGradient(listOf(accent.copy(alpha = 0.07f), Color.Transparent, accent2.copy(alpha = 0.04f))), shape)
         .drawWithCache {
             val u = 1.dp.toPx()
+            val o = shape.createOutline(size, layoutDirection, this)
+            val path = androidx.compose.ui.graphics.Path().apply { addRoundRect((o as androidx.compose.ui.graphics.Outline.Rounded).roundRect) }
+            val contour = Brush.linearGradient(listOf(bronze.copy(alpha = 0.95f), bronze.copy(alpha = 0.35f), accent2.copy(alpha = 0.65f)))
+            val thin = androidx.compose.ui.graphics.drawscope.Stroke(1.3f * u)
+            val big = minOf(size.width, size.height) > 80 * u
             val w = size.width
             val h = size.height
-            val c = 16.dp.toPx().coerceAtMost(minOf(w, h) / 3f)
-            val n = c * 0.38f
-            val notches = h * 0.17f > 2 * n && w * 0.22f > 2 * n
-            val big = minOf(w, h) > 90.dp.toPx()
-            val outer = afHudFramePath(size, 16.dp.toPx())
-            val inner = afHudFramePath(androidx.compose.ui.geometry.Size(w - 12 * u, h - 12 * u), 11 * u).apply {
-                translate(Offset(6 * u, 6 * u))
-            }
-            val g1 = androidx.compose.ui.graphics.drawscope.Stroke(7 * u)
-            val g2 = androidx.compose.ui.graphics.drawscope.Stroke(3.5f * u)
-            val line = androidx.compose.ui.graphics.drawscope.Stroke(1.8f * u)
-            val thin = androidx.compose.ui.graphics.drawscope.Stroke(1f * u)
+            val r = 20 * u
+            val len = 18 * u
             val cap = androidx.compose.ui.graphics.StrokeCap.Round
             onDrawWithContent {
                 drawContent()
-                if (glow) {
-                    drawPath(outer, accent.copy(alpha = 0.10f), style = g1)
-                    drawPath(outer, accent.copy(alpha = 0.22f), style = g2)
-                }
-                drawPath(outer, accent, style = line)
-                if (big) drawPath(inner, accent.copy(alpha = 0.45f), style = thin)
-                if (notches) {
-                    drawLine(accent2, Offset(w * 0.52f + n, n / 2), Offset(w * 0.74f - n, n / 2), 3 * u, cap)
-                    drawLine(accent2, Offset(w * 0.10f + n, h - n / 2), Offset(w * 0.38f - n, h - n / 2), 3 * u, cap)
-                    drawLine(accent2, Offset(n / 2, h * 0.28f + n), Offset(n / 2, h * 0.45f - n), 3 * u, cap)
-                    drawLine(accent2, Offset(w - n / 2, h * 0.55f + n), Offset(w - n / 2, h * 0.72f - n), 3 * u, cap)
-                    // nós brilhantes nas pontas dos entalhes
-                    for (p in listOf(Offset(w * 0.52f, 0f), Offset(w * 0.38f, h), Offset(0f, h * 0.28f), Offset(w, h * 0.55f))) {
-                        drawCircle(accent2.copy(alpha = 0.30f), 9 * u, p)
-                        drawCircle(Color.White, 3.2f * u, p)
-                    }
-                    // grupos de pontos
-                    for (i in 0 until 5) {
-                        drawCircle(accent.copy(alpha = 0.85f), 1.6f * u, Offset(w * 0.80f + i * 8 * u, 7 * u))
-                        drawCircle(accent.copy(alpha = 0.85f), 1.6f * u, Offset(w * 0.55f + i * 8 * u, h - 7 * u))
-                    }
-                    drawLine(accent.copy(alpha = 0.8f), Offset(w * 0.78f, h - 7 * u), Offset(w * 0.90f, h - 7 * u), 2 * u, cap)
+                drawPath(path, contour, style = thin)
+                if (big) {
+                    // marcas de canto: traço curto de luz nos cantos superior esquerdo e inferior direito
+                    drawLine(accent, Offset(r, 0.7f * u), Offset(r + len, 0.7f * u), 2.2f * u, cap)
+                    drawLine(accent, Offset(0.7f * u, r), Offset(0.7f * u, r + len), 2.2f * u, cap)
+                    drawLine(accent2, Offset(w - r, h - 0.7f * u), Offset(w - r - len, h - 0.7f * u), 2.2f * u, cap)
+                    drawLine(accent2, Offset(w - 0.7f * u, h - r), Offset(w - 0.7f * u, h - r - len), 2.2f * u, cap)
                 }
             }
         }
+}
+
+internal fun Modifier.afHudFrame(backing: Float = 0.55f): Modifier = this.afForgeFrame(backing, true)
+
+internal fun Modifier.afHudScreen(backing: Float = 0.6f, glow: Boolean = true): Modifier = this.afForgeFrame(backing, glow)
+
+/** Botão de perigo (excluir, apagar): rosa avermelhado, alto contraste. */
+@Composable
+internal fun AfDangerButton(text: String, modifier: Modifier = Modifier, icon: Int? = null, onClick: () -> Unit) {
+    val red = Color(0xFFFF4D6A)
+    val shape = RoundedCornerShape(14.dp)
+    Row(
+        modifier = modifier.height(44.dp)
+            .shadow(10.dp, shape, ambientColor = red, spotColor = red)
+            .clip(shape)
+            .background(Brush.horizontalGradient(listOf(Color(0xFFFF4D6A), Color(0xFFD7263D))), shape)
+            .afClick(onClick),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        if (icon != null) {
+            Icon(painterResource(icon), null, tint = Color.White, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(8.dp))
+        }
+        Text(text.uppercase(), color = Color.White, fontSize = 13.sp, fontFamily = AfCondensed, letterSpacing = 1.sp, maxLines = 1)
+    }
 }

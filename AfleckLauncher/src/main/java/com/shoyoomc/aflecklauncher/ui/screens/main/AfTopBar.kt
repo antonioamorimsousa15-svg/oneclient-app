@@ -55,12 +55,12 @@ fun AfTopBar(
             ) { Icon(painterResource(R.drawable.ic_af_bolt), null, tint = AfAccent, modifier = Modifier.size(32.dp)) }
             Spacer(Modifier.width(10.dp))
             Column {
-                Text("Afleck", color = AfText, fontSize = 28.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+                Text("AFLECK", color = AfText, fontSize = 24.sp, fontFamily = AfCondensed, letterSpacing = 3.sp, maxLines = 1)
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("LAUNCHER", color = AfDim, fontSize = 13.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+                    Text("NEXT-GENERATION GAME LAUNCHER", color = AfDim, fontSize = 8.sp, fontFamily = AfCondensed, letterSpacing = 1.2.sp, maxLines = 1)
                     Spacer(Modifier.width(6.dp))
-                    Box(Modifier.border(1.dp, AfAccent, CircleShape).padding(horizontal = 8.dp, vertical = 1.dp)) {
-                        Text("v" + BuildConfig.VERSION_NAME, color = AfAccent, fontSize = 13.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+                    Box(Modifier.border(1.dp, AfAccent, CircleShape).padding(horizontal = 6.dp, vertical = 0.dp)) {
+                        Text("r" + BuildConfig.VERSION_NAME.removePrefix("r"), color = AfAccent, fontSize = 9.sp, fontFamily = AfCondensed, maxLines = 1)
                     }
                 }
             }

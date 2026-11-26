@@ -23,7 +23,7 @@ fun afColorScheme(): ColorScheme {
     val base = AfThemeState.base
     val glass = AfThemeState.panelOpacity / 100f
     val navy = lerp(base, Color.Black, 0.55f).copy(alpha = 1f)
-    val bg = lerp(base, Color.Black, 0.4f).copy(alpha = 1f)
+    val bg = lerp(base, Color.Black, 0.88f).copy(alpha = 1f)
     return darkColorScheme(
         primary = accent,
         onPrimary = navy,
@@ -42,7 +42,7 @@ fun afColorScheme(): ColorScheme {
         onBackground = Color.White,
         surface = bg,
         onSurface = Color.White,
-        surfaceVariant = lerp(base, Color.White, 0.08f).copy(alpha = 1f),
+        surfaceVariant = lerp(base, Color.Black, 0.4f).copy(alpha = 1f),
         onSurfaceVariant = AfThemeState.current.dim,
         surfaceTint = accent,
         inverseSurface = Color.White,
@@ -53,9 +53,9 @@ fun afColorScheme(): ColorScheme {
         surfaceBright = lerp(base, Color.White, 0.15f).copy(alpha = 1f),
         surfaceContainerLowest = lerp(base, Color.Black, 0.5f).copy(alpha = glass),
         surfaceContainerLow = lerp(base, Color.Black, 0.25f).copy(alpha = glass),
-        surfaceContainer = base.copy(alpha = glass),
-        surfaceContainerHigh = lerp(base, Color.White, 0.06f).copy(alpha = 1f),
-        surfaceContainerHighest = lerp(base, Color.White, 0.12f).copy(alpha = 1f),
+        surfaceContainer = lerp(base, Color.Black, 0.6f).copy(alpha = glass),
+        surfaceContainerHigh = lerp(base, Color.Black, 0.55f).copy(alpha = 1f),
+        surfaceContainerHighest = lerp(base, Color.Black, 0.4f).copy(alpha = 1f),
     )
 }
 
