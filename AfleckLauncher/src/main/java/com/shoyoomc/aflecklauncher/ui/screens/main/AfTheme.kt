@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -479,7 +480,7 @@ internal fun Modifier.afScanLine(): Modifier = this.drawBehind {
     val ac = AfAccent
     val band = 38.dp.toPx()
     val inset = 5.dp.toPx()
-    androidx.compose.ui.graphics.drawscope.clipRect(0f, 0f, w, h) {
+    clipRect(0f, 0f, w, h) {
         drawRect(
             Brush.verticalGradient(
                 listOf(Color.Transparent, ac.copy(alpha = 0.16f), Color.Transparent),
