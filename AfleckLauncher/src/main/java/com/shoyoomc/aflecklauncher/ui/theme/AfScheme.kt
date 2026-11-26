@@ -62,10 +62,10 @@ fun afColorScheme(): ColorScheme {
 /** Formato retangular com bordas bem arredondadas, em todo o app. */
 private fun afCorner(r: androidx.compose.ui.unit.Dp) = androidx.compose.foundation.shape.RoundedCornerShape(r)
 
-fun afShapes() = Shapes(
-    extraSmall = afCorner(5.dp),
-    small = afCorner(5.dp),
-    medium = afCorner(5.dp),
-    large = afCorner(5.dp),
-    extraLarge = afCorner(5.dp)
-)
+fun afShapes(): Shapes {
+    val r = if (com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState.roundStyle) 22.dp else 5.dp
+    return Shapes(
+        extraSmall = afCorner(r), small = afCorner(r), medium = afCorner(r),
+        large = afCorner(r), extraLarge = afCorner(r)
+    )
+}

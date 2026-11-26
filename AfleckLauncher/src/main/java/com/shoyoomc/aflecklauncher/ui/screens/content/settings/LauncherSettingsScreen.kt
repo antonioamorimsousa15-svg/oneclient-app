@@ -833,6 +833,11 @@ private fun AfWallpaperAnimDialog(
                 }
             }
 
+            //Formato das bordas
+            run {
+                val T0 = com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState
+                AfGlowSwitchRow("Bordas arredondadas", "Ligado: botões em pílula e cartões bem arredondados. Desligado: retângulos de 5 dp.", T0.roundStyle) { T0.changeRoundStyle(it) }
+            }
             //Brilho (neon) — igual ao padrão Afleck
             run {
                 val T = com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeState

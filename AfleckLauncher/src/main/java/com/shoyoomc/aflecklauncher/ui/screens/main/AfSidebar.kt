@@ -46,7 +46,7 @@ fun AfSidebar(
     onAppearance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val panelShape = androidx.compose.foundation.shape.RoundedCornerShape(5.dp)
+    val panelShape = androidx.compose.foundation.shape.RoundedCornerShape(if (AfThemeState.roundStyle) 30.dp else 5.dp)
     Box(
         modifier = modifier.width(205.dp).fillMaxHeight()
             .afHudFrame(backing = 0.14f)

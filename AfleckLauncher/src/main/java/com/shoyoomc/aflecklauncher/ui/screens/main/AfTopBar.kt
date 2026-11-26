@@ -49,27 +49,29 @@ fun AfTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Pill(onClick = onLogo) {
-            Box(
-                Modifier.size(54.dp).clip(AfHexShape()).border(1.5.dp, AfAccent, AfHexShape()),
-                contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.af_sym_logo), null, tint = AfAccent, modifier = Modifier.size(32.dp)) }
+            androidx.compose.foundation.Image(
+                painterResource(R.drawable.af_logo), null,
+                modifier = Modifier.size(54.dp).clip(AfHexShape()),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop
+            )
             Spacer(Modifier.width(10.dp))
             Column {
                 Text("AFLECK", color = AfText, fontSize = 24.sp, fontFamily = AfCondensed, letterSpacing = 3.sp, maxLines = 1)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("NEXT-GENERATION GAME LAUNCHER", color = AfDim, fontSize = 8.sp, fontFamily = AfCondensed, letterSpacing = 1.2.sp, maxLines = 1)
                     Spacer(Modifier.width(6.dp))
-                    Box(Modifier.border(1.dp, AfAccent, androidx.compose.foundation.shape.RoundedCornerShape(5.dp)).padding(horizontal = 6.dp, vertical = 0.dp)) {
+                    Box(Modifier.border(1.dp, AfAccent, CircleShape).padding(horizontal = 6.dp, vertical = 0.dp)) {
                         Text("r" + BuildConfig.VERSION_NAME.removePrefix("r"), color = AfAccent, fontSize = 9.sp, fontFamily = AfCondensed, maxLines = 1)
                     }
                 }
             }
         }
         Pill {
-            Box(
-                Modifier.size(40.dp).clip(AfHexShape()).border(1.5.dp, AfAccent, AfHexShape()),
-                contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.af_sym_logo), null, tint = AfAccent, modifier = Modifier.size(24.dp)) }
+            androidx.compose.foundation.Image(
+                painterResource(R.drawable.af_logo), null,
+                modifier = Modifier.size(40.dp).clip(AfHexShape()),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop
+            )
             Spacer(Modifier.width(10.dp))
             Text(sectionTitle, color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }

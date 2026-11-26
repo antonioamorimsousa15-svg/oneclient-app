@@ -64,22 +64,25 @@ import androidx.compose.ui.unit.sp
 /** Fonte compacta (condensada) para títulos, botões e rótulos. */
 internal val AfCondensed: FontFamily = FontFamily(android.graphics.Typeface.create("sans-serif-condensed", android.graphics.Typeface.BOLD))
 
-/** Raio padrão de todo o launcher: 5 dp. */
-internal val AfRadiusDp: Dp = 5.dp
-private fun afRadiusPx(): Float = 5f * android.content.res.Resources.getSystem().displayMetrics.density
+/** Raio em px: pílula/arredondado grande (estilo redondo) ou 5 dp (estilo retangular). */
+private fun afRadiusPx(w: Float, h: Float): Float {
+    val d = android.content.res.Resources.getSystem().displayMetrics.density
+    val r = if (AfThemeState.roundStyle) 26f * d else 5f * d
+    return r.coerceAtMost(minOf(w, h) / 2f)
+}
 
-/** Contorno retangular com cantos de 5 dp (usado também para brilhos e molduras). */
+/** Contorno com cantos conforme o estilo escolhido (usado também para brilhos e molduras). */
 internal fun afChamferPath(w: Float, h: Float, c0: Float): androidx.compose.ui.graphics.Path {
-    val r = afRadiusPx().coerceAtMost(minOf(w, h) / 2f)
+    val r = afRadiusPx(w, h)
     return androidx.compose.ui.graphics.Path().apply {
         addRoundRect(androidx.compose.ui.geometry.RoundRect(0f, 0f, w, h, androidx.compose.ui.geometry.CornerRadius(r, r)))
     }
 }
 
-/** Nome mantido por compatibilidade: agora é um retângulo com 5 dp de arredondamento. */
+/** Forma de botões, abas e ícones: pílula no estilo redondo, retângulo de 5 dp no outro. */
 class AfHexShape(private val chamfer: Dp = 0.dp) : Shape {
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
-        val r = with(density) { AfRadiusDp.toPx() }.coerceAtMost(minOf(size.width, size.height) / 2f)
+        val r = afRadiusPx(size.width, size.height)
         return Outline.Rounded(androidx.compose.ui.geometry.RoundRect(0f, 0f, size.width, size.height, androidx.compose.ui.geometry.CornerRadius(r, r)))
     }
 }
@@ -144,6 +147,10 @@ object AfThemeState {
     var auroraAnim by mutableStateOf(true)
         private set
 
+    /** true = cantos bem arredondados (pílulas); false = retângulo de 5 dp. */
+    var roundStyle by mutableStateOf(true)
+        private set
+
     var dblClickOn by mutableStateOf(false)
         private set
     var dblClickRate by mutableIntStateOf(50)
@@ -173,6 +180,7 @@ object AfThemeState {
         neonAnimated = p.getBoolean("theme.neonAnimated", false)
         neonThickness = p.getInt("theme.neonThickness", 3)
         auroraAnim = p.getBoolean("theme.auroraAnim", true)
+        roundStyle = p.getBoolean("style.round", true)
         dblClickOn = p.getBoolean("game.dblClickOn", false)
         dblClickRate = p.getInt("game.dblClickGap", 50)
     }
@@ -188,6 +196,7 @@ object AfThemeState {
     fun changeNeonAnimated(v: Boolean) { neonAnimated = v; saveAll() }
     fun changeNeonThickness(v: Int) { neonThickness = v.coerceIn(1, 10); saveAll() }
     fun changeAuroraAnim(v: Boolean) { auroraAnim = v; saveAll() }
+    fun changeRoundStyle(v: Boolean) { roundStyle = v; saveAll() }
     fun changeDblClickOn(v: Boolean) { dblClickOn = v; saveAll() }
     fun changeDblClickRate(v: Int) { dblClickRate = v.coerceIn(20, 200); saveAll() }
     fun changeUiScale(v: Int) { uiScale = v.coerceIn(60, 110); saveAll() }
@@ -207,6 +216,7 @@ object AfThemeState {
             ?.putBoolean("theme.neonAnimated", neonAnimated)
             ?.putInt("theme.neonThickness", neonThickness)
             ?.putBoolean("theme.auroraAnim", auroraAnim)
+            ?.putBoolean("style.round", roundStyle)
             ?.putBoolean("game.dblClickOn", dblClickOn)
             ?.putInt("game.dblClickGap", dblClickRate)
             ?.apply()
@@ -510,8 +520,8 @@ private fun Modifier.afForgeFrame(backing: Float, glow: Boolean): Modifier = com
         .drawBehind {
             if (glow) {
                 val path = afChamferPath(size.width, size.height, 12.dp.toPx())
-                drawPath(path, accent.copy(alpha = 0.09f), style = androidx.compose.ui.graphics.drawscope.Stroke(16.dp.toPx()))
-                drawPath(path, accent.copy(alpha = 0.16f), style = androidx.compose.ui.graphics.drawscope.Stroke(8.dp.toPx()))
+                drawPath(path, accent.copy(alpha = 0.14f), style = androidx.compose.ui.graphics.drawscope.Stroke(18.dp.toPx()))
+                drawPath(path, accent.copy(alpha = 0.26f), style = androidx.compose.ui.graphics.drawscope.Stroke(9.dp.toPx()))
             }
         }
         .clip(shape)
@@ -526,8 +536,9 @@ private fun Modifier.afForgeFrame(backing: Float, glow: Boolean): Modifier = com
             val soft = androidx.compose.ui.graphics.drawscope.Stroke(4f * u)
             onDrawWithContent {
                 drawContent()
-                drawPath(path, accent.copy(alpha = 0.10f), style = soft)
+                drawPath(path, accent.copy(alpha = 0.18f), style = soft)
                 drawPath(path, contour, style = thin)
+                drawPath(path, Color(0xFFFFE2D2).copy(alpha = 0.30f), style = androidx.compose.ui.graphics.drawscope.Stroke(0.7f * u))
             }
         }
 }
