@@ -177,14 +177,14 @@ private fun TabMenu(
     backScreenViewModel: ScreenBackStackViewModel,
 ) {
     val downloadsList = listOf(
-        CategoryItem(backScreenViewModel.downloadGameScreen, { CategoryIcon(R.drawable.ic_sports_esports_outlined, R.string.download_category_game) }, R.string.download_category_game),
-        CategoryItem(backScreenViewModel.downloadModPackScreen, { CategoryIcon(R.drawable.ic_package_2_outlined, R.string.download_category_modpack) }, R.string.download_category_modpack),
-        CategoryItem(backScreenViewModel.downloadModScreen, { CategoryIcon(R.drawable.ic_extension_outlined, R.string.download_category_mod) }, R.string.download_category_mod, division = true),
-        CategoryItem(backScreenViewModel.downloadResourcePackScreen, { CategoryIcon(R.drawable.ic_format_paint_outlined, R.string.download_category_resource_pack) }, R.string.download_category_resource_pack),
-        CategoryItem(backScreenViewModel.downloadSavesScreen, { CategoryIcon(R.drawable.ic_public, R.string.download_category_saves) }, R.string.download_category_saves),
-        CategoryItem(backScreenViewModel.downloadShadersScreen, { CategoryIcon(R.drawable.ic_lightbulb, R.string.download_category_shaders) }, R.string.download_category_shaders),
-        CategoryItem(NormalNavKey.SearchId, { CategoryIcon(R.drawable.ic_card, R.string.download_category_by_id) }, R.string.download_category_by_id, division = true),
-        CategoryItem(backScreenViewModel.downloadFavoritesScreen, { CategoryIcon(R.drawable.ic_favorite_outlined, R.string.download_category_favorites) }, R.string.download_category_favorites),
+        CategoryItem(backScreenViewModel.downloadGameScreen, { CategoryIcon(R.drawable.af_sym_versions, R.string.download_category_game) }, R.string.download_category_game),
+        CategoryItem(backScreenViewModel.downloadModPackScreen, { CategoryIcon(R.drawable.af_sym_modpack, R.string.download_category_modpack) }, R.string.download_category_modpack),
+        CategoryItem(backScreenViewModel.downloadModScreen, { CategoryIcon(R.drawable.af_sym_mods, R.string.download_category_mod) }, R.string.download_category_mod, division = true),
+        CategoryItem(backScreenViewModel.downloadResourcePackScreen, { CategoryIcon(R.drawable.af_sym_paint, R.string.download_category_resource_pack) }, R.string.download_category_resource_pack),
+        CategoryItem(backScreenViewModel.downloadSavesScreen, { CategoryIcon(R.drawable.af_sym_saves, R.string.download_category_saves) }, R.string.download_category_saves),
+        CategoryItem(backScreenViewModel.downloadShadersScreen, { CategoryIcon(R.drawable.af_sym_shaders, R.string.download_category_shaders) }, R.string.download_category_shaders),
+        CategoryItem(NormalNavKey.SearchId, { CategoryIcon(R.drawable.af_sym_id, R.string.download_category_by_id) }, R.string.download_category_by_id, division = true),
+        CategoryItem(backScreenViewModel.downloadFavoritesScreen, { CategoryIcon(R.drawable.af_sym_favorites, R.string.download_category_favorites) }, R.string.download_category_favorites),
     )
 
     val ctx = rememberAnimatedContext(isVisible = isVisible)
@@ -378,14 +378,14 @@ private fun AfDownloadTabs(
     backScreenViewModel: ScreenBackStackViewModel,
 ) {
     val tabs = listOf<Triple<TitledNavKey, Int, Int>>(
-        Triple(backScreenViewModel.downloadGameScreen, R.drawable.ic_sports_esports_outlined, R.string.download_category_game),
-        Triple(backScreenViewModel.downloadModScreen, R.drawable.ic_extension_outlined, R.string.download_category_mod),
-        Triple(backScreenViewModel.downloadShadersScreen, R.drawable.ic_lightbulb, R.string.download_category_shaders),
-        Triple(backScreenViewModel.downloadModPackScreen, R.drawable.ic_package_2_outlined, R.string.download_category_modpack),
-        Triple(backScreenViewModel.downloadResourcePackScreen, R.drawable.ic_format_paint_outlined, R.string.download_category_resource_pack),
-        Triple(backScreenViewModel.downloadSavesScreen, R.drawable.ic_public, R.string.download_category_saves),
-        Triple(backScreenViewModel.downloadFavoritesScreen, R.drawable.ic_favorite_outlined, R.string.download_category_favorites),
-        Triple(NormalNavKey.SearchId, R.drawable.ic_card, R.string.download_category_by_id),
+        Triple(backScreenViewModel.downloadGameScreen, R.drawable.af_sym_versions, R.string.download_category_game),
+        Triple(backScreenViewModel.downloadModScreen, R.drawable.af_sym_mods, R.string.download_category_mod),
+        Triple(backScreenViewModel.downloadShadersScreen, R.drawable.af_sym_shaders, R.string.download_category_shaders),
+        Triple(backScreenViewModel.downloadModPackScreen, R.drawable.af_sym_modpack, R.string.download_category_modpack),
+        Triple(backScreenViewModel.downloadResourcePackScreen, R.drawable.af_sym_paint, R.string.download_category_resource_pack),
+        Triple(backScreenViewModel.downloadSavesScreen, R.drawable.af_sym_saves, R.string.download_category_saves),
+        Triple(backScreenViewModel.downloadFavoritesScreen, R.drawable.af_sym_favorites, R.string.download_category_favorites),
+        Triple(NormalNavKey.SearchId, R.drawable.af_sym_id, R.string.download_category_by_id),
     )
     com.shoyoomc.aflecklauncher.ui.screens.main.AfTabBar(
         tabs = tabs.map { (tabKey, iconRes, textRes) ->

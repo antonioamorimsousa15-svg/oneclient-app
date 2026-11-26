@@ -50,9 +50,9 @@ fun AfTopBar(
     ) {
         Pill(onClick = onLogo) {
             Box(
-                Modifier.size(54.dp).clip(CircleShape).border(1.5.dp, AfAccent, CircleShape),
+                Modifier.size(54.dp).clip(AfHexShape()).border(1.5.dp, AfAccent, AfHexShape()),
                 contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.ic_af_bolt), null, tint = AfAccent, modifier = Modifier.size(32.dp)) }
+            ) { Icon(painterResource(R.drawable.af_sym_logo), null, tint = AfAccent, modifier = Modifier.size(32.dp)) }
             Spacer(Modifier.width(10.dp))
             Column {
                 Text("AFLECK", color = AfText, fontSize = 24.sp, fontFamily = AfCondensed, letterSpacing = 3.sp, maxLines = 1)
@@ -67,23 +67,23 @@ fun AfTopBar(
         }
         Pill {
             Box(
-                Modifier.size(40.dp).clip(CircleShape).border(1.5.dp, AfAccent, CircleShape),
+                Modifier.size(40.dp).clip(AfHexShape()).border(1.5.dp, AfAccent, AfHexShape()),
                 contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.ic_af_bolt), null, tint = AfAccent, modifier = Modifier.size(24.dp)) }
+            ) { Icon(painterResource(R.drawable.af_sym_logo), null, tint = AfAccent, modifier = Modifier.size(24.dp)) }
             Spacer(Modifier.width(10.dp))
             Text(sectionTitle, color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }
         Spacer(Modifier.weight(1f))
         Pill(onClick = { AfMusic.changeShow(ctx, !AfMusic.showWidget) }) {
-            AfIconCircle(R.drawable.ic_af_music, size = 40.dp, filled = AfMusic.showWidget)
+            AfIconCircle(R.drawable.af_sym_music, size = 40.dp, filled = AfMusic.showWidget)
         }
         Pill(onClick = onFiles) {
-            AfIconCircle(R.drawable.ic_folder_filled, size = 40.dp, filled = true)
+            AfIconCircle(R.drawable.af_sym_folder, size = 40.dp, filled = true)
             Spacer(Modifier.width(10.dp))
             Text("Arquivos", color = AfText, fontSize = 21.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }
         Pill(onClick = onUser) {
-            AfIconCircle(R.drawable.ic_person_filled, size = 40.dp)
+            AfIconCircle(R.drawable.af_sym_account, size = 40.dp)
             Spacer(Modifier.width(10.dp))
             Text(
                 account?.username ?: "Adicionar Conta", color = AfText, fontSize = 21.sp,

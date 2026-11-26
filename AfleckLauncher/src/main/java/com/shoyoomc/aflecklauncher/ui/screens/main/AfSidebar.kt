@@ -49,24 +49,23 @@ fun AfSidebar(
     val panelShape = androidx.compose.foundation.shape.RoundedCornerShape(30.dp)
     Box(
         modifier = modifier.width(205.dp).fillMaxHeight()
-            .clip(panelShape)
             .afHudFrame(backing = 0.14f)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(10.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-            NavPill(R.drawable.ic_home_filled, "Início", inHome, onHome)
-            NavPill(R.drawable.ic_sports_esports_outlined, "Versões", inVersions, onVersions)
-            NavPill(R.drawable.ic_download_2_filled, "Download", inDownload, onDownload)
-            NavPill(R.drawable.ic_person_filled, "Contas", inAccounts, onAccounts)
-            NavPill(R.drawable.ic_settings_filled, "Ajustes", inSettings, onSettings)
+            NavPill(R.drawable.af_sym_home, "01", "Início", inHome, onHome)
+            NavPill(R.drawable.af_sym_versions, "02", "Versões", inVersions, onVersions)
+            NavPill(R.drawable.af_sym_download, "03", "Download", inDownload, onDownload)
+            NavPill(R.drawable.af_sym_account, "04", "Contas", inAccounts, onAccounts)
+            NavPill(R.drawable.af_sym_settings, "05", "Ajustes", inSettings, onSettings)
         }
     }
 }
 
 @Composable
-private fun NavPill(icon: Int, label: String, selected: Boolean, onClick: () -> Unit) {
+private fun NavPill(icon: Int, code: String, label: String, selected: Boolean, onClick: () -> Unit) {
     val color = if (selected) AfAccent else AfBorder
     Row(
         modifier = Modifier.fillMaxWidth().height(58.dp)
@@ -77,15 +76,18 @@ private fun NavPill(icon: Int, label: String, selected: Boolean, onClick: () -> 
     ) {
         Box(
             modifier = Modifier.size(46.dp)
-                .clip(CircleShape).border(1.2.dp, color, CircleShape),
+                .clip(AfHexShape()).border(1.2.dp, color, AfHexShape()),
             contentAlignment = Alignment.Center
         ) {
             Icon(painterResource(icon), null, tint = AfText, modifier = Modifier.size(22.dp))
         }
         Spacer(Modifier.width(12.dp))
-        Text(
-            label, color = AfText,
-            fontSize = 22.sp, fontWeight = FontWeight.Bold, maxLines = 1
-        )
+        Column {
+            Text(code, color = if (selected) AfNavy.copy(alpha = 0.7f) else AfAccent, fontSize = 10.sp, fontFamily = AfCondensed, letterSpacing = 2.sp, maxLines = 1)
+            Text(
+                label.uppercase(), color = if (selected) AfNavy else AfText,
+                fontSize = 17.sp, fontFamily = AfCondensed, letterSpacing = 1.sp, maxLines = 1
+            )
+        }
     }
 }

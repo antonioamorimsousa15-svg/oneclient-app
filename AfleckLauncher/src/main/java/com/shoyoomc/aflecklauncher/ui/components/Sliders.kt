@@ -199,8 +199,8 @@ private fun AfStepButton(enabled: Boolean, icon: Int, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(34.dp)
-            .afGlow(CircleShape, AfBorder, 0.7f)
-            .clip(CircleShape)
+            .afGlow(com.shoyoomc.aflecklauncher.ui.screens.main.AfHexShape(), AfBorder, 0.7f)
+            .clip(com.shoyoomc.aflecklauncher.ui.screens.main.AfHexShape())
             .then(if (enabled) Modifier.afClick(onClick) else Modifier),
         contentAlignment = Alignment.Center
     ) {

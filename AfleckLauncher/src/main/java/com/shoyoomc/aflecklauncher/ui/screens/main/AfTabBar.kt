@@ -35,7 +35,7 @@ class AfTabSpec(val iconRes: Int, val textRes: Int, val selected: Boolean, val o
 /** Barra de abas em cápsula (01 Minecraft, 02 Mods, ...): aba ativa em degradê, abas espalhadas na largura toda. */
 @Composable
 fun AfTabBar(tabs: List<AfTabSpec>, modifier: Modifier = Modifier) {
-    val capsule = RoundedCornerShape(16.dp)
+    val capsule = AfHexShape()
     BoxWithConstraints(
         modifier = modifier
             .afGlow(capsule, AfBorder, 0.8f)
@@ -66,9 +66,9 @@ fun AfTabBar(tabs: List<AfTabSpec>, modifier: Modifier = Modifier) {
                     Row(
                         modifier = Modifier
                             .size(38.dp)
-                            .clip(CircleShape)
+                            .clip(AfHexShape())
                             .background(if (t.selected) Color.White.copy(alpha = 0.22f) else androidx.compose.ui.graphics.Color.White.copy(alpha = 0.10f))
-                            .border(1.dp, if (t.selected) AfBorder else AfDim.copy(alpha = 0.6f), CircleShape),
+                            .border(1.dp, if (t.selected) AfBorder else AfDim.copy(alpha = 0.6f), AfHexShape()),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -88,7 +88,7 @@ fun AfTabBar(tabs: List<AfTabSpec>, modifier: Modifier = Modifier) {
                         Text(
                             stringResource(t.textRes),
                             color = if (t.selected) Color(0xFF0B0B0D) else AfText,
-                            fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, maxLines = 1
+                            fontSize = 16.sp, fontFamily = AfCondensed, letterSpacing = 0.8.sp, maxLines = 1
                         )
                     }
                 }

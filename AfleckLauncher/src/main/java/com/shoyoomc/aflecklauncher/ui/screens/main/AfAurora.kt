@@ -20,7 +20,7 @@ fun AfAuroraBackground(
         val h = size.height
         drawRect(
             Brush.verticalGradient(
-                listOf(Color(0xFF0E0B0A), Color(0xFF080606), Color(0xFF050404)),
+                listOf(Color(0xFF0D0706), Color(0xFF080504), Color(0xFF040302)),
                 startY = 0f,
                 endY = h
             )
@@ -35,11 +35,28 @@ fun AfAuroraBackground(
             Brush.radialGradient(listOf(c2.copy(alpha = 0.10f), Color.Transparent), center = Offset(w * 0.95f, h * 0.98f), radius = w * 0.50f),
             radius = w * 0.50f, center = Offset(w * 0.95f, h * 0.98f)
         )
-        // fios de grafite: linhas horizontais bem finas, textura industrial
-        var y = 0f
-        while (y < h) {
-            drawLine(Color.White.copy(alpha = 0.012f), Offset(0f, y), Offset(w, y), 1f)
-            y += 6f * density
+        // grade hexagonal discreta (textura industrial), um único traçado estático
+        val r = 36f * density
+        val hw = r * 1.5f
+        val hh = r * 1.7320508f
+        val path = androidx.compose.ui.graphics.Path()
+        var col = 0
+        var cx = 0f
+        while (cx < w + r) {
+            var cy = -hh + (if (col % 2 == 0) 0f else hh / 2f)
+            while (cy < h + hh) {
+                for (k in 0..5) {
+                    val ang = Math.toRadians(60.0 * k).toFloat()
+                    val px = cx + r * kotlin.math.cos(ang)
+                    val py = cy + r * kotlin.math.sin(ang)
+                    if (k == 0) path.moveTo(px, py) else path.lineTo(px, py)
+                }
+                path.close()
+                cy += hh
+            }
+            cx += hw
+            col++
         }
+        drawPath(path, c1.copy(alpha = 0.06f), style = androidx.compose.ui.graphics.drawscope.Stroke(1f * density))
     }
 }

@@ -57,7 +57,7 @@ fun DefaultSwitch(
     val on = MaterialTheme.colorScheme.primary
     val off = MaterialTheme.colorScheme.outline
     val c = if (!enabled) off.copy(alpha = 0.3f) else if (checked) on else off
-    val shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+    val shape = com.shoyoomc.aflecklauncher.ui.screens.main.AfHexShape()
     androidx.compose.foundation.layout.Box(
         modifier = modifier
             .size(width = 46.dp, height = 24.dp)
@@ -71,9 +71,9 @@ fun DefaultSwitch(
             .padding(3.dp)
     ) {
         androidx.compose.foundation.layout.Box(
-            Modifier.size(18.dp)
+            Modifier.size(width = 20.dp, height = 16.dp)
                 .align(if (checked) Alignment.CenterEnd else Alignment.CenterStart)
-                .background(c, androidx.compose.foundation.shape.CircleShape)
+                .background(c, com.shoyoomc.aflecklauncher.ui.screens.main.AfHexShape())
         )
     }
 }
