@@ -422,7 +422,7 @@ private fun ModsUpdateEntryItem(
                 }
             }
 
-            Checkbox(
+            com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                 checked = selected,
                 onCheckedChange = { value ->
                     entry.updateSelected(value)

@@ -63,9 +63,9 @@ fun afColorScheme(): ColorScheme {
 private fun afCorner(r: androidx.compose.ui.unit.Dp) = androidx.compose.foundation.shape.RoundedCornerShape(r)
 
 fun afShapes() = Shapes(
-    extraSmall = afCorner(6.dp),
-    small = afCorner(8.dp),
-    medium = afCorner(10.dp),
-    large = afCorner(14.dp),
-    extraLarge = afCorner(16.dp)
+    extraSmall = afCorner(5.dp),
+    small = afCorner(5.dp),
+    medium = afCorner(5.dp),
+    large = afCorner(5.dp),
+    extraLarge = afCorner(5.dp)
 )

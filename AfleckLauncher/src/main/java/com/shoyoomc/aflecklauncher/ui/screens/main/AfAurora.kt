@@ -35,28 +35,13 @@ fun AfAuroraBackground(
             Brush.radialGradient(listOf(c2.copy(alpha = 0.10f), Color.Transparent), center = Offset(w * 0.95f, h * 0.98f), radius = w * 0.50f),
             radius = w * 0.50f, center = Offset(w * 0.95f, h * 0.98f)
         )
-        // grade hexagonal discreta (textura industrial), um único traçado estático
-        val r = 36f * density
-        val hw = r * 1.5f
-        val hh = r * 1.7320508f
+        // grade quadrada discreta (textura de painel técnico), um único traçado estático
+        val step = 55f * density
         val path = androidx.compose.ui.graphics.Path()
-        var col = 0
-        var cx = 0f
-        while (cx < w + r) {
-            var cy = -hh + (if (col % 2 == 0) 0f else hh / 2f)
-            while (cy < h + hh) {
-                for (k in 0..5) {
-                    val ang = Math.toRadians(60.0 * k).toFloat()
-                    val px = cx + r * kotlin.math.cos(ang)
-                    val py = cy + r * kotlin.math.sin(ang)
-                    if (k == 0) path.moveTo(px, py) else path.lineTo(px, py)
-                }
-                path.close()
-                cy += hh
-            }
-            cx += hw
-            col++
-        }
-        drawPath(path, c1.copy(alpha = 0.06f), style = androidx.compose.ui.graphics.drawscope.Stroke(1f * density))
+        var gx = 0f
+        while (gx <= w) { path.moveTo(gx, 0f); path.lineTo(gx, h); gx += step }
+        var gy = 0f
+        while (gy <= h) { path.moveTo(0f, gy); path.lineTo(w, gy); gy += step }
+        drawPath(path, c1.copy(alpha = 0.05f), style = androidx.compose.ui.graphics.drawscope.Stroke(1f * density))
     }
 }

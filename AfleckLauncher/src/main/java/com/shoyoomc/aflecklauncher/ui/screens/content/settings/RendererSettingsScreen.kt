@@ -142,7 +142,7 @@ fun RendererSettingsScreen(
                             if (configurableRenderer != null) {
                                 IconButton(onClick = { showConfigDialog = true }) {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_settings_filled),
+                                        painter = painterResource(R.drawable.af_sym_settings),
                                         contentDescription = stringResource(R.string.settings_renderer_config_title)
                                     )
                                 }
@@ -161,7 +161,7 @@ fun RendererSettingsScreen(
                                 }
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_download_2_filled),
+                                    painter = painterResource(R.drawable.af_sym_download),
                                     contentDescription = stringResource(R.string.generic_download)
                                 )
                             }

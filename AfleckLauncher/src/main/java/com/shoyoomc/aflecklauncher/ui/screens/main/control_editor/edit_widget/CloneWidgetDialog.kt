@@ -225,7 +225,7 @@ private fun SelectLayerListItem(
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(
+        com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
             checked = checked,
             onCheckedChange = {
                 if (it) {

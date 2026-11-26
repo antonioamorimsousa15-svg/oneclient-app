@@ -189,6 +189,7 @@ fun MainScreen(
         color = backgroundColor,
         contentColor = onBackgroundColor()
     ) {
+        AfScanClock()
         // Se o usuário escolheu um plano de fundo em Ajustes > Launcher, ele aparece (imagem ou vídeo).
         val useSystemBg = isBackgroundValid && bgSlot.uri == null
         Box(Modifier.fillMaxSize().then(if (useSystemBg) Modifier else Modifier.background(Color.Black))) {

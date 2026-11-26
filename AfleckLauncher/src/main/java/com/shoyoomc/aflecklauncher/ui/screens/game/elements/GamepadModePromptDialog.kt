@@ -123,7 +123,7 @@ fun GamepadModePromptDialog(
                                     .clickable { selected = mode },
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                RadioButton(
+                                com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                                     selected = selected == mode,
                                     onClick = { selected = mode }
                                 )

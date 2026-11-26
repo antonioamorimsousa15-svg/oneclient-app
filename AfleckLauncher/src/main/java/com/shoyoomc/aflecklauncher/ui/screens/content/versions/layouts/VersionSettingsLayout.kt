@@ -181,7 +181,7 @@ fun ToggleableIntSliderSettingsCard(
         enabled = checked,
         fineTuningControl = true,
         appendContent = {
-            Checkbox(
+            com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                 modifier = Modifier.padding(start = 12.dp),
                 checked = checked,
                 enabled = enabled,

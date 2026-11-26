@@ -719,7 +719,7 @@ private fun WelcomeIntroduction(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Checkbox(
+                        com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                             checked = agreementChecked,
                             onCheckedChange = onAgreementCheckedChange
                         )

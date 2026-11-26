@@ -64,25 +64,23 @@ import androidx.compose.ui.unit.sp
 /** Fonte compacta (condensada) para títulos, botões e rótulos. */
 internal val AfCondensed: FontFamily = FontFamily(android.graphics.Typeface.create("sans-serif-condensed", android.graphics.Typeface.BOLD))
 
-/** Forma hexagonal alongada (pontas laterais), como os botões e abas das referências. [chamfer] 0 = automático. */
-class AfHexShape(private val chamfer: Dp = 0.dp) : Shape {
-    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
-        val w = size.width
-        val h = size.height
-        val c = (if (chamfer > 0.dp) with(density) { chamfer.toPx() } else minOf(h * 0.34f, with(density) { 20.dp.toPx() })).coerceAtMost(w / 2.5f)
-        val p = androidx.compose.ui.graphics.Path()
-        p.moveTo(c, 0f); p.lineTo(w - c, 0f); p.lineTo(w, h / 2f); p.lineTo(w - c, h); p.lineTo(c, h); p.lineTo(0f, h / 2f)
-        p.close()
-        return Outline.Generic(p)
+/** Raio padrão de todo o launcher: 5 dp. */
+internal val AfRadiusDp: Dp = 5.dp
+private fun afRadiusPx(): Float = 5f * android.content.res.Resources.getSystem().displayMetrics.density
+
+/** Contorno retangular com cantos de 5 dp (usado também para brilhos e molduras). */
+internal fun afChamferPath(w: Float, h: Float, c0: Float): androidx.compose.ui.graphics.Path {
+    val r = afRadiusPx().coerceAtMost(minOf(w, h) / 2f)
+    return androidx.compose.ui.graphics.Path().apply {
+        addRoundRect(androidx.compose.ui.geometry.RoundRect(0f, 0f, w, h, androidx.compose.ui.geometry.CornerRadius(r, r)))
     }
 }
 
-/** Retângulo com os quatro cantos chanfrados (painéis e cartões). */
-internal fun afChamferPath(w: Float, h: Float, c0: Float): androidx.compose.ui.graphics.Path {
-    val c = c0.coerceAtMost(minOf(w, h) / 3f)
-    return androidx.compose.ui.graphics.Path().apply {
-        moveTo(c, 0f); lineTo(w - c, 0f); lineTo(w, c); lineTo(w, h - c); lineTo(w - c, h); lineTo(c, h); lineTo(0f, h - c); lineTo(0f, c)
-        close()
+/** Nome mantido por compatibilidade: agora é um retângulo com 5 dp de arredondamento. */
+class AfHexShape(private val chamfer: Dp = 0.dp) : Shape {
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
+        val r = with(density) { AfRadiusDp.toPx() }.coerceAtMost(minOf(size.width, size.height) / 2f)
+        return Outline.Rounded(androidx.compose.ui.geometry.RoundRect(0f, 0f, size.width, size.height, androidx.compose.ui.geometry.CornerRadius(r, r)))
     }
 }
 
@@ -345,7 +343,7 @@ internal fun Modifier.afDarkGlass(color: Color, selected: Boolean = false, radiu
 @Composable
 internal fun AfButton(text: String, modifier: Modifier = Modifier, icon: Int? = null, onClick: () -> Unit) {
     Row(
-        modifier = modifier.height(50.dp)
+        modifier = modifier.height(55.dp)
             .afRect(AfAccent, selected = true, radius = 14.dp)
             .afClick(onClick),
         verticalAlignment = Alignment.CenterVertically,
@@ -363,7 +361,7 @@ internal fun AfButton(text: String, modifier: Modifier = Modifier, icon: Int? = 
 @Composable
 internal fun AfOutlineButton(text: String, modifier: Modifier = Modifier, icon: Int? = null, onClick: () -> Unit) {
     Row(
-        modifier = modifier.height(44.dp)
+        modifier = modifier.height(55.dp)
             .afRect(AfBorder, radius = 14.dp)
             .afClick(onClick),
         verticalAlignment = Alignment.CenterVertically,
@@ -442,7 +440,52 @@ class AfCutShape(private val cut: Dp = 14.dp) : Shape {
 
 /** Vidro grande (cartões e painéis): degradê escuro na diagonal, luz nas bordas, borda branca fina. */
 @Composable
-internal fun Modifier.afHud(shape: androidx.compose.ui.graphics.Shape): Modifier = this.afGlassSurface(shape)
+internal fun Modifier.afHud(shape: androidx.compose.ui.graphics.Shape): Modifier = this.afGlassSurface(shape).afScanLine()
+
+/** Relógio único da linha de varredura (um só para todos os cartões; ~30 quadros por segundo). */
+internal object AfScan { val t = androidx.compose.runtime.mutableFloatStateOf(0f) }
+
+@Composable
+internal fun AfScanClock() {
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        var last = 0L
+        while (true) {
+            androidx.compose.runtime.withFrameNanos { n ->
+                if (n - last >= 33_000_000L) { last = n; AfScan.t.floatValue = n / 1_000_000_000f }
+            }
+        }
+    }
+}
+
+/** Linha na cor do tema que sobe e desce no fundo do cartão (cada cartão com uma fase diferente). */
+internal fun Modifier.afScanLine(): Modifier = this.drawBehind {
+    val h = size.height
+    val w = size.width
+    if (h <= 0f || w <= 0f) return@drawBehind
+    val period = 5.5f
+    val ph = ((AfScan.t.floatValue / period) + (h * 0.0013f) + (w * 0.0007f)) % 1f
+    val tri = if (ph < 0.5f) ph * 2f else 2f - ph * 2f
+    val y = tri * h
+    val ac = AfAccent
+    val band = 38.dp.toPx()
+    val inset = 5.dp.toPx()
+    androidx.compose.ui.graphics.drawscope.clipRect(0f, 0f, w, h) {
+        drawRect(
+            Brush.verticalGradient(
+                listOf(Color.Transparent, ac.copy(alpha = 0.16f), Color.Transparent),
+                startY = y - band, endY = y + band
+            ),
+            topLeft = Offset(0f, y - band), size = Size(w, band * 2f)
+        )
+        drawLine(
+            Brush.horizontalGradient(
+                listOf(Color.Transparent, ac.copy(alpha = 0.75f), ac.copy(alpha = 0.75f), Color.Transparent),
+                startX = inset, endX = w - inset
+            ),
+            Offset(inset, y), Offset(w - inset, y), 1.3.dp.toPx()
+        )
+    }
+}
 
 
 /** Cor firme (mas na cor do tema) para janelas por cima de outras telas. */

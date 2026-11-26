@@ -46,7 +46,7 @@ fun AfSidebar(
     onAppearance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val panelShape = androidx.compose.foundation.shape.RoundedCornerShape(30.dp)
+    val panelShape = androidx.compose.foundation.shape.RoundedCornerShape(5.dp)
     Box(
         modifier = modifier.width(205.dp).fillMaxHeight()
             .afHudFrame(backing = 0.14f)
@@ -68,14 +68,14 @@ fun AfSidebar(
 private fun NavPill(icon: Int, code: String, label: String, selected: Boolean, onClick: () -> Unit) {
     val color = if (selected) AfAccent else AfBorder
     Row(
-        modifier = Modifier.fillMaxWidth().height(58.dp)
+        modifier = Modifier.fillMaxWidth().height(55.dp)
             .afDarkGlass(color, selected, 28.dp)
             .afClick(onClick)
             .padding(horizontal = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier.size(46.dp)
+            modifier = Modifier.size(41.dp)
                 .clip(AfHexShape()).border(1.2.dp, color, AfHexShape()),
             contentAlignment = Alignment.Center
         ) {

@@ -111,7 +111,7 @@ private fun ChoseStyleItem(
                 textAlign = TextAlign.Center
             )
 
-            RadioButton(
+            com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                 selected = selected,
                 onClick = {
                     onSelectedChange(!selected)

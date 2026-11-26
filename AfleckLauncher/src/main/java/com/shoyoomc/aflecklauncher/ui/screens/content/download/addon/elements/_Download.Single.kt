@@ -484,7 +484,7 @@ private fun SelectVersionListItem(
             modifier = modifier.padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(
+            com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                 checked = checked,
                 onCheckedChange = {
                     if (it) {
@@ -615,7 +615,7 @@ private fun AddonUnavailableDependencyItem(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Checkbox(
+                com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                     modifier = Modifier.height(28.dp),
                     checked = false,
                     onCheckedChange = null
@@ -681,7 +681,7 @@ private fun AddonVersionDependencyItem(
                     iconUrl = iconUrl
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Checkbox(
+                com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                     modifier = Modifier.height(24.dp),
                     checked = checked,
                     onCheckedChange = onCheckedChange

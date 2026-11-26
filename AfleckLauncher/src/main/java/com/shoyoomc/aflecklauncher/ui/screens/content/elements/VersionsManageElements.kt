@@ -748,7 +748,7 @@ fun VersionItemLayout(
                 .padding(all = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            RadioButton(
+            com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                 selected = selected,
                 onClick = {
                     if (selected) return@RadioButton

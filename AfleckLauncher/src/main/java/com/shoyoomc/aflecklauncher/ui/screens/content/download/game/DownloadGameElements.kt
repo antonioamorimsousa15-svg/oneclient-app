@@ -418,7 +418,7 @@ fun AddonListItem(
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RadioButton(
+        com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
             selected = selected,
             onClick = onClick
         )

@@ -41,7 +41,7 @@ fun ContentCheckBox(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(
+        com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
             checked = checked,
             onCheckedChange = onCheckedChange,
             enabled = enabled,

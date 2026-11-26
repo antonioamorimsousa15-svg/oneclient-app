@@ -26,6 +26,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfBorder
 import com.shoyoomc.aflecklauncher.ui.screens.main.AfCutShape
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHud
@@ -36,6 +37,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -168,48 +171,7 @@ fun rememberSettingsCardShape(
     outerShape: Dp = 28.dp,
     innerShape: Dp = 4.dp
 ): Shape {
-    return remember(position, outerShape, innerShape) {
-        when (position) {
-            CardPosition.Top -> RoundedCornerShape(
-                topStart = outerShape,
-                topEnd = outerShape,
-                bottomStart = innerShape,
-                bottomEnd = innerShape
-            )
-            CardPosition.TopStart -> RoundedCornerShape(
-                topStart = outerShape,
-                topEnd = innerShape,
-                bottomStart = innerShape,
-                bottomEnd = innerShape
-            )
-            CardPosition.TopEnd -> RoundedCornerShape(
-                topStart = innerShape,
-                topEnd = outerShape,
-                bottomStart = innerShape,
-                bottomEnd = innerShape
-            )
-            CardPosition.Middle -> RoundedCornerShape(innerShape)
-            CardPosition.Bottom -> RoundedCornerShape(
-                topStart = innerShape,
-                topEnd = innerShape,
-                bottomStart = outerShape,
-                bottomEnd = outerShape
-            )
-            CardPosition.BottomStart -> RoundedCornerShape(
-                topStart = innerShape,
-                topEnd = innerShape,
-                bottomStart = outerShape,
-                bottomEnd = innerShape
-            )
-            CardPosition.BottomEnd -> RoundedCornerShape(
-                topStart = innerShape,
-                topEnd = innerShape,
-                bottomStart = innerShape,
-                bottomEnd = outerShape
-            )
-            CardPosition.Single -> RoundedCornerShape(outerShape)
-        }
-    }
+    return remember(position) { AfCutShape(12.dp) }
 }
 
 /** Dentro de um [SettingsCardColumn] as linhas viram um único cartão de vidro com divisórias. */
@@ -227,13 +189,25 @@ private fun SettingsGroupRow(
             position == CardPosition.TopEnd || position == CardPosition.Single
     Column(
         modifier = modifier
+            .heightIn(min = 55.dp)
             .alpha(if (enabled) 1f else 0.5f)
             .then(if (onClick != null) Modifier.clickable(enabled = enabled, onClick = onClick) else Modifier)
     ) {
         if (!first) {
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = AfBorder.copy(alpha = 0.35f)
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(
+                        androidx.compose.ui.graphics.Brush.horizontalGradient(
+                            listOf(
+                                com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent.copy(alpha = 0.6f),
+                                AfBorder.copy(alpha = 0.25f),
+                                androidx.compose.ui.graphics.Color.Transparent
+                            )
+                        )
+                    )
             )
         }
         content()
@@ -368,8 +342,21 @@ fun SettingsCardColumn(
     ) {
         Column(
             modifier = modifier
-                .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.05f), AfCutShape(18.dp))
-                .afHud(AfCutShape(18.dp)),
+                .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.38f), AfCutShape(18.dp))
+                .afHud(AfCutShape(18.dp))
+                .drawBehind {
+                    drawRect(
+                        color = com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent,
+                        topLeft = androidx.compose.ui.geometry.Offset(0f, 22.dp.toPx()),
+                        size = androidx.compose.ui.geometry.Size(2.5.dp.toPx(), (size.height - 44.dp.toPx()).coerceAtLeast(0f))
+                    )
+                    // colchetes de canto (visual HUD gamer)
+                    val ac = com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent
+                    val t = 1.6.dp.toPx(); val l = 14.dp.toPx(); val m = 18.dp.toPx()
+                    drawLine(ac, androidx.compose.ui.geometry.Offset(size.width - m - l, 0f), androidx.compose.ui.geometry.Offset(size.width - m, 0f), t)
+                    drawLine(ac, androidx.compose.ui.geometry.Offset(size.width, m), androidx.compose.ui.geometry.Offset(size.width, m + l), t)
+                    drawLine(ac, androidx.compose.ui.geometry.Offset(m, size.height), androidx.compose.ui.geometry.Offset(m + l, size.height), t)
+                },
             verticalArrangement = Arrangement.spacedBy(0.dp),
             content = content
         )

@@ -629,8 +629,8 @@ private fun FilterListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         when (selectionMode) {
-            FilterSelectionMode.Single -> RadioButton(selected = selected, onClick = onClick)
-            FilterSelectionMode.Multiple -> Checkbox(checked = selected, onCheckedChange = onCheckedChange)
+            FilterSelectionMode.Single -> com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(selected = selected, onClick = onClick)
+            FilterSelectionMode.Multiple -> com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(checked = selected, onCheckedChange = onCheckedChange)
         }
         itemLayout()
     }

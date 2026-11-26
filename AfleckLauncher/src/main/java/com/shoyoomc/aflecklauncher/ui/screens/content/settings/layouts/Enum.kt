@@ -87,7 +87,7 @@ fun <E: Enum<E>> EnumSettingsCard(
                 entries.forEach { enum ->
                     Row {
                         val radioText = getRadioText(enum)
-                        RadioButton(
+                        com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                             enabled = getRadioEnable(enum),
                             selected = value == enum,
                             onClick = {

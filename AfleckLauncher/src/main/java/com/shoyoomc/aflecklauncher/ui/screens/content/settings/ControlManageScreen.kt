@@ -596,7 +596,7 @@ private fun ControlLayoutItem(
                 .padding(all = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            RadioButton(
+            com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                 selected = selected,
                 enabled = data.isSupport,
                 onClick = {

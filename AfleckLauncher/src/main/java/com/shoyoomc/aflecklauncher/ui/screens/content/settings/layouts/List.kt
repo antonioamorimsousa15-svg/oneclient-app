@@ -129,17 +129,15 @@ private fun <E> BaseListSettingsCard(
                         targetValue = if (expanded) -180f else 0f,
                         animationSpec = getAnimateTween()
                     )
-                    IconButton(
+                    androidx.compose.foundation.layout.Box(
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
-                            .size(34.dp)
-                            .rotate(rotation),
-                        enabled = enabled,
-                        onClick = { onExpandChange(!expanded) }
+                            .size(38.dp)
+                            .clickable(enabled = enabled) { onExpandChange(!expanded) },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_drop_down_rounded),
-                            contentDescription = stringResource(if (expanded) R.string.generic_expand else R.string.generic_collapse)
+                        com.shoyoomc.aflecklauncher.ui.components.AfChevron(
+                            modifier = Modifier.rotate(rotation)
                         )
                     }
                 }

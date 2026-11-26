@@ -80,14 +80,18 @@ fun RadioCard(
     enabled: Boolean = true,
     color: Color = itemColor(false),
     contentColor: Color = onItemColor(),
-    shape: Shape = MaterialTheme.shapes.large,
+    shape: Shape = com.shoyoomc.aflecklauncher.ui.screens.main.AfCutShape(10.dp),
     radioColors: RadioButtonColors = RadioButtonDefaults.colors(),
     interactionSource: MutableInteractionSource? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
     InternalSurface(
         modifier = modifier,
-        color = color,
+        color = if (selected) com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent.copy(alpha = 0.14f) else Color.Black.copy(alpha = 0.30f),
+        border = androidx.compose.foundation.BorderStroke(
+            if (selected) 1.5.dp else 1.dp,
+            if (selected) com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent else com.shoyoomc.aflecklauncher.ui.screens.main.AfBorder.copy(alpha = 0.55f)
+        ),
         contentColor = contentColor,
         shape = shape,
         onClick = onClick,
@@ -98,7 +102,7 @@ fun RadioCard(
             modifier = Modifier.padding(end = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            RadioButton(
+            com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                 selected = selected,
                 onClick = onClick,
                 enabled = enabled,
@@ -113,6 +117,7 @@ fun RadioCard(
 
 @Composable
 private fun InternalSurface(
+    border: androidx.compose.foundation.BorderStroke?,
     color: Color,
     contentColor: Color,
     shape: Shape,
@@ -130,6 +135,7 @@ private fun InternalSurface(
             shape = shape,
             onClick = onClick,
             enabled = enabled,
+            border = border,
             interactionSource = interactionSource,
             content = content
         )
@@ -139,6 +145,7 @@ private fun InternalSurface(
             color = color,
             contentColor = contentColor,
             shape = shape,
+            border = border,
             content = content
         )
     }

@@ -208,7 +208,7 @@ fun <E> InfoLayoutListItem(
                                         },
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    RadioButton(
+                                    com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                                         selected = selectedItem == item,
                                         onClick = {
                                             onClick(item)

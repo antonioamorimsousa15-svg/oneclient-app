@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -54,6 +55,7 @@ fun AfTabBar(tabs: List<AfTabSpec>, modifier: Modifier = Modifier) {
             tabs.forEachIndexed { index, t ->
                 Row(
                     modifier = Modifier
+                        .height(55.dp)
                         .clip(capsule)
                         .then(
                             if (t.selected) Modifier.background(Brush.horizontalGradient(listOf(AfAccent, AfAccent2)))
@@ -65,7 +67,7 @@ fun AfTabBar(tabs: List<AfTabSpec>, modifier: Modifier = Modifier) {
                 ) {
                     Row(
                         modifier = Modifier
-                            .size(38.dp)
+                            .size(36.dp)
                             .clip(AfHexShape())
                             .background(if (t.selected) Color.White.copy(alpha = 0.22f) else androidx.compose.ui.graphics.Color.White.copy(alpha = 0.10f))
                             .border(1.dp, if (t.selected) AfBorder else AfDim.copy(alpha = 0.6f), AfHexShape()),

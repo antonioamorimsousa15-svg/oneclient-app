@@ -530,7 +530,7 @@ fun SimpleCheckEditDialog(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     checkBoxText?.let{ Text(text = it, style = MaterialTheme.typography.labelMedium) }
-                    Checkbox(
+                    com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                         checked = checked,
                         onCheckedChange = onCheckedChange
                     )

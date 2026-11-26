@@ -111,7 +111,7 @@ private fun UpgradeFileLayout(
             .clickable(enabled = enabled, onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RadioButton(
+        com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
             selected = selected,
             onClick = onClick,
             enabled = enabled

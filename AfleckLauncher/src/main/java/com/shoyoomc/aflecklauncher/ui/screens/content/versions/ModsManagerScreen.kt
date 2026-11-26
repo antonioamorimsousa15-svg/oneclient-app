@@ -1346,7 +1346,7 @@ private fun ModItemLayout(
                 }
 
                 //启用/禁用
-                Checkbox(
+                com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                     checked = mod.localMod.file.isEnabled(),
                     onCheckedChange = { checked ->
                         if (checked) onEnable()

@@ -183,11 +183,11 @@ fun SimpleListItem(
 ) {
     Row(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
+            .clip(shape = com.shoyoomc.aflecklauncher.ui.screens.main.AfCutShape(10.dp))
             .clickable(enabled = enabled, onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RadioButton(
+        com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
             selected = selected,
             onClick = onClick
         )
@@ -214,13 +214,13 @@ fun SimpleListItem(
 ) {
     Row(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
+            .clip(shape = com.shoyoomc.aflecklauncher.ui.screens.main.AfCutShape(10.dp))
             .clickable(enabled = enabled) {
                 onCheckedChange(!checked)
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(
+        com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
             checked = checked,
             onCheckedChange = onCheckedChange
         )
@@ -293,20 +293,24 @@ fun TitleAndSummary(
     titleStyle: TextStyle = MaterialTheme.typography.titleSmall,
     summaryStyle: TextStyle = MaterialTheme.typography.labelSmall
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Text(
-            text = title,
-            style = titleStyle
-        )
-        summary?.let { text ->
+    Row(modifier = modifier) {
+        AfBullet(modifier = Modifier.padding(top = 6.dp, end = 9.dp))
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             Text(
-                modifier = Modifier.alpha(0.7f),
-                text = text,
-                style = summaryStyle
+                text = title,
+                style = titleStyle,
+                color = com.shoyoomc.aflecklauncher.ui.screens.main.AfText
             )
+            summary?.let { text ->
+                Text(
+                    text = text,
+                    style = summaryStyle,
+                    color = com.shoyoomc.aflecklauncher.ui.screens.main.AfDim
+                )
+            }
         }
     }
 }

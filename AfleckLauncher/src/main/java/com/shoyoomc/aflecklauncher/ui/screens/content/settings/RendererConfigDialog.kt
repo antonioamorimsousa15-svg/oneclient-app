@@ -323,7 +323,7 @@ private fun ChoiceConfigItem(state: ConfigEntryState, position: CardPosition) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (hasCheckbox) {
-                Checkbox(
+                com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                     checked = enabled,
                     onCheckedChange = {
                         state.saveEnabled(it)
@@ -411,7 +411,7 @@ private fun OrderedChoiceConfigItem(state: ConfigEntryState, position: CardPosit
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (hasCheckbox) {
-                Checkbox(
+                com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                     checked = enabled,
                     onCheckedChange = {
                         state.saveEnabled(it)

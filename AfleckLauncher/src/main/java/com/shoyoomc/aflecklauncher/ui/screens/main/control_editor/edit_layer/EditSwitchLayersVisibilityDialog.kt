@@ -205,7 +205,7 @@ private fun LayerVisibilityItem(
             text = layer.name.orUnspecified(),
             style = MaterialTheme.typography.bodyMedium
         )
-        Checkbox(
+        com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
             checked = selected,
             onCheckedChange = onSelectedChange
         )

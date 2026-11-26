@@ -1090,7 +1090,7 @@ private fun InputMagnifierContent(
                                 Text(
                                     text = stringResource(R.string.game_menu_option_ime_magnifier_auto_show)
                                 )
-                                Checkbox(
+                                com.shoyoomc.aflecklauncher.ui.components.AfCheckbox(
                                     modifier = Modifier.focusProperties { canFocus = false },
                                     checked = AllSettings.imeMagnifierAutoShow.state,
                                     onCheckedChange = {
