@@ -366,7 +366,7 @@ fun AccountItem(
             com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                 selected = selected,
                 onClick = {
-                    if (selected || !enabled) return@RadioButton
+                    if (selected || !enabled) return@AfRadioButton
                     onSelected(account)
                 },
                 enabled = enabled

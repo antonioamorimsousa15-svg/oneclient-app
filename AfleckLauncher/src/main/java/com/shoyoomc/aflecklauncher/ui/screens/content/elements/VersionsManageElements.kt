@@ -751,7 +751,7 @@ fun VersionItemLayout(
             com.shoyoomc.aflecklauncher.ui.components.AfRadioButton(
                 selected = selected,
                 onClick = {
-                    if (selected) return@RadioButton
+                    if (selected) return@AfRadioButton
                     onSelected()
                 }
             )

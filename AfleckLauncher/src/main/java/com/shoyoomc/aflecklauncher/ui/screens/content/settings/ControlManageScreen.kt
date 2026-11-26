@@ -600,7 +600,7 @@ private fun ControlLayoutItem(
                 selected = selected,
                 enabled = data.isSupport,
                 onClick = {
-                    if (selected) return@RadioButton
+                    if (selected) return@AfRadioButton
                     onSelected()
                 }
             )
