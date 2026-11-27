@@ -343,12 +343,12 @@ fun AccountItem(
     LaunchedEffect(Unit) {
         scale.animateTo(targetValue = 1f, animationSpec = getAnimateTween())
     }
-    val afShape = AfCutShape(12.dp)
+    val afShape = RoundedCornerShape(16.dp)
     Surface(
         modifier = modifier
             .graphicsLayer(scaleY = scale.value, scaleX = scale.value)
             .afGlow(afShape, if (selected) AfAccent else AfBorder, if (selected) 1.5f else 0.6f),
-        color = if (selected) AfAccent.copy(alpha = 0.10f) else AfNavy.copy(alpha = 0.35f),
+        color = if (selected) AfAccent.copy(alpha = 0.14f) else Color(0xFF101D30).copy(alpha = 0.82f),
         contentColor = AfText,
         shape = afShape,
         onClick = {

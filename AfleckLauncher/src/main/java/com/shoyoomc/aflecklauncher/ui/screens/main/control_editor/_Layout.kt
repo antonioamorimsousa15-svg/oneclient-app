@@ -76,6 +76,7 @@ import com.shoyoomc.aflecklauncher.ui.components.MarqueeText
 import com.shoyoomc.aflecklauncher.ui.components.SimpleTextSlider
 import com.shoyoomc.aflecklauncher.ui.components.SliderValueEditDialog
 import com.shoyoomc.aflecklauncher.ui.screens.content.elements.DisabledAlpha
+import com.shoyoomc.aflecklauncher.ui.screens.main.afGlow
 import com.shoyoomc.aflecklauncher.ui.theme.itemColor
 import com.shoyoomc.aflecklauncher.ui.theme.onItemColor
 import com.shoyoomc.aflecklauncher.utils.animation.getAnimateTween
@@ -505,6 +506,7 @@ fun InfoLayoutItem(
 
     Surface(
         modifier = modifier
+            .afGlow(shape, borderColor, if (selected) 1.35f else 0.55f)
             .border(
                 width = borderWidth,
                 color = borderColor,

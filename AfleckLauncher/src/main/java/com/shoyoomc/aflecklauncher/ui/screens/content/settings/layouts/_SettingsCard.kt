@@ -229,7 +229,7 @@ fun SettingsCard(
     val shape = rememberSettingsCardShape(position, outerShape, innerShape)
 
     BackgroundCard(
-        modifier = modifier,
+        modifier = modifier.afHud(shape),
         shape = shape,
         content = content
     )
@@ -252,7 +252,7 @@ fun SettingsCard(
     val shape = rememberSettingsCardShape(position, outerShape, innerShape)
 
     BackgroundCard(
-        modifier = modifier,
+        modifier = modifier.afHud(shape),
         shape = shape,
         onClick = onClick,
         enabled = enabled,
@@ -303,7 +303,7 @@ fun SettingsCard(
     val shape = rememberSettingsCardShape(position, outerShape, innerShape)
 
     BackgroundCard(
-        modifier = modifier,
+        modifier = modifier.afHud(shape),
         shape = shape,
         onClick = onClick,
         enabled = enabled

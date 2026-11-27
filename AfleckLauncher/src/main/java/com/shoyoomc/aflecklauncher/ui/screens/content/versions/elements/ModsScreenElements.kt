@@ -372,8 +372,8 @@ private fun ModsUpdateEntryItem(
 
     Surface(
         modifier = modifier,
-        shape = shape,
-        color = color,
+        shape = RoundedCornerShape(16.dp),
+        color = Color(0xFF101D30).copy(alpha = 0.86f),
         contentColor = contentColor,
         onClick = {
             entry.updateSelected(!selected)
