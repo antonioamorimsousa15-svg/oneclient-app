@@ -222,29 +222,16 @@ fun GameMenuSubscreen(
                     .fillMaxWidth(0.74f)
                     .fillMaxHeight(0.82f)
                     .afHudScreen(backing = 0.72f, glow = true)
+                    .afTechMotion()
+                    .afTechCorners(len = 18.dp, inset = 4.dp)
                     .padding(6.dp)
             ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = "HUD // " + current.title,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = AfText,
-                                letterSpacing = 2.sp
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .afClick { panel = null }
-                                    .padding(horizontal = 8.dp),
-                                text = "✕",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                        }
+                        AfTechHeader(
+                            code = "MOD-" + "%02d".format(current.ordinal + 1),
+                            title = current.title,
+                            onClose = { panel = null }
+                        )
+                        AfTechHint(dockHint(current))
                         Box(modifier = Modifier.weight(1f)) {
                             when (current) {
                                 DockPanel.Controls -> ControlOverview(
@@ -307,18 +294,18 @@ private fun AfGameDock(
 ) {
     val shape = AfCutShape(20.dp)
     val left = listOf(
-        DockEntry(R.drawable.ic_dashboard_filled, "Controles", { onOpen(DockPanel.Controls) }, active == DockPanel.Controls),
+        DockEntry(R.drawable.af_sym_control, "Controles", { onOpen(DockPanel.Controls) }, active == DockPanel.Controls),
         DockEntry(R.drawable.ic_touch_app_filled, "Gestos", { onOpen(DockPanel.Gestures) }, active == DockPanel.Gestures),
         DockEntry(R.drawable.ic_af_keyboard, "Teclado", onKeyboard, false),
         DockEntry(R.drawable.ic_mouse_filled, "Mouse", { onOpen(DockPanel.Mouse) }, active == DockPanel.Mouse),
         DockEntry(R.drawable.ic_mobile_rotate_filled, "Giroscópio", { onOpen(DockPanel.Gyro) }, active == DockPanel.Gyro)
     )
     val right = listOf(
-        DockEntry(R.drawable.ic_video_settings, "Resolução", { onOpen(DockPanel.Resolution) }, active == DockPanel.Resolution),
-        DockEntry(R.drawable.ic_menu, "Menu flutuante", { onOpen(DockPanel.Game) }, active == DockPanel.Game),
-        DockEntry(R.drawable.ic_rocket_launch_filled, "FPS e Memória", { onOpen(DockPanel.Game) }, false),
+        DockEntry(R.drawable.af_sym_renderer, "Resolução", { onOpen(DockPanel.Resolution) }, active == DockPanel.Resolution),
+        DockEntry(R.drawable.af_sym_game, "Menu flutuante", { onOpen(DockPanel.Game) }, active == DockPanel.Game),
+        DockEntry(R.drawable.af_sym_hud, "FPS e Memória", { onOpen(DockPanel.Game) }, false),
         DockEntry(R.drawable.ic_terminal_outlined, "Log", onLog, false),
-        DockEntry(R.drawable.ic_af_music, "Música", { onOpen(DockPanel.Music) }, active == DockPanel.Music)
+        DockEntry(R.drawable.af_sym_music, "Música", { onOpen(DockPanel.Music) }, active == DockPanel.Music)
     )
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -327,6 +314,8 @@ private fun AfGameDock(
                 .fillMaxWidth(0.84f)
                 .widthIn(max = 760.dp)
                 .afHudFrame(backing = 0.62f)
+                .afTechMotion()
+                .afTechCorners(len = 14.dp, inset = 3.dp)
                 .padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -339,11 +328,17 @@ private fun AfGameDock(
             )
             AfDockGrid(modifier = Modifier.weight(1f), entries = right)
         }
+        Text(
+            modifier = Modifier.padding(top = 4.dp),
+            text = "Toque num ícone para abrir. Toque de novo para fechar.",
+            style = MaterialTheme.typography.labelSmall,
+            color = Color.White.copy(alpha = 0.65f)
+        )
         //Botão de forçar saída, colado embaixo do dock
         Row(
             modifier = Modifier
                 .offset(y = (-6).dp)
-                .clip(RoundedCornerShape(50))
+                .clip(RoundedCornerShape(5.dp))
                 .background(Brush.horizontalGradient(listOf(Color(0xFFB3123F), Color(0xFFE6366B))))
                 .afClick(onForceClose)
                 .padding(horizontal = 26.dp, vertical = 9.dp),
@@ -369,23 +364,13 @@ private fun AfDockGrid(modifier: Modifier, entries: List<DockEntry>) {
         entries.chunked(3).forEach { row ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 row.forEach { entry ->
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .afClick(entry.onClick),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        AfIconCircle(icon = entry.icon, size = 44.dp, filled = entry.active)
-                        Text(
-                            text = entry.label,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.White,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
-                    }
+                    AfTechCell(
+                        icon = entry.icon,
+                        label = entry.label,
+                        active = entry.active,
+                        onClick = entry.onClick,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
                 repeat(3 - row.size) { Spacer(modifier = Modifier.weight(1f)) }
             }
@@ -478,7 +463,7 @@ private fun AfDockCenter(modifier: Modifier, onGamepad: () -> Unit, onSettings: 
         ) {
             Icon(
                 modifier = Modifier.size(20.dp).afClick(onGamepad),
-                painter = painterResource(R.drawable.ic_sports_esports_filled),
+                painter = painterResource(R.drawable.af_sym_play),
                 contentDescription = null,
                 tint = Color.White
             )
@@ -492,7 +477,7 @@ private fun AfDockCenter(modifier: Modifier, onGamepad: () -> Unit, onSettings: 
             )
             Icon(
                 modifier = Modifier.size(20.dp).afClick(onSettings),
-                painter = painterResource(R.drawable.ic_settings_filled),
+                painter = painterResource(R.drawable.af_sym_settings),
                 contentDescription = null,
                 tint = AfAccent
             )
@@ -1456,4 +1441,15 @@ private fun ControlGyroscope(
             )
         }
     }
+}
+/** Explicação curta (em português) do que cada painel faz. */
+private fun dockHint(panel: DockPanel): String = when (panel) {
+    DockPanel.Controls -> "Escolha, troque ou edite o layout dos botões na tela. Use \"Editar HUD\" para mover os botões do jeito que preferir."
+    DockPanel.Gestures -> "Define o que cada toque faz: tocar, segurar, arrastar e usar dois dedos."
+    DockPanel.Mouse -> "Ajusta o mouse virtual: tamanho, velocidade e como ele responde ao seu toque."
+    DockPanel.Gamepad -> "Configura o controle (gamepad) conectado: botões e analógicos."
+    DockPanel.Gyro -> "Mire mexendo o celular. Ligue o giroscópio e ajuste a sensibilidade."
+    DockPanel.Resolution -> "Resolução menor dá mais FPS; maior deixa a imagem mais nítida. Aqui você também ajusta a barra de itens."
+    DockPanel.Game -> "Ações do jogo: forçar saída, abrir o log, multiplayer e atualizar a tela."
+    DockPanel.Music -> "Controle a música enquanto joga: tocar, pausar e trocar de faixa."
 }
