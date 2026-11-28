@@ -239,7 +239,7 @@ private fun LocalizedStringItem(
     take: Int? = null,
     color: Color = itemColor(false),
     contentColor: Color = onItemColor(),
-    shape: Shape = RoundedCornerShape(28.dp)
+    shape: Shape = RoundedCornerShape(10.dp)
 ) {
     Surface(
         modifier = modifier,

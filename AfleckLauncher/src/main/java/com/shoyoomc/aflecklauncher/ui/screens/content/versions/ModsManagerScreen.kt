@@ -99,8 +99,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shoyoomc.aflecklauncher.R
-import com.shoyoomc.aflecklauncher.ui.screens.main.AfBorder
-import com.shoyoomc.aflecklauncher.ui.screens.main.afGlow
 import com.shoyoomc.aflecklauncher.coroutine.TaskSystem
 import com.shoyoomc.aflecklauncher.game.addons.modloader.ModLoader
 import com.shoyoomc.aflecklauncher.game.download.addon.platform.Platform
@@ -1192,7 +1190,6 @@ private fun ModItemLayout(
     Surface(
         modifier = modifier
             .graphicsLayer(scaleY = scale.value, scaleX = scale.value)
-            .afGlow(shape, if (selected) AfBorder else AfBorder.copy(alpha = 0.65f), if (selected) 1.35f else 0.55f)
             .border(
                 width = borderWidth,
                 color = borderColor,
@@ -1449,8 +1446,7 @@ private fun WarningItem(
 
     Surface(
         modifier = modifier
-            .graphicsLayer(scaleY = scale.value, scaleX = scale.value)
-            .afGlow(shape, AfBorder, 0.5f),
+            .graphicsLayer(scaleY = scale.value, scaleX = scale.value),
         onClick = {},
         shape = shape,
         color = itemColor,

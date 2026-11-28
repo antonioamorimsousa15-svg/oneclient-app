@@ -190,6 +190,20 @@ fun AboutInfoScreen(
                             openLink = { openLink("https://github.com/modrinth/code") },
                         )
                         LinkIconItem(
+                            icon = painterResource(R.drawable.ic_github),
+                            title = "Ely.by",
+                            text = "Serviço de contas e skins. O Afleck entra com contas do Ely.by usando o servidor de login alternativo (authlib-injector).",
+                            openLink = { openLink("https://ely.by") },
+                            useImage = false
+                        )
+                        LinkIconItem(
+                            icon = painterResource(R.drawable.ic_github),
+                            title = "authlib-injector",
+                            text = "Peça que deixa o Afleck entrar com contas de servidores de login alternativos, como o Ely.by. É ela que faz o login de contas externas funcionar dentro do jogo.",
+                            openLink = { openLink("https://github.com/yushijinhun/authlib-injector") },
+                            useImage = false
+                        )
+                        LinkIconItem(
                             icon = painterResource(R.drawable.img_launcher_pcl2),
                             title = "Plain Craft Launcher 2",
                             text = stringResource(R.string.about_acknowledgements_pcl_text, BuildKeys.LAUNCHER_SHORT_NAME),

@@ -257,35 +257,6 @@ private fun VersionConfigs(
             )
         }
 
-        val sfpewPluginLayerEnabled = when (stateful.sfpewPluginLayer) {
-            SettingState.FOLLOW_GLOBAL -> AllSettings.sfpewPluginLayer.state
-            SettingState.ENABLE -> true
-            SettingState.DISABLE -> false
-        }
-        StatefulDropdownMenuFollowGlobal(
-            modifier = Modifier.fillMaxWidth(),
-            position = CardPosition.Middle,
-            currentValue = stateful.sfpewPluginLayer,
-            enabled = effectiveRenderer is Plugin,
-            onValueChange = { stateful.sfpewPluginLayer = it },
-            title = stringResource(R.string.settings_renderer_sfpew_plugin_layer_title),
-            summary = stringResource(R.string.settings_renderer_sfpew_plugin_layer_summary)
-        )
-
-        StatefulDropdownMenuFollowGlobal(
-            modifier = Modifier.fillMaxWidth(),
-            position = CardPosition.Middle,
-            currentValue = stateful.sfpewRelaxedContext,
-            enabled = effectiveRenderer?.let { renderer ->
-                renderer.supportsSfpewByDefault() ||
-                // 如果是插件，需要看是否给插件启用了这个玩意
-                (renderer is Plugin && sfpewPluginLayerEnabled)
-            } == true,
-            onValueChange = { stateful.sfpewRelaxedContext = it },
-            title = stringResource(R.string.renderer_config_sfpew_relaxed_context_title),
-            summary = stringResource(R.string.renderer_config_sfpew_relaxed_context_desc)
-        )
-
         val drivers = DriverPluginManager.getDriverList()
         val driversIdList = getIDList(drivers) { IDItem(it.id, it.name) }
         ListSettingsCard(

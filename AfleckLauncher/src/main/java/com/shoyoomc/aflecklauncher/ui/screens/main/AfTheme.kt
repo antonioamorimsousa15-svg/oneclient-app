@@ -68,7 +68,7 @@ internal val AfCondensed: FontFamily = FontFamily(android.graphics.Typeface.crea
 /** Raio em px: pílula/arredondado grande (estilo redondo) ou 5 dp (estilo retangular). */
 private fun afRadiusPx(w: Float, h: Float): Float {
     val d = android.content.res.Resources.getSystem().displayMetrics.density
-    val r = if (AfThemeState.roundStyle) 16f * d else 6f * d
+    val r = 10f * d
     return r.coerceAtMost(minOf(w, h) / 2f)
 }
 
@@ -103,8 +103,10 @@ class AfThemeDef(
 /** Estado do tema (cores, vibração, contraste, opacidade), salvo no aparelho. */
 object AfThemeState {
     val themes = listOf(
+        // Futuristic Frozen Glass UI: azul-marinho muito escuro, azul-gelo, ciano e turquesa.
+        AfThemeDef("frozen", "Frozen Glass", R.drawable.af_bg, Color(0xFF5CE1FF), Color(0xFF2DF5C8), Color(0xFF020B1C), Color(0xFF8FE3F5), Color(0xFFA8C4D8)),
         // Tema principal Afleck Forja: preto profundo e grafite, neon laranja, cobre e rosa-salmão.
-        AfThemeDef("afleck", "Afleck Glacial", R.drawable.af_bg, Color(0xFF75CFF5), Color(0xFF4B9ED4), Color(0xFF101A29), Color(0xFF557C9B), Color(0xFFB9C9D8)),
+        AfThemeDef("afleck", "Afleck Forja", R.drawable.af_bg, Color(0xFFFF7A2A), Color(0xFFFF4A2B), Color(0xFF0B0605), Color(0xFFFF8A3D), Color(0xFFC9B2A3)),
         AfThemeDef("aurora", "Aurora Boreal", R.drawable.af_bg, Color(0xFF39FFB0), Color(0xFF8A5CFF), Color(0xFF041512), Color(0xFF39FFB0), Color(0xFFB6D8CE)),
         AfThemeDef("vermelha", "Aurora Rubi", R.drawable.af_bg, Color(0xFFFF4D5E), Color(0xFFFF8A5C), Color(0xFF2A060A), Color(0xFFFF4D5E), Color(0xFFE8C2C6)),
         AfThemeDef("laranja", "Aurora Âmbar", R.drawable.af_bg, Color(0xFFFF8A2B), Color(0xFFFFC02B), Color(0xFF2B1405), Color(0xFFFF8A2B), Color(0xFFE8D2BC)),
@@ -122,13 +124,13 @@ object AfThemeState {
         AfThemeDef("branca", "Aurora Pérola", R.drawable.af_bg, Color(0xFFFFFFFF), Color(0xFFBFC8D2), Color(0xFF0B0B0D), Color(0xFFE6ECF2), Color(0xFFB4B9C2))
     )
 
-    var themeId by mutableStateOf("afleck")
+    var themeId by mutableStateOf("frozen")
         private set
     var vibrance by mutableIntStateOf(0)
         private set
     var contrast by mutableIntStateOf(0)
         private set
-    var panelOpacity by mutableIntStateOf(82)
+    var panelOpacity by mutableIntStateOf(72)
         private set
     var animate by mutableStateOf(false)
         private set
@@ -163,16 +165,19 @@ object AfThemeState {
         if (prefs != null) return
         val p = ctx.getSharedPreferences("afleck_ui", Context.MODE_PRIVATE)
         prefs = p
-        themeId = p.getString("theme.id", "afleck") ?: "afleck"
+        themeId = p.getString("theme.id", "frozen") ?: "frozen"
         // Migra instalações anteriores para a identidade visual principal Afleck.
-        if (p.getInt("theme.rev", 0) < 7) {
-            themeId = "afleck"
-            p.edit().putString("theme.id", "afleck").putInt("theme.rev", 7)
-                .putInt("theme.panelOpacityGlass", 82).apply()
+        if (p.getInt("theme.rev", 0) < 6) {
+            // Nova identidade: Futuristic Frozen Glass UI (vidro escuro, azul-gelo, brilho discreto, animações).
+            themeId = "frozen"
+            p.edit().putString("theme.id", "frozen").putInt("theme.rev", 6)
+                .putInt("theme.panelOpacityGlass", 62)
+                .putBoolean("theme.glowOn", true).putInt("theme.glowLevel", 4).putInt("theme.glowStrength", 55)
+                .putBoolean("theme.animate", true).putBoolean("style.round", true).apply()
         }
         vibrance = p.getInt("theme.vibrance", 0)
         contrast = p.getInt("theme.contrast", 0)
-        panelOpacity = p.getInt("theme.panelOpacityGlass", 82)
+        panelOpacity = p.getInt("theme.panelOpacityGlass", 72)
         animate = p.getBoolean("theme.animate", false)
         uiScale = p.getInt("theme.uiScale100", 100)
         glowOn = p.getBoolean("theme.glowOn", false)
@@ -264,7 +269,7 @@ internal fun Modifier.afClick(onClick: () -> Unit): Modifier = composed {
     clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onClick)
 }
 
-/** Painel de vidro azul-noite com contorno glacial discreto. */
+/** Painel de vidro azul-noite com borda cobre. */
 @Composable
 internal fun AfPanel(
     modifier: Modifier = Modifier,
@@ -299,14 +304,14 @@ internal fun Modifier.afGlassSurface(shape: androidx.compose.ui.graphics.Shape, 
         else
             Brush.verticalGradient(
                 listOf(
-                    Color(0xFF1A2B43).copy(alpha = (0.62f * k).coerceAtMost(0.88f)),
-                    Color(0xFF0B1729).copy(alpha = (0.58f * k).coerceAtMost(0.84f))
+                    Color.Black.copy(alpha = (0.42f * k).coerceAtMost(0.80f)),
+                    Color.Black.copy(alpha = (0.34f * k).coerceAtMost(0.70f))
                 )
             )
     }
     val borderBrush = remember(selected, border, accent, accent2) {
         if (selected) Brush.linearGradient(listOf(Color.White.copy(alpha = 0.7f), accent.copy(alpha = 1f)))
-        else Brush.linearGradient(listOf(border.copy(alpha = 0.72f), accent.copy(alpha = 0.38f), border.copy(alpha = 0.72f)))
+        else Brush.linearGradient(listOf(accent.copy(alpha = 0.85f), accent2.copy(alpha = 0.50f), accent.copy(alpha = 0.85f)))
     }
     val glintBrush = remember { Brush.horizontalGradient(listOf(Color.Transparent, Color.White.copy(alpha = 0.95f), Color.Transparent)) }
     val glowOn = AfThemeState.glowOn
@@ -350,7 +355,7 @@ internal fun Modifier.afRect(color: Color, selected: Boolean = false, radius: Dp
 internal fun Modifier.afDarkGlass(color: Color, selected: Boolean = false, radius: Dp = 28.dp): Modifier =
     this.afGlassSurface(AfHexShape(), selected)
 
-/** Botão principal: degradê azul glacial com texto azul-noite. */
+/** Botão principal: degradê âmbar/coral, texto azul-noite como nas referências. */
 @Composable
 internal fun AfButton(text: String, modifier: Modifier = Modifier, icon: Int? = null, onClick: () -> Unit) {
     Row(
@@ -368,7 +373,7 @@ internal fun AfButton(text: String, modifier: Modifier = Modifier, icon: Int? = 
     }
 }
 
-/** Botão secundário: contorno azul acinzentado discreto. */
+/** Botão secundário: contorno cobre discreto. */
 @Composable
 internal fun AfOutlineButton(text: String, modifier: Modifier = Modifier, icon: Int? = null, onClick: () -> Unit) {
     Row(
@@ -477,20 +482,20 @@ internal fun Modifier.afScanLine(): Modifier = this.drawBehind {
     val ph = ((AfScan.t.floatValue / period) + (h * 0.0013f) + (w * 0.0007f)) % 1f
     val tri = if (ph < 0.5f) ph * 2f else 2f - ph * 2f
     val y = tri * h
-    val ac = AfAccent
+    val ac = Color.White
     val band = 38.dp.toPx()
     val inset = 5.dp.toPx()
     clipRect(0f, 0f, w, h) {
         drawRect(
             Brush.verticalGradient(
-                listOf(Color.Transparent, ac.copy(alpha = 0.16f), Color.Transparent),
+                listOf(Color.Transparent, ac.copy(alpha = 0.10f), Color.Transparent),
                 startY = y - band, endY = y + band
             ),
             topLeft = Offset(0f, y - band), size = Size(w, band * 2f)
         )
         drawLine(
             Brush.horizontalGradient(
-                listOf(Color.Transparent, ac.copy(alpha = 0.75f), ac.copy(alpha = 0.75f), Color.Transparent),
+                listOf(Color.Transparent, ac.copy(alpha = 0.85f), ac.copy(alpha = 0.85f), Color.Transparent),
                 startX = inset, endX = w - inset
             ),
             Offset(inset, y), Offset(w - inset, y), 1.3.dp.toPx()
@@ -539,7 +544,7 @@ private fun Modifier.afForgeFrame(backing: Float, glow: Boolean): Modifier = com
                 drawContent()
                 drawPath(path, accent.copy(alpha = 0.18f), style = soft)
                 drawPath(path, contour, style = thin)
-                drawPath(path, Color(0xFFFFE2D2).copy(alpha = 0.30f), style = androidx.compose.ui.graphics.drawscope.Stroke(0.7f * u))
+                drawPath(path, Color(0xFFE6FBFF).copy(alpha = 0.30f), style = androidx.compose.ui.graphics.drawscope.Stroke(0.7f * u))
             }
         }
 }

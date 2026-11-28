@@ -372,8 +372,8 @@ private fun ModsUpdateEntryItem(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        color = Color(0xFF101D30).copy(alpha = 0.86f),
+        shape = shape,
+        color = color,
         contentColor = contentColor,
         onClick = {
             entry.updateSelected(!selected)
@@ -390,7 +390,7 @@ private fun ModsUpdateEntryItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AddonIcon(
-                    modifier = Modifier.clip(shape = RoundedCornerShape(12.dp)),
+                    modifier = Modifier.clip(shape = RoundedCornerShape(10.dp)),
                     size = 52.dp,
                     iconUrl = data.project.iconUrl
                 )

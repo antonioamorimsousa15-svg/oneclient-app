@@ -33,7 +33,7 @@ internal fun AfPickCard(
     onClick: () -> Unit,
     summary: (@Composable () -> Unit)? = null
 ) {
-    val shape = RoundedCornerShape(22.dp)
+    val shape = RoundedCornerShape(10.dp)
     Row(
         modifier = modifier
             .clip(shape)

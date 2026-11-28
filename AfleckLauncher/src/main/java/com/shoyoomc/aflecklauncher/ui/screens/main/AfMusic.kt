@@ -304,7 +304,7 @@ fun AfMusicWidget(
                         Text("✕", color = AfText, fontSize = 18.sp,
                             modifier = Modifier.afClick { AfMusic.panelOpen = false }.padding(horizontal = 8.dp))
                     }
-                    Box(Modifier.weight(1f).fillMaxWidth().clip(RoundedCornerShape(12.dp))) { webContent() }
+                    Box(Modifier.weight(1f).fillMaxWidth().clip(RoundedCornerShape(10.dp))) { webContent() }
                 }
             }
         } else {
@@ -313,7 +313,7 @@ fun AfMusicWidget(
         }
 
         if (showCapsule) {
-            val shape = RoundedCornerShape(30.dp)
+            val shape = RoundedCornerShape(10.dp)
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -335,7 +335,7 @@ fun AfMusicWidget(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    Modifier.size(46.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(46.dp).clip(RoundedCornerShape(10.dp))
                         .background(AfAccent.copy(alpha = 0.2f))
                         .afClick { AfMusic.panelOpen = true },
                     contentAlignment = Alignment.Center

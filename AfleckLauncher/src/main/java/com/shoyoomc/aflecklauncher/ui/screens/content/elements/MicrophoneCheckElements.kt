@@ -201,7 +201,7 @@ fun VoiceDbShower(
     level: Double,
     modifier: Modifier = Modifier,
     height: Dp = 24.dp,
-    shape: Shape = RoundedCornerShape(50.dp),
+    shape: Shape = RoundedCornerShape(10.dp),
     backgroundColor: Color = itemColor()
 ) {
     val normalizedDb = level.coerceIn(0.0, 100.0) //0~100db

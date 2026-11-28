@@ -343,12 +343,12 @@ fun AccountItem(
     LaunchedEffect(Unit) {
         scale.animateTo(targetValue = 1f, animationSpec = getAnimateTween())
     }
-    val afShape = RoundedCornerShape(16.dp)
+    val afShape = AfCutShape(12.dp)
     Surface(
         modifier = modifier
             .graphicsLayer(scaleY = scale.value, scaleX = scale.value)
             .afGlow(afShape, if (selected) AfAccent else AfBorder, if (selected) 1.5f else 0.6f),
-        color = if (selected) AfAccent.copy(alpha = 0.14f) else Color(0xFF101D30).copy(alpha = 0.82f),
+        color = if (selected) AfAccent.copy(alpha = 0.10f) else AfNavy.copy(alpha = 0.35f),
         contentColor = AfText,
         shape = afShape,
         onClick = {
@@ -390,7 +390,7 @@ fun AccountItem(
                     style = MaterialTheme.typography.labelMedium,
                     color = AfAccent,
                     modifier = Modifier
-                        .afGlow(androidx.compose.foundation.shape.CircleShape, AfBorder, 0.6f)
+                        .afGlow(androidx.compose.foundation.shape.RoundedCornerShape(10.dp), AfBorder, 0.6f)
                         .padding(horizontal = 10.dp, vertical = 2.dp)
                 )
             }
@@ -1580,7 +1580,7 @@ fun ChangeSkinDialog(
                                 modifier = Modifier
                                     .align(Alignment.TopStart)
                                     .padding(12.dp)
-                                    .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f), androidx.compose.foundation.shape.CircleShape)
+                                    .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f), androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
                                     .padding(horizontal = 10.dp, vertical = 4.dp)
                             )
                             Text(
@@ -1589,8 +1589,8 @@ fun ChangeSkinDialog(
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
                                     .padding(12.dp)
-                                    .afGlow(androidx.compose.foundation.shape.CircleShape, AfBorder, 0.8f)
-                                    .clip(androidx.compose.foundation.shape.CircleShape)
+                                    .afGlow(androidx.compose.foundation.shape.RoundedCornerShape(10.dp), AfBorder, 0.8f)
+                                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
                                     .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f))
                                     .afClick { playing = !playing }
                                     .padding(horizontal = 14.dp, vertical = 6.dp)
@@ -2115,7 +2115,7 @@ private fun AfSkinTile(file: File, slim: Boolean, selected: Boolean, onClick: ()
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .size(22.dp)
-                .clip(androidx.compose.foundation.shape.CircleShape)
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
                 .background(androidx.compose.ui.graphics.Color(0xFFE57373))
                 .afClick(onDelete),
             contentAlignment = Alignment.Center
@@ -2162,7 +2162,7 @@ private fun AfOptionRow(
         modifier = Modifier
             .fillMaxWidth()
             .alpha(if (enabled) 1f else 0.5f)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.07f))
             .then(if (enabled) Modifier.afClick(onClick) else Modifier)
             .padding(horizontal = 14.dp, vertical = 12.dp),

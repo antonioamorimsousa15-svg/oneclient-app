@@ -284,32 +284,6 @@ fun VersionsManageScreen(
         currentKey = backScreenViewModel.mainScreen.currentKey
     ) { isVisible ->
         Row {
-            LeftMenu(
-                isVisible = isVisible,
-                isRefreshing = isRefreshing,
-                swapToFileSelector = { path ->
-                    backScreenViewModel.mainScreen.backStack.navigateToFileSelector(
-                        startPath = path,
-                        selectFile = false,
-                        saveKey = NormalNavKey.VersionsManager
-                    ) { path ->
-                        viewModel.gamePathOperation = GamePathOperation.AddNewPath(path)
-                    }
-                },
-                onCleanupGameFiles = {
-                    if (viewModel.cleanupOperation == CleanupOperation.None) {
-                        viewModel.cleanupOperation = CleanupOperation.Tip
-                    }
-                },
-                changePathOperation = {
-                    viewModel.gamePathOperation = it
-                },
-                onImportModpack = { backScreenViewModel.navigateToDownload() },
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(2.5f)
-            )
-
             VersionsLayout(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -335,6 +309,32 @@ fun VersionsManageScreen(
                 onInstall = {
                     backScreenViewModel.navigateToDownload()
                 }
+            )
+
+            LeftMenu(
+                isVisible = isVisible,
+                isRefreshing = isRefreshing,
+                swapToFileSelector = { path ->
+                    backScreenViewModel.mainScreen.backStack.navigateToFileSelector(
+                        startPath = path,
+                        selectFile = false,
+                        saveKey = NormalNavKey.VersionsManager
+                    ) { path ->
+                        viewModel.gamePathOperation = GamePathOperation.AddNewPath(path)
+                    }
+                },
+                onCleanupGameFiles = {
+                    if (viewModel.cleanupOperation == CleanupOperation.None) {
+                        viewModel.cleanupOperation = CleanupOperation.Tip
+                    }
+                },
+                changePathOperation = {
+                    viewModel.gamePathOperation = it
+                },
+                onImportModpack = { backScreenViewModel.navigateToDownload() },
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(2.5f)
             )
 
             CleanupOperation(
@@ -375,8 +375,8 @@ private fun LeftMenu(
 
     AfPanel(
         modifier = modifier
-            .animated(ctx, from = AnimatedDirection.Left)
-            .padding(start = 12.dp, top = 12.dp, bottom = 12.dp),
+            .animated(ctx, from = AnimatedDirection.Right)
+            .padding(end = 12.dp, top = 12.dp, bottom = 12.dp),
         radius = 24.dp
     ) {
     Column(modifier = Modifier.fillMaxSize()) {

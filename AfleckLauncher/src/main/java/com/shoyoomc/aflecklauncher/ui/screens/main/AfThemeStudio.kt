@@ -1,5 +1,9 @@
 package com.shoyoomc.aflecklauncher.ui.screens.main
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,14 +41,46 @@ import kotlin.math.roundToInt
 /** "Estúdio de temas": janela com a lista de temas, prévia da tela inicial e ajustes de cor/degradê. */
 @Composable
 fun AfThemeStudioDialog(onClose: () -> Unit) {
-    Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Box(
-            Modifier.fillMaxWidth(0.82f).fillMaxHeight(0.88f)
-                .afHudScreen(backing = 0f, glow = true)
-                .padding(5.dp)
-                .clip(RoundedCornerShape(12.dp))
-        ) {
-            AfAuroraBackground(Modifier.matchParentSize())
+    Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnBackPress = false, dismissOnClickOutside = false)) {
+        val photoSlot = rememberAfSlot("themeBanner")
+        val showPhotoPicker = androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+        val sweepState = androidx.compose.animation.core.rememberInfiniteTransition(label = "studioSweep").animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = androidx.compose.animation.core.infiniteRepeatable(
+                animation = androidx.compose.animation.core.tween(3200, easing = androidx.compose.animation.core.LinearEasing),
+                repeatMode = androidx.compose.animation.core.RepeatMode.Reverse
+            ),
+            label = "studioSweepX"
+        )
+        if (showPhotoPicker.value) {
+            AfSlotDialog(
+                "Foto da tela de temas",
+                "Escolha uma foto da galeria. Ela cobre a tela inteira do Estúdio de temas.",
+                photoSlot
+            ) { showPhotoPicker.value = false }
+        }
+        Box(Modifier.fillMaxSize()) {
+            if (photoSlot.uri != null) {
+                AfSlotImage(photoSlot, null, Modifier.matchParentSize())
+                Box(Modifier.matchParentSize().background(Color(0x55000000)))
+            } else {
+                AfAuroraBackground(Modifier.matchParentSize())
+            }
+            Box(
+                Modifier.matchParentSize().drawBehind {
+                    val band = size.width * 0.30f
+                    val x = (size.width + band) * sweepState.value - band
+                    drawRect(
+                        Brush.horizontalGradient(
+                            listOf(Color.Transparent, Color.White.copy(alpha = 0.30f), Color.Transparent),
+                            startX = x, endX = x + band
+                        ),
+                        topLeft = androidx.compose.ui.geometry.Offset(x, 0f),
+                        size = androidx.compose.ui.geometry.Size(band, size.height)
+                    )
+                }
+            )
             Row(Modifier.fillMaxSize().padding(14.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 // ----- esquerda: lista de temas
                 Column(Modifier.weight(0.9f).fillMaxHeight()) {
@@ -80,7 +116,7 @@ fun AfThemeStudioDialog(onClose: () -> Unit) {
                         }
                     }
                     Spacer(Modifier.height(8.dp))
-                    AfOutlineButton("Fechar", Modifier.fillMaxWidth(), null, onClose)
+                    AfOutlineButton("Foto de fundo", Modifier.fillMaxWidth(), null) { showPhotoPicker.value = true }
                 }
 
                 // ----- direita: prévia + ajustes
@@ -163,6 +199,19 @@ fun AfThemeStudioDialog(onClose: () -> Unit) {
                         }
                     }
                 }
+            }
+            Box(
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(12.dp)
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.Black.copy(alpha = 0.65f))
+                    .border(1.dp, Color.White.copy(alpha = 0.7f), RoundedCornerShape(10.dp))
+                    .clickable { onClose() },
+                contentAlignment = Alignment.Center
+            ) {
+                Text("✕", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             }
         }
     }

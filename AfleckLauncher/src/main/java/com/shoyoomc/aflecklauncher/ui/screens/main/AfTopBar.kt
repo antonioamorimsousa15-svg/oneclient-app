@@ -1,5 +1,6 @@
 package com.shoyoomc.aflecklauncher.ui.screens.main
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -60,8 +61,8 @@ fun AfTopBar(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("NEXT-GENERATION GAME LAUNCHER", color = AfDim, fontSize = 8.sp, fontFamily = AfCondensed, letterSpacing = 1.2.sp, maxLines = 1)
                     Spacer(Modifier.width(6.dp))
-                    Box(Modifier.border(1.dp, AfAccent, CircleShape).padding(horizontal = 6.dp, vertical = 0.dp)) {
-                        Text("r" + BuildConfig.VERSION_NAME.removePrefix("r"), color = AfAccent, fontSize = 9.sp, fontFamily = AfCondensed, maxLines = 1)
+                    Box(Modifier.border(1.dp, AfAccent, RoundedCornerShape(10.dp)).padding(horizontal = 6.dp, vertical = 0.dp)) {
+                        Text("r" + BuildConfig.VERSION_NAME.removePrefix("r") + " P101", color = AfAccent, fontSize = 9.sp, fontFamily = AfCondensed, maxLines = 1)
                     }
                 }
             }

@@ -18,6 +18,9 @@
 
 package com.shoyoomc.aflecklauncher.ui.screens.content.settings
 
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.border
 import com.shoyoomc.aflecklauncher.ui.screens.main.afHud
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.width
@@ -135,6 +138,89 @@ private sealed interface CustomColorOperation {
     data object Dialog: CustomColorOperation
 }
 
+/** Faixa do tema: 1560 x 455, retângulo de canto pequeno. A foto escolhida na galeria cobre a faixa inteira e uma luz branca vai e volta por cima. */
+@Composable
+private fun AfThemeBanner(onPickImage: () -> Unit) {
+    val slot = com.shoyoomc.aflecklauncher.ui.screens.main.rememberAfSlot("themeBanner")
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+    val sweep by androidx.compose.animation.core.rememberInfiniteTransition(label = "themeBannerSweep").animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(2600, easing = androidx.compose.animation.core.LinearEasing),
+            repeatMode = androidx.compose.animation.core.RepeatMode.Reverse
+        ),
+        label = "themeBannerSweepX"
+    )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .aspectRatio(1560f / 455f)
+            .clip(shape)
+            .background(
+                androidx.compose.ui.graphics.Brush.linearGradient(
+                    listOf(
+                        androidx.compose.ui.graphics.Color(0xFF050505),
+                        androidx.compose.ui.graphics.Color(0xFF6E6E6E),
+                        androidx.compose.ui.graphics.Color(0xFFEDEDED),
+                        androidx.compose.ui.graphics.Color(0xFF3C3C3C),
+                        androidx.compose.ui.graphics.Color(0xFF0A0A0A)
+                    )
+                )
+            )
+            .clickable { onPickImage() }
+            .drawWithContent {
+                drawContent()
+                val band = size.width * 0.28f
+                val x = (size.width + band) * sweep - band
+                drawRect(
+                    androidx.compose.ui.graphics.Brush.horizontalGradient(
+                        listOf(
+                            androidx.compose.ui.graphics.Color.Transparent,
+                            androidx.compose.ui.graphics.Color.White.copy(alpha = 0.38f),
+                            androidx.compose.ui.graphics.Color.Transparent
+                        ),
+                        startX = x, endX = x + band
+                    ),
+                    topLeft = androidx.compose.ui.geometry.Offset(x, 0f),
+                    size = androidx.compose.ui.geometry.Size(band, size.height)
+                )
+            }
+            .border(2.dp, com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent, shape)
+    ) {
+        if (slot.uri != null) {
+            com.shoyoomc.aflecklauncher.ui.screens.main.AfSlotImage(slot, null, Modifier.matchParentSize())
+        } else {
+            androidx.compose.foundation.Canvas(
+                Modifier
+                    .align(Alignment.Center)
+                    .fillMaxHeight(0.55f)
+                    .aspectRatio(1f)
+            ) {
+                val w = size.width
+                val sw = w * 0.07f
+                val white = androidx.compose.ui.graphics.Color.White
+                drawRoundRect(
+                    white, topLeft = androidx.compose.ui.geometry.Offset(sw / 2, sw / 2),
+                    size = androidx.compose.ui.geometry.Size(w - sw, size.height - sw),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(w * 0.14f),
+                    style = androidx.compose.ui.graphics.drawscope.Stroke(sw)
+                )
+                drawCircle(white, radius = w * 0.09f, center = androidx.compose.ui.geometry.Offset(w * 0.32f, size.height * 0.30f))
+                val p = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(w * 0.08f, size.height * 0.80f)
+                    lineTo(w * 0.36f, size.height * 0.52f)
+                    lineTo(w * 0.52f, size.height * 0.68f)
+                    lineTo(w * 0.68f, size.height * 0.46f)
+                    lineTo(w * 0.92f, size.height * 0.76f)
+                }
+                drawPath(p, white, style = androidx.compose.ui.graphics.drawscope.Stroke(sw, cap = androidx.compose.ui.graphics.StrokeCap.Round, join = androidx.compose.ui.graphics.StrokeJoin.Round))
+            }
+        }
+    }
+}
+
 @Composable
 fun LauncherSettingsScreen(
     key: NestedNavKey.Settings,
@@ -165,38 +251,51 @@ fun LauncherSettingsScreen(
                     if (showThemeStudio) {
                         com.shoyoomc.aflecklauncher.ui.screens.main.AfThemeStudioDialog { showThemeStudio = false }
                     }
-                    SettingsCard(
-                        position = CardPosition.Top,
-                        modifier = Modifier.fillMaxWidth(),
-                        title = "Tema do Launcher",
-                        summary = "Escolha o tema, ajuste as cores e veja a prévia da tela inicial.",
-                        onClick = { showThemeStudio = true },
-                        trailingIcon = { Text("›") }
-                    )
-
+                    var langOpen by remember { mutableStateOf(false) }
+                    val currentLang = AllSettings.launcherLanguage.state
                     Column(
-                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(5.dp))
                     ) {
-                        Text(
-                            systemLocaleStringResource(R.string.settings_launcher_language),
-                            color = com.shoyoomc.aflecklauncher.ui.screens.main.AfText,
-                            fontSize = 18.sp, fontWeight = FontWeight.Bold
+                        SettingsCard(
+                            position = CardPosition.Top,
+                            modifier = Modifier.fillMaxWidth(),
+                            title = systemLocaleStringResource(R.string.settings_launcher_language),
+                            summary = if (currentLang == AppLanguage.FOLLOW_SYSTEM) systemLocaleStringResource(currentLang.textRes)
+                            else stringResource(currentLang.textRes),
+                            onClick = { langOpen = !langOpen },
+                            trailingIcon = { Text(if (langOpen) "⌃" else "⌄") }
                         )
-                        val currentLang = AllSettings.launcherLanguage.state
-                        com.shoyoomc.aflecklauncher.ui.screens.main.AfPickGrid(AppLanguage.entries) { lang, cardModifier ->
-                            com.shoyoomc.aflecklauncher.ui.screens.main.AfPickCard(
-                                title = if (lang == AppLanguage.FOLLOW_SYSTEM) systemLocaleStringResource(lang.textRes)
-                                else stringResource(lang.textRes),
-                                selected = currentLang == lang,
-                                modifier = cardModifier,
-                                onClick = {
-                                    AllSettings.launcherLanguage.save(lang)
-                                    applyLanguage(lang)
+                        if (langOpen) {
+                            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+                                com.shoyoomc.aflecklauncher.ui.screens.main.AfPickGrid(AppLanguage.entries) { lang, cardModifier ->
+                                    com.shoyoomc.aflecklauncher.ui.screens.main.AfPickCard(
+                                        title = if (lang == AppLanguage.FOLLOW_SYSTEM) systemLocaleStringResource(lang.textRes)
+                                        else stringResource(lang.textRes),
+                                        selected = currentLang == lang,
+                                        modifier = cardModifier,
+                                        onClick = {
+                                            AllSettings.launcherLanguage.save(lang)
+                                            applyLanguage(lang)
+                                            langOpen = false
+                                        }
+                                    )
                                 }
-                            )
+                            }
                         }
                     }
+
+                    var showBannerPicker by remember { mutableStateOf(false) }
+                    if (showBannerPicker) {
+                        com.shoyoomc.aflecklauncher.ui.screens.main.AfSlotDialog(
+                            "Foto da faixa do tema",
+                            "Escolha uma foto da galeria. Ela cobre a faixa inteira.",
+                            com.shoyoomc.aflecklauncher.ui.screens.main.rememberAfSlot("themeBanner")
+                        ) { showBannerPicker = false }
+                    }
+                    AfThemeBanner(onPickImage = { showThemeStudio = true })
 
                     SwitchSettingsCard(
                         modifier = Modifier.fillMaxWidth(),
@@ -917,4 +1016,4 @@ private fun AfGlowSliderRow(title: String, summary: String, value: Int, min: Int
 
 @androidx.compose.runtime.Composable
 private fun Modifier.afGlowRowBg(): Modifier =
-    this.afHud(androidx.compose.foundation.shape.RoundedCornerShape(16.dp))
+    this.afHud(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))

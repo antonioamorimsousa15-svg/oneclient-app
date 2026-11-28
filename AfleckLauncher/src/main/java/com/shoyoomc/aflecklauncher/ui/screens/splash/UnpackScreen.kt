@@ -150,7 +150,7 @@ private fun SetupPanel(
     val done = states.count { it == InstallableItem.State.FINISHED }
     val total = items.size.coerceAtLeast(1)
     val fraction = done.toFloat() / total
-    val shape = RoundedCornerShape(36.dp)
+    val shape = RoundedCornerShape(10.dp)
     val canInstall = !installing && states.any {
         it == InstallableItem.State.NOT_STARTED ||
         it == InstallableItem.State.PENDING ||
@@ -246,7 +246,7 @@ private fun SetupPanel(
                 .fillMaxWidth()
                 .height(52.dp)
                 .alpha(if (canInstall) 1f else 0.45f)
-                .clip(RoundedCornerShape(26.dp))
+                .clip(RoundedCornerShape(10.dp))
                 .background(Brush.horizontalGradient(listOf(ShoyoColors.Accent, ShoyoColors.Secondary)))
                 .then(if (canInstall) Modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onAgreeClick) else Modifier),
             contentAlignment = Alignment.Center
@@ -267,7 +267,7 @@ private fun ModulesPanel(
     items: List<InstallableItem>,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(36.dp)
+    val shape = RoundedCornerShape(10.dp)
     Column(
         modifier = modifier
             .clip(shape).background(ShoyoColors.Glass)
@@ -326,7 +326,7 @@ private fun ModuleRow(number: Int, item: InstallableItem) {
         InstallableItem.State.PENDING -> "NA FILA"
         else -> "NOVO"
     }
-    val cardShape = RoundedCornerShape(22.dp)
+    val cardShape = RoundedCornerShape(10.dp)
     val nodeShape = RoundedCornerShape(10.dp)
     val line = ShoyoColors.Accent.copy(alpha = 0.55f)
     Box(

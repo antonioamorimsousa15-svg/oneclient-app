@@ -297,7 +297,7 @@ private fun <E> SuggestionsText(
                 topStart = 16.0.dp, topEnd = 16.0.dp,
                 bottomStart = 0.dp, bottomEnd = 0.dp
             )
-            else RoundedCornerShape(16.0.dp)
+            else RoundedCornerShape(10.dp)
         )
         OwnOutlinedTextField(
             modifier = modifier
@@ -368,7 +368,7 @@ private fun <E> SuggestionsText(
 @Composable
 fun BaseFilterLayout(
     modifier: Modifier = Modifier,
-    shape: Shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
+    shape: Shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp),
     influencedByBackground: Boolean = true,
     color: Color = cardColor(influencedByBackground),
     contentColor: Color = onCardColor(),

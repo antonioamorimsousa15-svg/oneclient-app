@@ -727,13 +727,13 @@ fun VersionItemLayout(
     LaunchedEffect(Unit) {
         scale.animateTo(targetValue = 1f, animationSpec = getAnimateTween())
     }
-    val afShape = RoundedCornerShape(16.dp)
+    val afShape = AfCutShape(12.dp)
     Surface(
         modifier = modifier
             .graphicsLayer(scaleY = scale.value, scaleX = scale.value)
             .afGlowPath(afShape, selected),
-        color = if (selected) AfAccent.copy(alpha = 0.14f)
-                else Color(0xFF101D30).copy(alpha = 0.82f),
+        color = if (selected) AfAccent.copy(alpha = 0.12f)
+                else AfNavy.copy(alpha = 0.35f),
         contentColor = AfText,
         shape = afShape,
         onClick = {

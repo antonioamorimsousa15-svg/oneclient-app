@@ -184,35 +184,13 @@ fun RendererSettingsScreen(
                         )
                     }
 
-                    SwitchSettingsCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        position = CardPosition.Middle,
-                        unit = AllSettings.sfpewPluginLayer,
-                        enabled = currentRenderer is Plugin,
-                        title = stringResource(R.string.settings_renderer_sfpew_plugin_layer_title),
-                        summary = stringResource(R.string.settings_renderer_sfpew_plugin_layer_summary)
-                    )
-
-                    SwitchSettingsCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        position = CardPosition.Middle,
-                        unit = AllSettings.sfpewRelaxedContext,
-                        enabled = currentRenderer?.let { renderer ->
-                            renderer.supportsSfpewByDefault() ||
-                            // 如果是插件，需要看是否给插件启用了这个玩意
-                            (renderer is Plugin && AllSettings.sfpewPluginLayer.state)
-                        } == true,
-                        title = stringResource(R.string.renderer_config_sfpew_relaxed_context_title),
-                        summary = stringResource(R.string.renderer_config_sfpew_relaxed_context_desc)
-                    )
-
                     ListSettingsCard(
                         modifier = Modifier.fillMaxWidth(),
                         position = CardPosition.Bottom,
                         unit = AllSettings.graphicsApi,
                         items = GraphicsApi.entries,
-                        title = stringResource(R.string.settings_game_graphics_api_title),
-                        summary = stringResource(R.string.settings_game_graphics_api_summary),
+                        title = "API gráfica do jogo",
+                        summary = "Escolhe como o Minecraft 26.2 ou mais novo desenha a imagem na tela. Se o jogo travar ou ficar com a tela estranha, volte para o padrão.",
                         getItemText = {
                             when (it) {
                                 GraphicsApi.DEFAULT -> stringResource(R.string.settings_game_graphics_api_default)
@@ -242,8 +220,8 @@ fun RendererSettingsScreen(
                             position = CardPosition.Top,
                             unit = AllSettings.resolutionRule,
                             items = ResolutionRule.entries,
-                            title = stringResource(R.string.settings_renderer_resolution_rule_title),
-                            summary = stringResource(R.string.settings_renderer_resolution_rule_summary),
+                            title = "Tamanho da imagem do jogo",
+                            summary = "Define de onde vem a resolução do jogo: da tela do aparelho, de uma escala em porcentagem ou de um tamanho que você digita.",
                             getItemText = { stringResource(it.nameRes) },
                             onValueChange = { rule ->
                                 // 自定义分辨率尚未初始化时，以屏幕真实宽高填充
@@ -267,8 +245,8 @@ fun RendererSettingsScreen(
                                     .padding(top = 2.dp),
                                 position = CardPosition.Middle,
                                 unit = AllSettings.resolutionRatio,
-                                title = stringResource(R.string.settings_renderer_resolution_scale_title),
-                                summary = stringResource(R.string.settings_renderer_resolution_scale_summary),
+                                title = "Nitidez da imagem",
+                                summary = "Valor menor deixa o jogo mais leve e com imagem mais borrada. Valor maior deixa mais nítido, mas pesa mais. Acima de 100% quase nunca vale a pena.",
                                 valueRange = AllSettings.resolutionRatio.floatRange,
                                 suffix = "%",
                                 fineTuningControl = true
@@ -296,8 +274,8 @@ fun RendererSettingsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         position = CardPosition.Bottom,
                         unit = AllSettings.gameFullScreen,
-                        title = stringResource(R.string.settings_renderer_full_screen_title),
-                        summary = stringResource(R.string.settings_renderer_full_screen_summary)
+                        title = "Jogo em tela cheia",
+                        summary = "O jogo ocupa a tela toda, inclusive por trás do furo da câmera e das bordas arredondadas."
                     )
                 }
             }
@@ -312,16 +290,32 @@ fun RendererSettingsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         position = CardPosition.Top,
                         unit = AllSettings.sustainedPerformance,
-                        title = stringResource(R.string.settings_renderer_sustained_performance_title),
-                        summary = stringResource(R.string.settings_renderer_sustained_performance_summary)
+                        title = "Desempenho constante",
+                        summary = "Mantém o celular num ritmo parelho para o FPS não oscilar em partidas longas. Em troca, o aparelho pode responder um pouco mais devagar para esquentar menos."
+                    )
+
+                    SwitchSettingsCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        position = CardPosition.Middle,
+                        unit = AllSettings.requestMaxRefreshRate,
+                        title = "Tela na taxa máxima (Hz)",
+                        summary = "Pede ao Android para usar a maior taxa de atualização da tela enquanto você joga. Em alguns aparelhos isso libera o limite de FPS."
+                    )
+
+                    SwitchSettingsCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        position = CardPosition.Middle,
+                        unit = AllSettings.zinkPreferSystemDriver,
+                        title = "Driver Vulkan do Android",
+                        summary = "Troca o driver Vulkan padrão do Afleck (Turnip) pelo que já vem no seu celular. Só faz diferença no Zink e em mods que usam Vulkan."
                     )
 
                     SwitchSettingsCard(
                         modifier = Modifier.fillMaxWidth(),
                         position = CardPosition.Bottom,
                         unit = AllSettings.dumpShaders,
-                        title = stringResource(R.string.settings_renderer_shader_dump_title),
-                        summary = stringResource(R.string.settings_renderer_shader_dump_summary)
+                        title = "Salvar log dos shaders",
+                        summary = "Grava num arquivo o código dos shaders que o jogo usa. Serve para descobrir por que um shader dá erro. Pode deixar desligado."
                     )
                 }
             }

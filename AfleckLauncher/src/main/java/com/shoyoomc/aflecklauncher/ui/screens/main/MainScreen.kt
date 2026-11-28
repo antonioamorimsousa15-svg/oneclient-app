@@ -18,6 +18,7 @@
 
 package com.shoyoomc.aflecklauncher.ui.screens.main
 
+import androidx.compose.foundation.border
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -271,6 +272,22 @@ fun MainScreen(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(1f)
+                    .then(
+                        if (inLauncherScreen) Modifier
+                        else Modifier
+                            .padding(end = 8.dp, bottom = 8.dp)
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
+                            .background(
+                                androidx.compose.ui.graphics.Brush.verticalGradient(
+                                    listOf(
+                                        androidx.compose.ui.graphics.lerp(AfAccent, Color(0xFF020712), 0.93f),
+                                        Color(0xFF020712),
+                                        Color(0xFF01040C)
+                                    )
+                                )
+                            )
+                            .border(1.dp, AfBorder.copy(alpha = 0.35f), androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
+                    )
                     .graphicsLayer { alpha = sectionAlpha.value }
             ) {
                 NavStateHost(rootKey = screenBackStackModel.mainScreen) {

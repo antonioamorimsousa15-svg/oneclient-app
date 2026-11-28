@@ -125,7 +125,7 @@ fun FpsChart(
             modifier = modifier
                 .width(170.dp)
                 .height(95.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(10.dp))
                 .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f))
                 .padding(horizontal = 6.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),

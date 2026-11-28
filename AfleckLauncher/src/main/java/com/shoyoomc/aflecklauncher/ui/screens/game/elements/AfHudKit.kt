@@ -316,7 +316,7 @@ internal fun Modifier.afTechMotion(arrows: Boolean = true, scan: Boolean = true)
             clipRect(0f, 0f, w, h) {
                 drawRect(
                     Brush.verticalGradient(
-                        listOf(Color.Transparent, ac.copy(alpha = 0.16f), Color.Transparent),
+                        listOf(Color.Transparent, Color.White.copy(alpha = 0.10f), Color.Transparent),
                         startY = y - band,
                         endY = y + band
                     ),
@@ -325,7 +325,7 @@ internal fun Modifier.afTechMotion(arrows: Boolean = true, scan: Boolean = true)
                 )
                 drawLine(
                     Brush.horizontalGradient(
-                        listOf(Color.Transparent, ac.copy(alpha = 0.75f), ac.copy(alpha = 0.75f), Color.Transparent),
+                        listOf(Color.Transparent, Color.White.copy(alpha = 0.85f), Color.White.copy(alpha = 0.85f), Color.Transparent),
                         startX = inset,
                         endX = w - inset
                     ),

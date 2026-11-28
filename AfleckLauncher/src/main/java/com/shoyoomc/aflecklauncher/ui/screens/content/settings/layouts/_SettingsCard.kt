@@ -18,6 +18,8 @@
 
 package com.shoyoomc.aflecklauncher.ui.screens.content.settings.layouts
 
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -229,7 +231,7 @@ fun SettingsCard(
     val shape = rememberSettingsCardShape(position, outerShape, innerShape)
 
     BackgroundCard(
-        modifier = modifier.afHud(shape),
+        modifier = modifier,
         shape = shape,
         content = content
     )
@@ -252,7 +254,7 @@ fun SettingsCard(
     val shape = rememberSettingsCardShape(position, outerShape, innerShape)
 
     BackgroundCard(
-        modifier = modifier.afHud(shape),
+        modifier = modifier,
         shape = shape,
         onClick = onClick,
         enabled = enabled,
@@ -303,7 +305,7 @@ fun SettingsCard(
     val shape = rememberSettingsCardShape(position, outerShape, innerShape)
 
     BackgroundCard(
-        modifier = modifier.afHud(shape),
+        modifier = modifier,
         shape = shape,
         onClick = onClick,
         enabled = enabled
@@ -344,19 +346,8 @@ fun SettingsCardColumn(
             modifier = modifier
                 .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.38f), AfCutShape(18.dp))
                 .afHud(AfCutShape(18.dp))
-                .drawBehind {
-                    drawRect(
-                        color = com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent,
-                        topLeft = androidx.compose.ui.geometry.Offset(0f, 22.dp.toPx()),
-                        size = androidx.compose.ui.geometry.Size(2.5.dp.toPx(), (size.height - 44.dp.toPx()).coerceAtLeast(0f))
-                    )
-                    // colchetes de canto (visual HUD gamer)
-                    val ac = com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent
-                    val t = 1.6.dp.toPx(); val l = 14.dp.toPx(); val m = 18.dp.toPx()
-                    drawLine(ac, androidx.compose.ui.geometry.Offset(size.width - m - l, 0f), androidx.compose.ui.geometry.Offset(size.width - m, 0f), t)
-                    drawLine(ac, androidx.compose.ui.geometry.Offset(size.width, m), androidx.compose.ui.geometry.Offset(size.width, m + l), t)
-                    drawLine(ac, androidx.compose.ui.geometry.Offset(m, size.height), androidx.compose.ui.geometry.Offset(m + l, size.height), t)
-                },
+                .border(2.dp, com.shoyoomc.aflecklauncher.ui.screens.main.AfAccent, androidx.compose.foundation.shape.RoundedCornerShape(16.dp))
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(16.dp)),
             verticalArrangement = Arrangement.spacedBy(0.dp),
             content = content
         )

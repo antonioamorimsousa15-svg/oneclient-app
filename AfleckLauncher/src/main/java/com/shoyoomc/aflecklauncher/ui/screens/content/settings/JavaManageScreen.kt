@@ -490,7 +490,7 @@ private fun JavaRuntimeCard(runtime: Runtime, onDeleteClick: () -> Unit) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
-                    Modifier.size(58.dp).clip(RoundedCornerShape(14.dp))
+                    Modifier.size(58.dp).clip(RoundedCornerShape(10.dp))
                         .background(Brush.linearGradient(listOf(AfAccent, AfAccent2))),
                     contentAlignment = Alignment.Center
                 ) {

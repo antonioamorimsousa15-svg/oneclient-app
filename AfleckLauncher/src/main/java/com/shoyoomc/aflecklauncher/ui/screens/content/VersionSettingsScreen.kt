@@ -83,6 +83,8 @@ import com.shoyoomc.aflecklauncher.viewmodel.EventViewModel
 import com.shoyoomc.aflecklauncher.viewmodel.ModifyOperation
 import com.shoyoomc.aflecklauncher.viewmodel.ModifyPayload
 import com.shoyoomc.aflecklauncher.viewmodel.ModifyVersionViewModel
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfTabBar
+import com.shoyoomc.aflecklauncher.ui.screens.main.AfTabSpec
 import com.shoyoomc.aflecklauncher.viewmodel.ScreenBackStackViewModel
 import com.shoyoomc.aflecklauncher.viewmodel.sendToast
 
@@ -116,16 +118,14 @@ fun VersionSettingsScreen(
             screenKey = key,
             currentKey = backScreenViewModel.mainScreen.currentKey
         ) { isVisible ->
-            Row(modifier = Modifier.fillMaxSize()) {
-                TabMenu(
-                    isVisible = isVisible,
+            Column(modifier = Modifier.fillMaxSize()) {
+                VersionTabBar(
                     backStack = key.backStack,
-                    versionsScreenKey = key.currentKey,
-                    modifier = Modifier.fillMaxHeight()
+                    versionsScreenKey = key.currentKey
                 )
 
                 NavigationUI(
-                    modifier = Modifier.fillMaxHeight(),
+                    modifier = Modifier.fillMaxWidth().weight(1f),
                     key = key,
                     modifyViewModel = modifyViewModel,
                     backScreenViewModel = backScreenViewModel,
@@ -167,6 +167,36 @@ private val settingItems = listOf(
     CategoryItem(NormalNavKey.Versions.ScreenshotsManager, { CategoryIcon(R.drawable.ic_photo_library_outlined, R.string.screenshots_manage) }, R.string.screenshots_manage),
     CategoryItem(NormalNavKey.Versions.ServerList, { CategoryIcon(R.drawable.ic_dns_outlined, R.string.servers_list) }, R.string.servers_list, division = true),
 )
+
+@Composable
+private fun VersionTabBar(
+    backStack: NavBackStack<TitledNavKey>,
+    versionsScreenKey: TitledNavKey?
+) {
+    val icons = mapOf(
+        NormalNavKey.Versions.OverView to R.drawable.af_sym_home,
+        NormalNavKey.Versions.Config to R.drawable.af_sym_settings,
+        NormalNavKey.Versions.ModifyVersion to R.drawable.af_sym_paint,
+        NormalNavKey.Versions.ModsManager to R.drawable.af_sym_mods,
+        NormalNavKey.Versions.SavesManager to R.drawable.af_sym_saves,
+        NormalNavKey.Versions.ResourcePackManager to R.drawable.af_sym_modpack,
+        NormalNavKey.Versions.ShadersManager to R.drawable.af_sym_shaders,
+        NormalNavKey.Versions.ScreenshotsManager to R.drawable.af_sym_extra,
+        NormalNavKey.Versions.ServerList to R.drawable.af_sym_download
+    )
+    AfTabBar(
+        tabs = settingItems.map { item ->
+            AfTabSpec(
+                iconRes = icons[item.key] ?: R.drawable.af_sym_home,
+                textRes = item.textRes,
+                selected = versionsScreenKey === item.key
+            ) { backStack.navigateOnce(item.key) }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+    )
+}
 
 @Composable
 private fun TabMenu(

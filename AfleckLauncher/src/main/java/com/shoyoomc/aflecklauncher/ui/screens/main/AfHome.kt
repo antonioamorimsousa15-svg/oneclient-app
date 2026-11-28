@@ -227,7 +227,7 @@ private fun AfHomeContent(
                         Spacer(Modifier.width(8.dp))
                         Text("Conta", color = AfText, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                         Row(
-                            Modifier.clip(CircleShape).background(AfAccent).afClick(onOpenAccounts)
+                            Modifier.clip(RoundedCornerShape(10.dp)).background(AfAccent).afClick(onOpenAccounts)
                                 .padding(horizontal = 12.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -238,7 +238,7 @@ private fun AfHomeContent(
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
-                            Modifier.size(58.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.12f)).border(2.dp, AfAccent, CircleShape),
+                            Modifier.size(58.dp).clip(RoundedCornerShape(10.dp)).background(Color.White.copy(alpha = 0.12f)).border(2.dp, AfAccent, RoundedCornerShape(10.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             val skin = account?.takeIf { it.hasSkinFile }?.getSkinFile()
@@ -257,7 +257,7 @@ private fun AfHomeContent(
                                 maxLines = 1, overflow = TextOverflow.Ellipsis
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(Modifier.size(8.dp).clip(CircleShape).background(if (userName == null) AfDim else Color(0xFF4ADE80)))
+                                Box(Modifier.size(8.dp).clip(RoundedCornerShape(10.dp)).background(if (userName == null) AfDim else Color(0xFF4ADE80)))
                                 Spacer(Modifier.width(6.dp))
                                 Text(accountKind, color = if (userName == null) AfDim else Color(0xFF4ADE80), fontSize = 16.sp)
                             }
@@ -275,8 +275,8 @@ private fun AfHomeContent(
         }
             // Imagem 9:16 (plano de fundo)
             Box(
-                Modifier.weight(1.0f).fillMaxHeight().clip(androidx.compose.foundation.shape.RoundedCornerShape(26.dp))
-                    .border(1.5.dp, AfBorder, androidx.compose.foundation.shape.RoundedCornerShape(26.dp))
+                Modifier.weight(1.0f).fillMaxHeight().clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
+                    .border(1.5.dp, AfBorder, androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
             ) {
                 AfSlotImage(slot916, R.drawable.af_bg, Modifier.fillMaxSize())
                 Box(Modifier.align(Alignment.TopEnd).padding(8.dp).afClick { onEdit("card916") }) {
@@ -284,7 +284,7 @@ private fun AfHomeContent(
                 }
                 Text(
                     "9:16", color = AfText, fontSize = 13.sp, fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.BottomStart).padding(10.dp).clip(CircleShape)
+                    modifier = Modifier.align(Alignment.BottomStart).padding(10.dp).clip(RoundedCornerShape(10.dp))
                         .background(Color.White.copy(alpha = 0.18f)).padding(horizontal = 10.dp, vertical = 4.dp)
                 )
             }
@@ -358,7 +358,7 @@ private fun HomeChip(text: String) {
         modifier = Modifier.afRect(AfAccent, radius = 50.dp).padding(horizontal = 12.dp, vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(Modifier.size(8.dp).clip(CircleShape).background(AfAccent))
+        Box(Modifier.size(8.dp).clip(RoundedCornerShape(10.dp)).background(AfAccent))
         Spacer(Modifier.width(6.dp))
         Text(text, color = AfAccent, fontSize = 13.sp, fontWeight = FontWeight.Bold, maxLines = 1)
     }
