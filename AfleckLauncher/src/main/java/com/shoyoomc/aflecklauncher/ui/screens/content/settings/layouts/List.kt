@@ -18,6 +18,8 @@
 
 package com.shoyoomc.aflecklauncher.ui.screens.content.settings.layouts
 
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.border
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -154,8 +156,31 @@ private fun <E> BaseListSettingsCard(
                                 .fillMaxWidth()
                                 .padding(itemListPadding)
                         ) {
-                            items.forEach { item ->
-                                itemLayout(item)
+                            items.chunked(2).forEach { pair ->
+                                androidx.compose.foundation.layout.Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 4.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    pair.forEach { item ->
+                                        androidx.compose.foundation.layout.Box(
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .border(
+                                                    1.5.dp,
+                                                    com.shoyoomc.aflecklauncher.ui.screens.main.AfBorder.copy(alpha = 0.7f),
+                                                    androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+                                                )
+                                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(16.dp))
+                                        ) {
+                                            itemLayout(item)
+                                        }
+                                    }
+                                    if (pair.size == 1) {
+                                        androidx.compose.foundation.layout.Spacer(Modifier.weight(1f))
+                                    }
+                                }
                             }
                         }
                     }
