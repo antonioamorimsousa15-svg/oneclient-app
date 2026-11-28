@@ -18,6 +18,7 @@
 
 package com.shoyoomc.aflecklauncher.ui.screens.content.settings
 
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.border

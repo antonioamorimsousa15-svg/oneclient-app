@@ -1,5 +1,6 @@
 package com.shoyoomc.aflecklauncher.ui.screens.main
 
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.graphics.Color
